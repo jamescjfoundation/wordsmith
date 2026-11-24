@@ -1,0 +1,5 @@
+# Python packages for build.py (Python 3.10+). Install with: pip install -r brand/source/requirements.txt
+fonttools>=4.50
+cairosvg>=2.7
+numpy>=1.26
+pillow>=10.0

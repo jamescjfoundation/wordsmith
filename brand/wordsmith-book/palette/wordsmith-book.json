@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Iron Gall Ink",
+    "hex": "#1C2340",
+    "rgb": [
+      28,
+      35,
+      64
+    ],
+    "use": "Logo, icon tile, title screens"
+  },
+  {
+    "name": "Page White",
+    "hex": "#FAFAF7",
+    "rgb": [
+      250,
+      250,
+      247
+    ],
+    "use": "Page, reversed logo"
+  },
+  {
+    "name": "Ribbon Green",
+    "hex": "#2E9473",
+    "rgb": [
+      46,
+      148,
+      115
+    ],
+    "use": "The ribbon cursor, small fills"
+  },
+  {
+    "name": "Ribbon Green Text",
+    "hex": "#1F7358",
+    "rgb": [
+      31,
+      115,
+      88
+    ],
+    "use": "Green for readable text on white"
+  },
+  {
+    "name": "Cream Stock",
+    "hex": "#F3EBD9",
+    "rgb": [
+      243,
+      235,
+      217
+    ],
+    "use": "Cream paper in print previews"
+  },
+  {
+    "name": "Margin Blue",
+    "hex": "#3B4FA8",
+    "rgb": [
+      59,
+      79,
+      168
+    ],
+    "use": "Links, buttons, focus"
+  },
+  {
+    "name": "Slate",
+    "hex": "#5A6080",
+    "rgb": [
+      90,
+      96,
+      128
+    ],
+    "use": "Secondary text"
+  },
+  {
+    "name": "Night",
+    "hex": "#12162B",
+    "rgb": [
+      18,
+      22,
+      43
+    ],
+    "use": "Dark mode background"
+  }
+]

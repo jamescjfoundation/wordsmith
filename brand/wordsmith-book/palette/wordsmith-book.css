@@ -1,0 +1,10 @@
+:root {
+  --ws-iron-gall-ink: #1C2340; /* Logo, icon tile, title screens */
+  --ws-page-white: #FAFAF7; /* Page, reversed logo */
+  --ws-ribbon-green: #2E9473; /* The ribbon cursor, small fills */
+  --ws-ribbon-green-text: #1F7358; /* Green for readable text on white */
+  --ws-cream-stock: #F3EBD9; /* Cream paper in print previews */
+  --ws-margin-blue: #3B4FA8; /* Links, buttons, focus */
+  --ws-slate: #5A6080; /* Secondary text */
+  --ws-night: #12162B; /* Dark mode background */
+}

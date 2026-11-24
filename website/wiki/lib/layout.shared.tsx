@@ -1,4 +1,5 @@
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
+import { Globe } from 'lucide-react';
 import { gitConfig, siteUrl } from './shared';
 import { Wordmark } from './brand';
 
@@ -17,8 +18,9 @@ export function baseOptions(): BaseLayoutProps {
       title: <Logo />,
       url: '/',
     },
+    // an icon link sits in the sidebar's footer, next to GitHub
     links: [
-      { text: 'Website', url: siteUrl, external: true },
+      { type: 'icon', text: 'Website', label: 'Wordsmith website', icon: <Globe />, url: siteUrl, external: true },
     ],
     githubUrl: `https://github.com/${gitConfig.user}`,
   };

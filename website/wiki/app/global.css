@@ -89,6 +89,13 @@ html {
   scrollbar-gutter: stable;
 }
 
+/* Use the whole window. By default Fumadocs centres a 97rem layout, and on wide screens the
+   sidebar's background then stretches to the left edge with its links far from it. The page
+   text keeps its own reading width. */
+#nd-docs-layout {
+  --fd-layout-width: 100vw;
+}
+
 html > body[data-scroll-locked] {
   margin-right: 0px !important;
   --removed-body-scroll-bar-size: 0px !important;

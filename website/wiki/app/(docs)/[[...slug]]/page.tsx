@@ -71,7 +71,8 @@ export async function generateMetadata(props: PageProps<'/[[...slug]]'>): Promis
 
   const app = appForSection(page.slugs[0]);
   return {
-    title: page.data.title,
+    // the home page's title is the wiki's name, so it isn't repeated ("Wordsmith Wiki · Wordsmith Wiki")
+    title: page.slugs.length === 0 ? { absolute: page.data.title } : page.data.title,
     description: page.data.description,
     icons: { icon: brandUrl.favicon(app ?? 'wordsmith-and-ink') },
   };

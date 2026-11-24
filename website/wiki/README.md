@@ -10,11 +10,11 @@ Pages are MDX (Markdown with a few components) in `content/docs/`:
 
 | Folder | Sidebar tab |
 | --- | --- |
-| `index.mdx` | The wiki's home page, shown first in the Getting started tab (`start/meta.json` lists it as `../index`) |
-| `start/` | Getting started: the home page, the suite, installing, files, privacy, help |
+| `index.mdx` | The wiki's home page, shown first in the Wordsmith apps tab as "Getting started" (`start/meta.json` lists it as `../index`) |
+| `start/` | The Wordsmith apps tab: the suite, installing, files, moving between apps, help, privacy |
 | `script/`, `manuscript/`, `book/` | One tab per app |
 
-- Each page starts with frontmatter: `title`, a one-line `description`, and optionally `icon` (a [Lucide](https://lucide.dev/icons) icon name).
+- Each page starts with frontmatter: `title`, a one-line `description`, and optionally `icon` (a [Lucide](https://lucide.dev/icons) icon name) and `navTitle` (a different label for the sidebar; the home page uses it to show as "Getting started").
 - Each folder's `meta.json` sets the page order (`pages`) and, for the tabs, `"root": true`.
 - Link to other pages by their file: `[Views](./views.mdx)` or `<Card title="Views" href="./views.mdx" />`.
 - Put pictures next to the pages (`script/images/…`) and link them relatively: `![The page view](./images/page-view.webp)`.

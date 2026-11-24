@@ -9,7 +9,8 @@ import { metaSchema, pageSchema } from 'fumadocs-core/source/schema';
 const docs = defineDocs({
   dir: 'content/docs',
   docs: {
-    schema: pageSchema,
+    // navTitle: a shorter or different label for the page in the sidebar; the page keeps its title
+    schema: pageSchema.extend({ navTitle: pageSchema.shape.title.optional() }),
     postprocess: {
       includeProcessedMarkdown: true,
     },
@@ -30,12 +31,27 @@ function brandIconsPlugin(): LoaderPlugin {
   return { name: 'wordsmith:brand-icons', transformPageTree: { file: replace, folder: replace } };
 }
 
+/* `navTitle` in a page's frontmatter replaces its title in the sidebar */
+function navTitlePlugin(): LoaderPlugin {
+  return {
+    name: 'wordsmith:nav-title',
+    transformPageTree: {
+      file(node, filePath) {
+        const file = filePath ? this.storage.read(filePath) : undefined;
+        const navTitle = file?.format === 'page' ? (file.data as { navTitle?: string }).navTitle : undefined;
+        if (navTitle) node.name = navTitle;
+        return node;
+      },
+    },
+  };
+}
+
 // See https://fumadocs.dev/docs/headless/source-api
 export const source = loader({
   baseUrl: docsRoute,
   source: docs.toFumadocsSource(),
   // `icon` in frontmatter and meta.json: "brand:<app>" for an app icon, or a Lucide icon name such as "Compass"
-  plugins: [brandIconsPlugin(), lucideIconsPlugin()],
+  plugins: [navTitlePlugin(), brandIconsPlugin(), lucideIconsPlugin()],
 });
 
 export const docsLlms = llms(source, {

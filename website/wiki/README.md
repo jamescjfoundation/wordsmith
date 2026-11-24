@@ -10,8 +10,8 @@ Pages are MDX (Markdown with a few components) in `content/docs/`:
 
 | Folder | Sidebar tab |
 | --- | --- |
-| `index.mdx` | The wiki's home page |
-| `start/` | Getting started: the suite, installing, files, privacy, help |
+| `index.mdx` | The wiki's home page, shown first in the Getting started tab (`start/meta.json` lists it as `../index`) |
+| `start/` | Getting started: the home page, the suite, installing, files, privacy, help |
 | `script/`, `manuscript/`, `book/` | One tab per app |
 
 - Each page starts with frontmatter: `title`, a one-line `description`, and optionally `icon` (a [Lucide](https://lucide.dev/icons) icon name).

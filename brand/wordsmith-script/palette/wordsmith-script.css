@@ -1,0 +1,9 @@
+:root {
+  --ws-iron-gall-ink: #1C2340; /* Logo, icon tile, title screens */
+  --ws-page-white: #FAFAF7; /* Script page, reversed logo */
+  --ws-brad-brass: #B8862B; /* The cursor, brads, small fills */
+  --ws-brass-text: #8A6418; /* Brass for readable text on white */
+  --ws-margin-blue: #3B4FA8; /* Links, buttons, focus */
+  --ws-slate: #5A6080; /* Secondary text */
+  --ws-night: #12162B; /* Dark mode background */
+}

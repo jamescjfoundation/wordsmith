@@ -1,0 +1,9 @@
+:root {
+  --ws-iron-gall-ink: #1C2340; /* Logo, icon tile, title screens */
+  --ws-page-white: #FAFAF7; /* Page, reversed logo */
+  --ws-card-red: #D24B3E; /* The cursor, the rule on index cards, small fills */
+  --ws-card-red-text: #A8322A; /* Red for readable text on white */
+  --ws-margin-blue: #3B4FA8; /* Links, buttons, focus */
+  --ws-slate: #5A6080; /* Secondary text */
+  --ws-night: #12162B; /* Dark mode background */
+}

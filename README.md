@@ -8,6 +8,7 @@ The apps themselves live in their own repositories. This repository is a small m
 
 | Folder | What it is | Status |
 | --- | --- | --- |
+| [`brand/`](brand/) | The brand kit: logos, app icons, palettes, tokens and brand guidelines | v1.0 |
 | [`website/`](website/) | The public website, plain HTML and CSS, published with GitHub Pages | Draft, live |
 | [`wiki/`](wiki/) | User and contributor documentation for the whole suite | Not started |
 | [`launcher/`](launcher/) | Wordsmith Launcher, a Rust app that installs, updates and opens the Wordsmith apps | Not started |

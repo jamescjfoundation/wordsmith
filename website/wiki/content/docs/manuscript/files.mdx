@@ -1,0 +1,99 @@
+---
+title: Files, saving and backups
+description: What a Manuscript project is, how your work is saved, and how it is kept safe.
+icon: FolderOpen
+---
+
+## A project is a folder
+
+A Manuscript project is a **folder whose name ends in `.wsm`**, for example `My Novel.wsm`. Inside
+are plain text files you can open in any text editor:
+
+<Files>
+  <Folder name="My Novel.wsm" defaultOpen>
+    <File name="project.toml" />
+    <File name="binder.toml" />
+    <Folder name="text" defaultOpen>
+      <File name="(one .md file per document)" />
+    </Folder>
+    <Folder name="bible">
+      <File name="(one .md file per entry)" />
+    </Folder>
+    <Folder name="snapshots" />
+    <Folder name="media" />
+    <Folder name="drafts" />
+  </Folder>
+</Files>
+
+| File | Holds |
+| --- | --- |
+| `project.toml` | The book's details, your label, status and keyword lists, targets and settings |
+| `binder.toml` | The binder: every item's place, role, title, label and status |
+| `text/` | Each document's text, in a simple form of Markdown, with its synopsis and other details at the top |
+| `bible/` | Each story bible entry |
+| `snapshots/` | Your snapshots |
+| `media/` | Pictures, PDFs and other files you added to Research |
+| `scripts/` | Wordsmith Script screenplays you added, kept exactly as Script wrote them |
+| `drafts/` | The drafts you have kept |
+
+Files are named by a fixed id, not by title, so renaming or moving a scene never touches its file.
+A change to one scene changes one file. That makes projects work well with version control and
+synced folders, and your words stay readable even without the app.
+
+On a Mac, a `.wsm` folder can appear as a single document in Finder. You can open a project by
+opening the folder, or its `project.toml`.
+
+## One file: `.wsmz`
+
+A **packed project** (`.wsmz`) is the whole project in one file, for sending or archiving. File ›
+Save As › **Save as One File** writes one. Opening a `.wsmz` unpacks it into a folder beside it.
+The book package for [Wordsmith Book](./sending-to-book.mdx) and your backups are also `.wsmz`
+files.
+
+## Saving
+
+Your work is saved automatically as you write. File › Save (<Kbd>Mod</Kbd>+<Kbd>S</Kbd>) saves at
+once. Only the files that changed are written, and each one safely: a save that is cut short
+leaves the previous file whole.
+
+## Recovery
+
+While you work, unsaved changes are kept in the project's `.recovery` folder. If the app stops
+without saving, the next time you open the project it offers your work back: **Recover It**, or
+**Keep the Saved Version**.
+
+## Backups
+
+When you close a project, and every 30 minutes while you write, a packed copy (`.wsmz`) goes into
+a `Backups` folder beside the project. The newest ten are kept. Open a backup like any packed
+project.
+
+## Synced folders
+
+A project can live in a folder that a sync service keeps in step between your computers. Every
+few seconds, Manuscript looks for changes made elsewhere:
+
+- A document changed only on the other computer is read in, and the editor shows it.
+- A document changed on both keeps this computer's version. The other becomes a snapshot named
+  "Changed elsewhere", which you can compare word by word and restore.
+- If the binder changed elsewhere, the project reloads when nothing here is unsaved; otherwise the
+  other version is kept as a copy.
+
+A save never writes over a change it hasn't seen without first copying it into the project's
+`conflicts` folder. Nothing is lost either way, and the status bar tells you what happened.
+
+<Callout type="warn">
+  Synced folders are made safe, but this is not live syncing. Avoid writing in the same project on
+  two computers at once.
+</Callout>
+
+## Versions of the format
+
+Projects saved by a newer version of Manuscript may not open in an older one. Projects from older
+versions always open in newer ones.
+
+## Your privacy
+
+Your project stays on your computer, or wherever you keep it. Manuscript has no accounts, no cloud
+and no telemetry. Your writing history is kept beside the app's preferences, never in the project,
+so it isn't shared when you share the project.

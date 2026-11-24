@@ -1,0 +1,69 @@
+---
+title: Sending to Wordsmith Book
+description: How a finished manuscript goes to Wordsmith Book to be typeset, and how Book offers fixes back.
+icon: BookOpen
+---
+
+Manuscript is where you write the book. Wordsmith Book is where it gets designed and typeset for
+print and ebook. You don't need to reformat anything to move from one to the other.
+
+<Callout type="info">
+  Manuscript's side of the hand-off is built: the book package and the Offered fixes inbox work
+  today. Wordsmith Book itself is <Status value="in-progress" /> and has no release yet.
+</Callout>
+
+## How Book reads your manuscript
+
+Wordsmith Book opens your Manuscript project directly: either the project folder (`.wsm`) or a
+packed project (`.wsmz`). It reads the words and the structure (parts, chapters, scenes, front and
+back matter) and your book details.
+
+Book **never writes to your project**. Its own work (the design, the editions, print-only and
+ebook-only choices) is kept in a separate Book file. So you can go on writing in Manuscript while the
+book is being designed.
+
+Some things stay behind on purpose: items you have left out of export, screenplays, story bible
+entries and research are not part of the book.
+
+## The book package
+
+File › Export › **Book package** packs the project into one `.wsmz` file for Wordsmith Book. It
+is useful when you send the book to someone else to typeset.
+
+Before the file is kept, Manuscript reads the package back the way Book will and checks every
+word. The export report lists the book details Book needs that you haven't set yet, such as the
+copyright year, the rights statement or a description. Fill them in under File › Book Details.
+
+If you keep [several drafts](./drafts-and-progress.mdx#drafts), **Export This** in View › Drafts
+chooses the one that goes to Book.
+
+## Fixes offered back
+
+While typesetting, Book may spot a small mistake: a typo, a missing comma. It doesn't change your
+project. Instead it **offers the fix back** to Manuscript.
+
+<Steps>
+<Step>
+
+### See what's waiting
+
+The status bar shows how many fixes are waiting. Click it, or run **Offered Fixes** in the command
+palette.
+
+</Step>
+<Step>
+
+### Decide on each one
+
+Each fix shows the document, the reason, and the words before and after.
+
+- **Accept** takes the fix into your text (and can be undone in one step).
+- **Reject** turns it down.
+- **Open** shows the document.
+
+</Step>
+</Steps>
+
+If you have changed those words since Book made its offer, the fix can only be rejected. Your
+decisions are kept in the project, and Book never overwrites your words without showing you the
+difference first.

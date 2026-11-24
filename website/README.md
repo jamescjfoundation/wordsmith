@@ -20,6 +20,7 @@ Plain HTML and CSS with no build step, so GitHub Pages can serve this folder as 
 | `assets/img/` | Wordsmith Script screenshots from the app's repository (`docs/images`), with the title bar cropped off |
 | `assets/fonts/` | Courier Prime and Inter (SIL Open Font License 1.1, license files included), served from here so no visitor data goes to a font service |
 | `.nojekyll` | Tells GitHub Pages to serve the files as they are |
+| `wiki/` | The wiki, a separate Fumadocs project published at `/wiki/`. See [`wiki/README.md`](wiki/README.md) |
 
 The Manuscript, Book and Launcher pictures are HTML illustrations, not screenshots, and say so in their captions. Replace them with real screenshots once each app can draw its own.
 
@@ -29,6 +30,6 @@ The shared header, footer and page text live in `tools/build.py`. Edit it and ru
 
 ## Publishing on GitHub Pages
 
-The workflow in `.github/workflows/pages.yml` publishes this folder whenever a push to `main` changes it (or run it by hand from the Actions tab). Pages is enabled with Source set to "GitHub Actions", and the site is live at https://wordsmithand.ink, a custom domain set in the repository's Pages settings (DNS is on Cloudflare). The deploy doesn't need a `CNAME` file.
+The workflow in `.github/workflows/pages.yml` publishes this folder whenever a push to `main` changes it (or run it by hand from the Actions tab). It builds the wiki first and publishes its static export at `/wiki/` in place of the wiki's source. Pages is enabled with Source set to "GitHub Actions", and the site is live at https://wordsmithand.ink, a custom domain set in the repository's Pages settings (DNS is on Cloudflare). The deploy doesn't need a `CNAME` file.
 
 All links between pages are relative, so the site works at a domain root or under a repository path.

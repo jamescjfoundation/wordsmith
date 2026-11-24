@@ -1,0 +1,111 @@
+---
+title: Installing
+description: Build and run Wordsmith Script, Manuscript or Book on macOS, Windows or Linux.
+icon: Download
+---
+
+<Callout type="info" title="No installers yet">
+Installers for macOS, Windows and Linux come with each app's first release. Until then you build
+the app from its source code. You don't need to know how to program: it's a few commands in a
+terminal, and the first build takes a few minutes.
+</Callout>
+
+## What you need
+
+- A computer running **macOS 11 or later**, **Windows** or **Linux**.
+- An internet connection for the first build, which downloads the parts the app is made from.
+- **Git**, to download the code. Many computers already have it. If not, get it from
+  [git-scm.com](https://git-scm.com).
+- **Rust**, the language the apps are written in. You install it once with rustup (below). Each
+  app asks for the exact Rust version it was made with, and rustup fetches it automatically.
+
+## Build and run an app
+
+<Steps>
+<Step>
+
+### Install Rust
+
+Go to [rustup.rs](https://rustup.rs) and follow the instructions for your system.
+
+<Tabs items={['macOS', 'Windows', 'Linux']}>
+  <Tab value="macOS">
+    Open **Terminal** and run the command shown on rustup.rs. If macOS asks to install the
+    command line developer tools, say yes: Rust needs them.
+  </Tab>
+  <Tab value="Windows">
+    Download and run **rustup-init.exe** from rustup.rs. If it offers to install the Visual Studio
+    build tools, accept: Rust needs them on Windows.
+  </Tab>
+  <Tab value="Linux">
+    Run the command shown on rustup.rs in a terminal. You also need a C compiler and linker; on
+    Debian or Ubuntu that's `sudo apt install build-essential`. If a build stops because a system
+    library is missing, the error names it; install it with your package manager and run the
+    command again.
+  </Tab>
+</Tabs>
+
+Close and reopen the terminal afterwards, so it finds the new `cargo` command.
+
+</Step>
+<Step>
+
+### Download and run the app
+
+Pick the app, then run its two commands in a terminal. The first downloads the code into a new
+folder; the second builds the app and opens it.
+
+<Tabs items={['Script', 'Manuscript', 'Book']}>
+  <Tab value="Script">
+    ```sh
+    git clone https://github.com/jamescjfoundation/wordsmith-script
+    cd wordsmith-script
+    cargo run --release -p wordsmith
+    ```
+  </Tab>
+  <Tab value="Manuscript">
+    ```sh
+    git clone https://github.com/jamescjfoundation/wordsmith-manuscript
+    cd wordsmith-manuscript
+    cargo run --release -p wordsmith-manuscript
+    ```
+  </Tab>
+  <Tab value="Book">
+    ```sh
+    git clone https://github.com/jamescjfoundation/wordsmith-book
+    cd wordsmith-book
+    cargo run --release -p wordsmith-book
+    ```
+    Book is in development and can't make a new book from its window yet.
+    [Book's Getting started](../book/getting-started.mdx) shows how to try it with a book of your own.
+  </Tab>
+</Tabs>
+
+The first build takes a few minutes. After that, the same `cargo run` command opens the app in
+seconds.
+
+</Step>
+<Step>
+
+### Next time
+
+To open the app again, go to its folder in a terminal and run the same `cargo run` command.
+
+To get the latest version, run `git pull` in the app's folder first, then `cargo run` as before.
+
+</Step>
+</Steps>
+
+<Callout type="warn" title="Keep a copy of your work">
+These are pre-release versions. They save and back up your work, but until the first release,
+keep your own copy of anything important too. A newer version can save files that an older
+version can't open. See [Your files](./files.mdx).
+</Callout>
+
+## Next
+
+<Cards>
+  <Card title="Script: Getting started" href="../script/getting-started.mdx" />
+  <Card title="Manuscript: Getting started" href="../manuscript/getting-started.mdx" />
+  <Card title="Book: Getting started" href="../book/getting-started.mdx" />
+</Cards>

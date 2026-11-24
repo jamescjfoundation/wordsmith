@@ -29,10 +29,11 @@ The shared header, footer and page text live in `tools/build.py`. Edit it and ru
 
 ## Publishing on GitHub Pages
 
-The workflow in `.github/workflows/pages.yml` publishes this folder whenever `main` changes.
+The workflow in `.github/workflows/pages.yml` publishes this folder whenever a push to `main` changes it (or run it by hand from the Actions tab). Pages is enabled with Source set to "GitHub Actions", and the site is live at https://jamescjfoundation.github.io/wordsmith/.
 
-1. In the repository's Settings > Pages, set Source to "GitHub Actions" (once).
-2. For a custom domain, add a `CNAME` file with the domain to this folder and set the DNS records GitHub lists.
-3. Once the address is known, make the `og:image` URL in each page absolute (for example `https://<domain>/assets/brand/og-image.png`), because link previews need a full URL.
+Still to do:
+
+1. For a custom domain, set it in Settings > Pages, add a `CNAME` file with the domain to this folder, and set the DNS records GitHub lists.
+2. Once the final address is known, make the `og:image` URL in each page absolute (for example `https://<domain>/assets/brand/og-image.png`, set in `tools/build.py`), because link previews need a full URL.
 
 All links between pages are relative, so the site works at a domain root or under a repository path.

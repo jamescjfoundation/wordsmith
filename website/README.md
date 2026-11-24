@@ -29,7 +29,7 @@ The shared header, footer and page text live in `tools/build.py`. Edit it and ru
 
 ## Publishing on GitHub Pages
 
-The workflow in `.github/workflows/pages.yml` publishes this folder whenever a push to `main` changes it (or run it by hand from the Actions tab). Pages is enabled with Source set to "GitHub Actions", and the site is live at https://jamescjfoundation.github.io/wordsmith/.
+The workflow in `.github/workflows/pages.yml` publishes this folder whenever a push to `main` changes it (or run it by hand from the Actions tab). Pages is enabled with Source set to "GitHub Actions", and the site is live at https://wordsmithand.ink, a custom domain set in the repository's Pages settings (DNS is on Cloudflare). The deploy doesn't need a `CNAME` file.
 
 Still to do:
 

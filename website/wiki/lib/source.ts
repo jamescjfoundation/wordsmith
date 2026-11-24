@@ -1,6 +1,8 @@
-import { llms, loader } from 'fumadocs-core/source';
+import { createElement } from 'react';
+import { llms, loader, type LoaderPlugin } from 'fumadocs-core/source';
 import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
 import { docsRoute } from './shared';
+import { AppIcon, type Brand } from './brand';
 import { defineDocs } from 'fumadocs-mdx/macro';
 import { metaSchema, pageSchema } from 'fumadocs-core/source/schema';
 
@@ -17,12 +19,23 @@ const docs = defineDocs({
   },
 });
 
+/* `icon: brand:wordsmith-script` (or -manuscript, -book, -and-ink) shows the brand kit's app icon */
+function brandIconsPlugin(): LoaderPlugin {
+  function replace<T extends { icon?: unknown }>(node: T): T {
+    if (typeof node.icon === 'string' && node.icon.startsWith('brand:')) {
+      node.icon = createElement(AppIcon, { app: node.icon.slice('brand:'.length) as Brand, size: 16 });
+    }
+    return node;
+  }
+  return { name: 'wordsmith:brand-icons', transformPageTree: { file: replace, folder: replace } };
+}
+
 // See https://fumadocs.dev/docs/headless/source-api
 export const source = loader({
   baseUrl: docsRoute,
   source: docs.toFumadocsSource(),
-  // `icon` in frontmatter and meta.json takes a Lucide icon name, e.g. "Clapperboard"
-  plugins: [lucideIconsPlugin()],
+  // `icon` in frontmatter and meta.json: "brand:<app>" for an app icon, or a Lucide icon name such as "Compass"
+  plugins: [brandIconsPlugin(), lucideIconsPlugin()],
 });
 
 export const docsLlms = llms(source, {

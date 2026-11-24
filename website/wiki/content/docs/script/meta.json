@@ -1,7 +1,7 @@
 {
   "title": "Wordsmith Script",
   "description": "Screenplays, TV and stage plays",
-  "icon": "Clapperboard",
+  "icon": "brand:wordsmith-script",
   "root": true,
   "pages": [
     "index",

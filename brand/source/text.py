@@ -2,10 +2,16 @@ from fontTools.ttLib import TTFont
 from fontTools.pens.svgPathPen import SVGPathPen
 from fontTools.pens.transformPen import TransformPen
 import os
-FD=os.environ.get('WORDSMITH_FONT_DIR', os.path.join(os.path.dirname(os.path.abspath(__file__)),'fonts'))+'/'  # Courier Prime, Inter TTFs (OFL) from Google Fonts
+# Courier Prime and Inter (both SIL OFL 1.1). fetch_fonts.py puts the exact versions the kit was drawn with here.
+FD=os.environ.get('WORDSMITH_FONT_DIR', os.path.join(os.path.dirname(os.path.abspath(__file__)),'fonts'))+'/'
 _c={}
 def font(n):
-    if n not in _c: _c[n]=TTFont(FD+n)
+    """n is a name like 'Inter-500.ttf'; a .otf with the same stem is used when there is no .ttf."""
+    if n not in _c:
+        path=FD+n
+        if not os.path.exists(path) and os.path.exists(os.path.splitext(path)[0]+'.otf'): path=os.path.splitext(path)[0]+'.otf'
+        if not os.path.exists(path): raise SystemExit(f'Font {n} not found in {FD}. Run: python3 brand/source/fetch_fonts.py')
+        _c[n]=TTFont(path)
     return _c[n]
 def text_path(s, fname, size, x=0, y=0, tracking=0.0):
     """returns (d, advance_width). y = baseline. tracking in em."""
@@ -43,3 +49,15 @@ def fit_svg(path, scale=8):
     nw,nh=nx1-nx0,ny1-ny0
     out=f'{head}viewBox="{nx0:.2f} {ny0:.2f} {nw:.2f} {nh:.2f}" width="{nw:.0f}" height="{nh:.0f}"{rest}{inner}</svg>\n'
     open(path,'w').write(out)
+
+def make_ico(folder, name, sizes=(16,32,48,64,128,256)):
+    """Windows icon from the icon-<size>.png files in folder. Uses ImageMagick when it is installed
+    (as the kit was made), otherwise Pillow."""
+    import shutil, subprocess
+    pngs=[f'icon-{s}.png' for s in sizes]
+    tool=shutil.which('magick') or shutil.which('convert')
+    if tool:
+        subprocess.run([tool,*pngs,name],cwd=folder,check=True); return
+    from PIL import Image
+    imgs=[Image.open(os.path.join(folder,p)).convert('RGBA') for p in pngs]
+    imgs[-1].save(os.path.join(folder,name),format='ICO',sizes=[i.size for i in imgs],append_images=imgs[:-1])

@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "description": "Renders the Wordsmith brand PDFs (build.py --pdf). Install with: npm install && npx playwright install chromium",
+  "devDependencies": {
+    "playwright": "1.64.1"
+  }
+}

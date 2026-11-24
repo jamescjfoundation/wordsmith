@@ -1,11 +1,13 @@
+"""Wordsmith Script logo and icon builder. Usage: python3 buildc.py <outdir>
+Script keeps its own builder: its mark is boxed to the capital height. Its palette is written by build.py."""
 import sys, os
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
-from text import text_path, fit_svg
+from text import text_path, fit_svg, make_ico
 import cairosvg
 INK='#1C2340'; PAPER='#FAFAF7'; BRASS='#B8862B'
 F='CourierPrime-700.ttf'; CAP=1187/2048
 OUT=sys.argv[1]
-for d in ('logo','icon','concepts'): os.makedirs(f'{OUT}/{d}',exist_ok=True)
+for d in ('logo','app-icon'): os.makedirs(f'{OUT}/{d}',exist_ok=True)
 def svg(w,h,body,title):
     return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w:.1f} {h:.1f}" width="{w:.0f}" height="{h:.0f}" role="img" aria-label="{title}"><title>{title}</title>{body}</svg>\n'
 def save(n,s):
@@ -43,21 +45,19 @@ for nm,fg,cur in variants:
 for nm,fg,cur in variants[:2]:
     w,h,b=block(['Wordsmith','Script'],100,fg,cur); save(f'logo/wordsmith-script-stacked-{nm}.svg',svg(w,h,b,'Wordsmith Script'))
     w,h,b=block(['S'],400,fg,cur); save(f'logo/wordsmith-mark-{nm}.svg',svg(w,400*CAP+8,b,'Wordsmith mark'))
-w,h,b=block(['Wordsmith And Ink'],100,INK,BRASS); save('logo/example-wordsmith-and-ink-wordmark.svg',svg(w,h,b,'Wordsmith And Ink (family example)'))
 
 def icon(S=1024, glyph=640):
     _,r=typed('S',glyph,0,0,PAPER,BRASS)
     x=(S-r)/2; base=S/2+glyph*CAP/2
     b,_=typed('S',glyph,x,base,PAPER,BRASS)
     return f'<rect width="{S}" height="{S}" rx="{S*0.225:.1f}" fill="{INK}"/>'+b
-save('icon/wordsmith-script-icon.svg',svg(1024,1024,icon(),'Wordsmith Script app icon'))
-save('icon/wordsmith-script-icon-small.svg',svg(1024,1024,icon(glyph=720),'Wordsmith Script app icon, small sizes'))
-save('icon/favicon.svg',svg(1024,1024,icon(glyph=720),'Wordsmith Script'))
-save('icon/wordsmith-script-icon-macos.svg',svg(1024,1024,f'<g transform="translate(100 100) scale({824/1024})">{icon()}</g>','Wordsmith Script app icon (macOS grid)'))
+save('app-icon/wordsmith-script-icon.svg',svg(1024,1024,icon(),'Wordsmith Script app icon'))
+save('app-icon/wordsmith-script-icon-small.svg',svg(1024,1024,icon(glyph=720),'Wordsmith Script app icon, small sizes'))
+save('app-icon/favicon.svg',svg(1024,1024,icon(glyph=720),'Wordsmith Script'))
+save('app-icon/wordsmith-script-icon-macos.svg',svg(1024,1024,f'<g transform="translate(100 100) scale({824/1024})">{icon()}</g>','Wordsmith Script app icon (macOS grid)'))
 for s in [1024,512,256,128,64]:
-    cairosvg.svg2png(url=f'{OUT}/icon/wordsmith-script-icon.svg',write_to=f'{OUT}/icon/icon-{s}.png',output_width=s,output_height=s)
+    cairosvg.svg2png(url=f'{OUT}/app-icon/wordsmith-script-icon.svg',write_to=f'{OUT}/app-icon/icon-{s}.png',output_width=s,output_height=s)
 for s in [48,32,16]:
-    cairosvg.svg2png(url=f'{OUT}/icon/wordsmith-script-icon-small.svg',write_to=f'{OUT}/icon/icon-{s}.png',output_width=s,output_height=s)
-cairosvg.svg2png(url=f'{OUT}/icon/wordsmith-script-icon-macos.svg',write_to=f'{OUT}/icon/icon-macos-1024.png',output_width=1024,output_height=1024)
-print('ok')
-os.system(f'cd "{OUT}/icon" && convert icon-16.png icon-32.png icon-48.png icon-64.png icon-128.png icon-256.png wordsmith-script.ico')
+    cairosvg.svg2png(url=f'{OUT}/app-icon/wordsmith-script-icon-small.svg',write_to=f'{OUT}/app-icon/icon-{s}.png',output_width=s,output_height=s)
+cairosvg.svg2png(url=f'{OUT}/app-icon/wordsmith-script-icon-macos.svg',write_to=f'{OUT}/app-icon/icon-macos-1024.png',output_width=1024,output_height=1024)
+make_ico(f'{OUT}/app-icon','wordsmith-script.ico')

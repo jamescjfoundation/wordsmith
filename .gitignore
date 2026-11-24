@@ -9,3 +9,9 @@ __pycache__/
 .idea/
 .vscode/
 *.swp
+
+# Brand kit build (brand/source/build.py)
+brand/build/
+brand/source/fonts/
+brand/source/node_modules/
+brand/source/package-lock.json

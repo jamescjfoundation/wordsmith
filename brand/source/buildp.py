@@ -1,9 +1,9 @@
-"""Wordsmith suite product brand builder. Usage: python3 buildp.py <product> <outdir>
+"""Wordsmith suite product brand builder. Usage: python3 buildp.py <manuscript|book> <outdir> (Script uses buildc.py)
 Products share: brand-ink tile, Courier Prime Bold wordmark, a cursor after the name.
 Each product owns its cursor color, icon letter and cursor shape."""
 import sys, os, struct, json
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
-from text import text_path, fit_svg
+from text import text_path, fit_svg, make_ico
 import cairosvg
 INK='#1C2340'; PAPER='#FAFAF7'; GROUND='dark'  # set by build(): which ground the art sits on
 STACK_TONES={'dark':['#D24B3E','#9C3A3A','#6B2F3C'],'light':['#D24B3E','#E8968A','#F4CBC3']}
@@ -68,7 +68,7 @@ def icon(p,S=1024,glyph=640):
 
 def build(key,OUT,palette):
     p=PRODUCTS[key]; slug=p['name'].lower().replace(' ','-'); mark=f"wordsmith-{key}-mark" if key!='script' else 'wordsmith-mark'
-    for d in ('logo','icon','palette'): os.makedirs(f'{OUT}/{d}',exist_ok=True)
+    for d in ('logo','app-icon','palette'): os.makedirs(f'{OUT}/{d}',exist_ok=True)
     def save(n,s):
         open(f'{OUT}/{n}','w').write(s)
         if n.startswith('logo/'): fit_svg(f'{OUT}/{n}')
@@ -83,16 +83,16 @@ def build(key,OUT,palette):
         w,h,b=block(p['lines'],100,fg,c,sh); save(f'logo/{slug}-stacked-{nm}.svg',svg(w,h,b,p['name']))
         w,h,b=block([p['letter']],400,fg,c,sh); save(f'logo/{mark}-{nm}.svg',svg(w,h,b,p['name']+' mark'))
     GROUND='dark'
-    save(f'icon/{slug}-icon.svg',svg(1024,1024,icon(p),p['name']+' app icon'))
-    save(f'icon/{slug}-icon-small.svg',svg(1024,1024,icon(p,glyph=720 if sh=='bar' else 660),p['name']+' app icon, small sizes'))
-    save('icon/favicon.svg',svg(1024,1024,icon(p,glyph=720 if sh=='bar' else 660),p['name']))
-    save(f'icon/{slug}-icon-macos.svg',svg(1024,1024,f'<g transform="translate(100 100) scale({824/1024})">{icon(p)}</g>',p['name']+' app icon (macOS grid)'))
+    save(f'app-icon/{slug}-icon.svg',svg(1024,1024,icon(p),p['name']+' app icon'))
+    save(f'app-icon/{slug}-icon-small.svg',svg(1024,1024,icon(p,glyph=720 if sh=='bar' else 660),p['name']+' app icon, small sizes'))
+    save('app-icon/favicon.svg',svg(1024,1024,icon(p,glyph=720 if sh=='bar' else 660),p['name']))
+    save(f'app-icon/{slug}-icon-macos.svg',svg(1024,1024,f'<g transform="translate(100 100) scale({824/1024})">{icon(p)}</g>',p['name']+' app icon (macOS grid)'))
     for s in [1024,512,256,128,64]:
-        cairosvg.svg2png(url=f'{OUT}/icon/{slug}-icon.svg',write_to=f'{OUT}/icon/icon-{s}.png',output_width=s,output_height=s)
+        cairosvg.svg2png(url=f'{OUT}/app-icon/{slug}-icon.svg',write_to=f'{OUT}/app-icon/icon-{s}.png',output_width=s,output_height=s)
     for s in [48,32,16]:
-        cairosvg.svg2png(url=f'{OUT}/icon/{slug}-icon-small.svg',write_to=f'{OUT}/icon/icon-{s}.png',output_width=s,output_height=s)
-    cairosvg.svg2png(url=f'{OUT}/icon/{slug}-icon-macos.svg',write_to=f'{OUT}/icon/icon-macos-1024.png',output_width=1024,output_height=1024)
-    os.system(f'cd "{OUT}/icon" && convert icon-16.png icon-32.png icon-48.png icon-64.png icon-128.png icon-256.png {slug}.ico')
+        cairosvg.svg2png(url=f'{OUT}/app-icon/{slug}-icon-small.svg',write_to=f'{OUT}/app-icon/icon-{s}.png',output_width=s,output_height=s)
+    cairosvg.svg2png(url=f'{OUT}/app-icon/{slug}-icon-macos.svg',write_to=f'{OUT}/app-icon/icon-macos-1024.png',output_width=1024,output_height=1024)
+    make_ico(f'{OUT}/app-icon',f'{slug}.ico')
     write_palette(p['name'],slug,palette,f'{OUT}/palette/')
 
 rgb=lambda h:tuple(int(h[i:i+2],16) for i in (1,3,5))

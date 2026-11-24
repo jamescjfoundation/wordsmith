@@ -270,7 +270,7 @@ about = f"""
             <a href="{FOUNDATION}">The James C. J. Foundation</a>. Its goal is simple: give creatives the tools they need
             to create, free, on any computer, for good.</p>
         </div>
-        <div class="about-mark">{logo("wordsmith-and-ink-foundation", "Wordsmith &amp; Ink, a project of The J. C. J. Foundation")}</div>
+        <div class="about-mark">{logo("wordsmith-and-ink-foundation", "Wordsmith &amp; Ink, a project of The James C. J. Foundation")}</div>
       </div>
     </section>
 

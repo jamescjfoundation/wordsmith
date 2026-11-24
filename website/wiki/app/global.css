@@ -94,8 +94,13 @@ html {
    text keeps its own reading width. */
 #nd-docs-layout {
   --fd-layout-width: 100vw;
-  /* a little wider than the default 268px, to fit the Manuscript wordmark in the tab switcher */
-  --fd-sidebar-width: 292px;
+}
+/* A little wider than the default 268px, to fit the Manuscript wordmark in the tab switcher.
+   Only from 768px (Fumadocs' md), where the sidebar shows; below it the width must stay 0. */
+@media (min-width: 48rem) {
+  #nd-docs-layout:has(#nd-sidebar) {
+    --fd-sidebar-width: 292px;
+  }
 }
 
 html > body[data-scroll-locked] {
@@ -135,6 +140,25 @@ html > body[data-scroll-locked] {
 .ws-tab-wordsmith-script img { width: 161.5px; }
 .ws-tab-wordsmith-manuscript img { width: 204px; }
 .ws-tab-wordsmith-book img { width: 141.7px; }
+
+/* "Choose an app" in the switcher, on the shared pages where no app is selected */
+.ws-tab-placeholder { font-size: 0.875rem; font-weight: 500; padding: 0.15rem 0.25rem; }
+
+/* "Getting started" at the bottom of the sidebar, above the GitHub and theme bar: the way back
+   to the shared pages. The sidebar puts its footer after that bar, so it's moved up. */
+.ws-start-link {
+  order: -1;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-fd-foreground);
+}
+.ws-start-link:hover { background: var(--color-fd-accent); }
 
 /* Logo in the nav */
 .ws-logo { display: inline-flex; align-items: center; gap: 0.5rem; }

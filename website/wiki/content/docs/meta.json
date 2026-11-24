@@ -1,4 +1,9 @@
 {
   "title": "Wordsmith Wiki",
-  "pages": ["index", "start", "script", "manuscript", "book"]
+  "pages": [
+    "start",
+    "script",
+    "manuscript",
+    "book"
+  ]
 }

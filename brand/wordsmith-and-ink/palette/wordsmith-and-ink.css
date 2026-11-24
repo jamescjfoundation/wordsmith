@@ -1,0 +1,10 @@
+:root {
+  --ws-iron-gall-ink: #1C2340; /* The mark, icon tile, spines, title pages */
+  --ws-page-white: #FAFAF7; /* Pages, reversed mark */
+  --ws-night: #12162B; /* Dark grounds, website dark theme */
+  --ws-slate: #5A6080; /* Secondary text, endorsement lines */
+  --ws-margin-blue: #3B4FA8; /* Links, buttons, focus */
+  --ws-brad-brass: #B8862B; /* Wordsmith Script */
+  --ws-card-red: #D24B3E; /* Wordsmith Manuscript */
+  --ws-ribbon-green: #2E9473; /* Wordsmith Book */
+}

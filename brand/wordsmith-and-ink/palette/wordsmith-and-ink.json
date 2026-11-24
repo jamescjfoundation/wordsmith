@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Iron Gall Ink",
+    "hex": "#1C2340",
+    "rgb": [
+      28,
+      35,
+      64
+    ],
+    "use": "The mark, icon tile, spines, title pages"
+  },
+  {
+    "name": "Page White",
+    "hex": "#FAFAF7",
+    "rgb": [
+      250,
+      250,
+      247
+    ],
+    "use": "Pages, reversed mark"
+  },
+  {
+    "name": "Night",
+    "hex": "#12162B",
+    "rgb": [
+      18,
+      22,
+      43
+    ],
+    "use": "Dark grounds, website dark theme"
+  },
+  {
+    "name": "Slate",
+    "hex": "#5A6080",
+    "rgb": [
+      90,
+      96,
+      128
+    ],
+    "use": "Secondary text, endorsement lines"
+  },
+  {
+    "name": "Margin Blue",
+    "hex": "#3B4FA8",
+    "rgb": [
+      59,
+      79,
+      168
+    ],
+    "use": "Links, buttons, focus"
+  },
+  {
+    "name": "Brad Brass",
+    "hex": "#B8862B",
+    "rgb": [
+      184,
+      134,
+      43
+    ],
+    "use": "Wordsmith Script"
+  },
+  {
+    "name": "Card Red",
+    "hex": "#D24B3E",
+    "rgb": [
+      210,
+      75,
+      62
+    ],
+    "use": "Wordsmith Manuscript"
+  },
+  {
+    "name": "Ribbon Green",
+    "hex": "#2E9473",
+    "rgb": [
+      46,
+      148,
+      115
+    ],
+    "use": "Wordsmith Book"
+  }
+]

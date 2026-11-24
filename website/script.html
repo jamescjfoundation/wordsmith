@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wordsmith Script · Wordsmith</title>
+  <meta name="description" content="A free, open-source screenwriting app for macOS, Windows and Linux.">
+  <meta property="og:title" content="Wordsmith Script · Wordsmith">
+  <meta property="og:description" content="A free, open-source screenwriting app for macOS, Windows and Linux.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/brand/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#FAFAF7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#12162B" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/brand/wordsmith-and-ink-icon-512.png">
+  <link rel="preload" href="assets/fonts/courier-prime-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body class="p-script">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand-link" href="index.html" aria-label="Wordsmith home">
+        <picture><source srcset="assets/brand/wordsmith-and-ink-wordmark-paper.svg" media="(prefers-color-scheme: dark)"><img src="assets/brand/wordsmith-and-ink-wordmark-ink.svg" alt="Wordsmith &amp; Ink"></picture>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav class="nav" id="site-nav" aria-label="Main">
+        <div class="nav-links">
+        <div class="nav-group"><a href="index.html">Home</a><a href="about.html">About</a></div>
+        <span class="nav-sep" aria-hidden="true"></span>
+        <div class="nav-group"><a href="script.html" class="n-script" aria-current="page">Script</a><a href="manuscript.html" class="n-manuscript">Manuscript</a><a href="book.html" class="n-book">Book</a></div>
+        <span class="nav-sep" aria-hidden="true"></span>
+        <div class="nav-group"><a href="launcher.html">Launcher</a><a href="open-source.html">Open source</a></div>
+        </div>
+        <div class="nav-actions">
+          <a class="btn btn-ghost btn-sm" href="https://github.com/jamescjfoundation" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
+          <a class="btn btn-primary btn-sm" href="https://jamescj.org" target="_blank" rel="noopener">Foundation</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <section class="p-hero">
+      <div class="wrap">
+        <div class="app-id">
+          <img class="icon" src="assets/brand/wordsmith-script-icon.svg" alt="" width="72" height="72">
+          <picture><source srcset="assets/brand/wordsmith-script-wordmark-paper.svg" media="(prefers-color-scheme: dark)"><img class="wordmark" src="assets/brand/wordsmith-script-wordmark-ink.svg" alt="Wordsmith Script"></picture>
+        </div>
+        <p class="endorse">a Wordsmith &amp; Ink app</p>
+        <h1>Write the screenplay. The page takes care of itself.</h1>
+        <p class="lede">A free, open-source screenwriting app. Type with two keys doing the formatting, see every page
+          as it will print, and take the script into production with revision colors, locked pages and scene numbers.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="https://github.com/jamescjfoundation/wordsmith-script" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> View on GitHub</a>
+          <a class="btn btn-ghost" href="https://github.com/jamescjfoundation/wordsmith-script/blob/main/docs/guide/README.md" target="_blank" rel="noopener">Read the guide</a>
+        </div>
+        <div class="meta"><span class="chip pre">Pre-release</span><span>macOS, Windows, Linux</span><span>No downloads yet: build from source</span></div>
+        <figure class="visual">
+          <div class="shot"><img src="assets/img/script-page-view.webp" alt="Wordsmith Script showing a screenplay page, the list of scenes on the left and the scene inspector on the right" width="1600" height="983"></div>
+          <figcaption>The page view, with the scenes on the left and the scene at the caret on the right. Pictures are drawn by the app from "Everybody's Girl" (1918), a public-domain photoplay.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section sunken">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">What it does</p>
+          <h2>Everything a script needs, from first draft to shooting script.</h2>
+        </div>
+        <div class="features">
+          <div class="feature"><h3>Formatting on two keys</h3><p>Return and Tab move between scene headings, action, characters, parentheticals, dialogue and transitions. The status bar always says what comes next.</p></div>
+          <div class="feature"><h3>Industry pages</h3><p>Courier Prime on standard margins, with (MORE) and (CONT'D), scene continueds, a title page, and PDFs and printouts that match the screen.</p></div>
+          <div class="feature"><h3>Autocomplete that waits</h3><p>Character names, places and times offered as you type, never typed for you. Spelling, find and replace, and notes on any text.</p></div>
+          <div class="feature"><h3>Structure</h3><p>Index cards and a scene view that reorder the script, a story board of beats, an outline in lanes, scene colors and a structure strip.</p></div>
+          <div class="feature"><h3>Production</h3><p>Revision mode on the standard color cycle with margin marks, scene numbers with A-scenes and omitted scenes, locked pages and revised-pages-only printing.</p></div>
+          <div class="feature"><h3>Reports</h3><p>Scene lengths in eighths, a character report, a representation report and writing statistics, with goals and a sprint timer.</p></div>
+          <div class="feature"><h3>Templates</h3><p>Feature screenplays, TV episodes, stage plays and more, with dual dialogue when two people talk at once.</p></div>
+          <div class="feature"><h3>Open files</h3><p>A plain-text native format that reads well in version control. Fountain both ways, import from text, RTF and PDF, export to PDF, RTF, text, HTML and CSV.</p></div>
+          <div class="feature"><h3>Command line</h3><p>Convert, export and report from a terminal or a build script, and let tools you choose drive the app.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="gallery">
+          <figure><div class="shot"><img src="assets/img/script-index-cards.webp" alt="Index cards, one per scene, with scene summaries" width="1600" height="983" loading="lazy"></div><figcaption>Index cards: drag a card and the scene moves in the script.</figcaption></figure>
+          <figure><div class="shot"><img src="assets/img/script-story-board.webp" alt="The story board with beats arranged in acts" width="1600" height="983" loading="lazy"></div><figcaption>The story board: plan beats before you write them.</figcaption></figure>
+          <figure><div class="shot"><img src="assets/img/script-ribbon-production.webp" alt="The Production tab with revision tools" width="1600" height="983" loading="lazy"></div><figcaption>Production: revisions, scene numbers and locked pages.</figcaption></figure>
+          <figure><div class="shot"><img src="assets/img/script-draft-view-dark.webp" alt="The draft view in the dark theme" width="1600" height="983" loading="lazy"></div><figcaption>The draft view, in the dark theme.</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section sunken">
+      <div class="wrap split">
+        <div>
+          <p class="eyebrow">Familiar from day one</p>
+          <h2>Works the way screenwriters already work.</h2>
+          <p class="muted">Wordsmith Script follows the conventions the industry has used for decades, so you can move
+            between it and other screenwriting software without relearning anything. The ribbon is named for screenplay
+            work: Write, Insert, Plan, Production, Review and View.</p>
+        </div>
+        <ul class="ticks">
+          <li>Plain-text scripts you can read, back up and compare anywhere</li>
+          <li>Auto-save and timestamped backups, every file saved safely</li>
+          <li>No telemetry. The only request it makes is an update check you can turn off</li>
+          <li>Screen readers supported through the platform's accessibility tools</li>
+          <li>MIT or Apache-2.0 licensed: free to use, study and improve</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="split">
+          <div>
+            <p class="eyebrow">Try it today</p>
+            <h2>Build it from source.</h2>
+            <p class="muted">There are no installers yet. If you're comfortable with a terminal and have
+              <a href="https://rustup.rs" target="_blank" rel="noopener">Rust</a> installed, you can run the current version now. Installers for macOS,
+              Windows and Linux come with the first release.</p>
+          </div>
+          <pre><code>git clone https://github.com/jamescjfoundation/wordsmith-script
+cd wordsmith-script
+cargo run --release -p wordsmith</code></pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <img src="assets/brand/wordsmith-and-ink-wordmark-paper.svg" alt="Wordsmith &amp; Ink">
+          <p>Free, open-source writing apps for screenwriters, novelists and authors. A project of
+            <a href="https://jamescj.org" target="_blank" rel="noopener">The James C. J. Foundation</a>.</p>
+        </div>
+        <div>
+          <h4>Apps</h4>
+          <ul>
+            <li><a href="script.html">Wordsmith Script</a></li>
+            <li><a href="manuscript.html">Wordsmith Manuscript</a></li>
+            <li><a href="book.html">Wordsmith Book</a></li>
+            <li><a href="launcher.html">Wordsmith Launcher</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Project</h4>
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="open-source.html">Open source</a></li>
+            <li><a href="open-source.html#roadmap">Road to 1.0</a></li>
+            <li><a href="open-source.html#get-involved">Get involved</a></li>
+            <li><a href="open-source.html#privacy">Privacy</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Elsewhere</h4>
+          <ul>
+            <li><a href="https://github.com/jamescjfoundation" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://jamescj.org" target="_blank" rel="noopener">The James C. J. Foundation</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot-legal">
+        <span>The apps' code is open source under MIT or Apache-2.0. Wordsmith, Wordsmith &amp; Ink and the app names and logos are trademarks of The James C. J. Foundation.</span>
+        <span>Set in Courier Prime and Inter.</span>
+      </div>
+    </div>
+  </footer>
+  <script src="assets/js/site.js" defer></script>
+</body>
+</html>

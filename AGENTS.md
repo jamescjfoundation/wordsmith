@@ -29,7 +29,7 @@ These come from the project's public promises on the website. Don't break them.
 
 - Pages are generated. The shared header, footer and all page text are in `website/tools/build.py`. Edit that, then run `python3 website/tools/build.py` from the repo root and commit the regenerated `.html` files with it. Don't hand-edit the `.html` pages; the next build overwrites them.
 - Styles: `website/assets/css/site.css` (brand color tokens, dark theme follows the system). JS: `website/assets/js/site.js`; the site must work with JS off.
-- Links between pages stay relative, so the site also works from a local preview or a subpath. It is served at `https://wordsmithand.ink/`; the only absolute URLs are the canonical, `og:url` and `og:image` tags, built from `SITE` in `build.py`.
+- Links between pages stay relative, so the site also works from a local preview or a subpath. It is served at `https://wordsmithand.ink/`; the only absolute URLs are the canonical, `og:url` and `og:image` tags, built from `SITE` in `build.py`. The 404 page is the exception: `build.py` makes its local links start at `/`, because Pages shows it at any missing address, including ones inside folders.
 - Preview: `python3 -m http.server -d website` then http://localhost:8000.
 - Deploy: `.github/workflows/pages.yml` publishes `website/` on every push to `main` that touches it. Pages is set to the "GitHub Actions" source, with the custom domain `wordsmithand.ink` set in the repository's Pages settings.
 - Check before committing: every page builds, no broken relative links or missing assets, images have `alt` text, and the page reads well at phone width and in dark mode.

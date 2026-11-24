@@ -1,0 +1,87 @@
+---
+title: Wordsmith Book
+description: A free, open-source app for turning a finished manuscript into a print book and an ebook.
+icon: BookOpen
+---
+
+Wordsmith Book is for the last step of making a book. You bring a finished manuscript, choose a
+book design, set the trim size, chapter openings and front and back matter, and get a print-ready
+PDF for a paperback or hardcover and an EPUB for ebook stores. Every word is checked against your
+source, so nothing you wrote is lost or changed without your say.
+
+Book is for self-publishing authors first, and for small presses that make several books the same
+way. It is free and open source (MIT or Apache-2.0), made by The James C. J. Foundation, for macOS,
+Windows and Linux.
+
+## Where it stands
+
+<Callout type="warn" title="In development">
+  Book is being built now and is not ready for real books yet. There are no installers, and you
+  can't export a PDF or an EPUB from the app yet. If you want to look at it early, you can build
+  it from source: [Getting started](./getting-started.mdx) shows how.
+</Callout>
+
+Book is younger than Wordsmith Script and Wordsmith Manuscript. Much of the work so far is the
+part you don't see: reading your manuscript, typesetting the pages and writing the ebook. The
+window that puts it all in your hands comes later. So in this section each feature is marked:
+
+- <Status value="available" /> works in the app window today.
+- <Status value="in-progress" /> is built and tested inside Book, but you can't reach it from the
+  window yet.
+- <Status value="planned" /> is not built yet.
+
+## What you can do today
+
+These work in the app window now. <Status value="available" />
+
+- **Open a book project** and see its outline: front matter, parts, chapters and back matter.
+- **Link a Wordsmith Manuscript project.** Book reads it and never changes it. When the writer
+  changes the manuscript, Book notices.
+- **Fix a typo** in a paragraph. For a linked manuscript, the fix is offered back to the writer to
+  accept or reject in Manuscript.
+- **Arrange front and back matter** by dragging it in the outline.
+- **Choose a book design** from six, filtered by genre and mood, with a preview of your own first
+  chapter.
+- **Add editions** (paperback, hardcover, ebook) and give each its ISBN, which Book checks.
+- **See what's missing** from your book's details before it can be published.
+- **Review typographic cleanup** (curly quotes, dashes, ellipses) one change at a time, or keep the
+  text exactly as written.
+- **Keep your work safe** with auto-save, crash recovery and backups.
+
+## Built, but not in the window yet
+
+These are working and tested inside Book, and are waiting for the screens that use them.
+<Status value="in-progress" />
+
+- Importing a Word (DOCX), OpenDocument (ODT), RTF, Markdown or plain-text file, with chapters and
+  scene breaks found for you and every word checked.
+- Typesetting the whole book for print: trims, mirrored margins, running heads, page numbers,
+  chapter openings, drop caps and scene breaks.
+- Writing the EPUB: navigation, accessibility information, embedded fonts and the cover.
+- Chapter number styles, subtitles and epigraphs, mixing designs and saving your own.
+
+## Coming later
+
+Not built yet. <Status value="planned" />
+
+- Print and ebook previews.
+- Preflight: checking the files against print and ebook rules before you upload them.
+- Exporting the print PDF and the EPUB from the app.
+- The command line for building books from a script.
+- A cover template, footnotes, hardcover settings and more trims.
+
+[What's next](./whats-next.mdx) has the whole plan.
+
+## In this section
+
+<Cards>
+  <Card title="Getting started" href="/book/getting-started/">Build the app and open your first book.</Card>
+  <Card title="Bringing your book in" href="/book/bringing-your-book-in/">Link a Manuscript project or import a file, then tidy the text.</Card>
+  <Card title="Front and back matter" href="/book/front-and-back-matter/">Title page, copyright, contents, chapters, parts and editions.</Card>
+  <Card title="Book designs" href="/book/designs/">Six designs, chapter openings, and making your own.</Card>
+  <Card title="Print books" href="/book/print/">Trim sizes, margins, page numbers and the print PDF.</Card>
+  <Card title="Ebooks" href="/book/ebooks/">The EPUB, its navigation, accessibility and cover.</Card>
+  <Card title="Preview, preflight and export" href="/book/preflight-and-export/">Checking and making the final files.</Card>
+  <Card title="Files and saving" href="/book/files/">What a book project is and how your work is kept safe.</Card>
+  <Card title="What's next" href="/book/whats-next/">The road to the first release and beyond.</Card>
+</Cards>

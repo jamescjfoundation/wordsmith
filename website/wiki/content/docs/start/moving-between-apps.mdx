@@ -1,0 +1,66 @@
+---
+title: Moving between the apps
+description: How Script, Manuscript and Book share work, and what isn't connected yet.
+icon: ArrowRightLeft
+---
+
+Each app works on its own. Where two of them meet, they share files rather than copying text
+between them, so you never end up with two versions of the same chapter.
+
+## Script files in a Manuscript project
+
+A Manuscript project can hold Wordsmith Script files (`.wss`) in its binder, next to your
+chapters. That's handy for a screenplay adaptation of your novel, or a script you're writing
+alongside it.
+
+- Manuscript shows a script read-only, laid out as a script.
+- To edit it, open it in Wordsmith Script. Your changes show up in Manuscript next time it reads
+  the file.
+
+See [Manuscript: The binder](../manuscript/binder.mdx).
+
+## From Manuscript to Book
+
+<Status value="in-progress" />
+
+When your novel is finished, Wordsmith Book turns it into a print book and an ebook. Book is still
+being built; this is how it works so far.
+
+<Steps>
+<Step>
+
+### Book links to your manuscript
+
+A book project points at your Manuscript project (the `.wsm` folder, or a packed `.wsmz` file).
+Book **reads** it and **never writes to it**, so your manuscript stays exactly as you left it.
+In Manuscript, **Export › Book package** makes a `.wsmz` file to hand to Book.
+
+</Step>
+<Step>
+
+### Book offers fixes back
+
+If Book finds something to fix in the text, it doesn't change your manuscript. It writes the
+suggestion to a small file next to your project (`My Novel.wsm-offers.json`).
+
+</Step>
+<Step>
+
+### You decide in Manuscript
+
+Manuscript shows the suggestions in its **Offered fixes** list. Accept the ones you want and
+reject the rest. The manuscript stays the one true copy of your words.
+
+</Step>
+</Steps>
+
+Book can't yet start a new book from your manuscript in its window, or export the finished PDF
+and EPUB. [Book: Bringing your book in](../book/bringing-your-book-in.mdx) explains what works
+today and [Manuscript: Sending to Book](../manuscript/sending-to-book.mdx) covers the Manuscript
+side.
+
+## Not connected yet
+
+- **Script and Book** don't work with each other; Book is for prose books.
+- **Sharing a story bible with Script:** using one set of characters and places across a novel and
+  its screenplay is <Status value="planned" />.

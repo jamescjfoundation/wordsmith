@@ -1,0 +1,127 @@
+---
+title: Getting started
+description: Build Wordsmith Manuscript, start a novel and find your way around the window.
+icon: Rocket
+---
+
+## Get the app
+
+<Callout type="info">
+  There are no installers yet. Until the first release is published, you run Manuscript by
+  building it from its source code. It takes a few commands and works on macOS, Windows and Linux.
+</Callout>
+
+<Steps>
+<Step>
+
+### Install Rust
+
+Install [rustup](https://rustup.rs), the usual Rust installer. You don't need to pick a version:
+the project names the exact Rust release it uses, and rustup fetches it the first time you build.
+
+</Step>
+<Step>
+
+### Get the source
+
+```sh
+git clone https://github.com/jamescjfoundation/wordsmith-manuscript
+cd wordsmith-manuscript
+```
+
+</Step>
+<Step>
+
+### Build and run
+
+```sh
+cargo run --release -p wordsmith-manuscript
+```
+
+The first build downloads the libraries Manuscript is built from, so it needs an internet
+connection and takes a while. Later builds are much quicker.
+
+</Step>
+</Steps>
+
+## Start a project
+
+When no project is open, the start window shows the templates, Open, and your recent projects.
+Pick a template:
+
+- **Novel**: a title page, Part One with Chapter One and Scene One, folders for the story bible
+  (Characters, Places, Objects, Groups, Lore, Plot Threads), and notes for your premise and
+  synopsis.
+- **Short story collection**: a title page and a contents page, Story One with a scene, and the
+  same bible and notes.
+- **Your templates**: any you have saved yourself (see below).
+
+Manuscript makes a new project folder in your Documents folder. To choose another place, use
+File › New. A project is a folder whose name ends in `.wsm`; [Files, saving and backups](./files.mdx)
+explains what is inside.
+
+<Callout type="info">
+  Manuscript does not have the system's file dialogs yet. Where it needs a file or folder (to open,
+  import or export), you type its path on the File page.
+</Callout>
+
+## The window
+
+- **The ribbon** across the top has three tabs: Write, Bible and View.
+- **The binder** on the left holds everything in the project, in five areas: Manuscript, Story
+  Bible, Research, Notes and Trash. See [The binder](./binder.mdx).
+- **The editor** in the middle shows the selected document. The View tab switches it to the
+  corkboard, the outline and the other [planning views](./planning.mdx).
+- **The inspector** on the right shows the selected item's synopsis, label, status, fields,
+  target, keywords, linked bible entries, notes, comments and snapshots.
+- **The status bar** shows the words in the document and the selection, how far the manuscript
+  has come toward its target, and the words written this session.
+- **The File page** (File in the ribbon) is where you make, open, import and export projects, set
+  targets, change keys and open the preferences.
+
+## Your first words
+
+Select Scene One in the binder and start typing. Your work saves itself as you go; File › Save
+(<Kbd>Mod</Kbd>+<Kbd>S</Kbd>) saves at once. To add the next scene, press
+<Kbd>Mod</Kbd>+<Kbd>Alt</Kbd>+<Kbd>N</Kbd>: a new document appears after the selected one.
+
+In these pages, <Kbd>Mod</Kbd> means <Kbd>Ctrl</Kbd> on Windows and Linux and <Kbd>Cmd</Kbd>
+on a Mac.
+
+## The command palette
+
+Every command is in the command palette (<Kbd>Mod</Kbd>+<Kbd>Shift</Kbd>+<Kbd>P</Kbd>). Type a
+few letters of what you want and pick it. Some things, like Save as Template or Series, live only
+there. Every command can also be given a key of your own on File › Keys.
+
+## Your own templates
+
+Once a project has the shape you like, run **Save as Template** in the command palette. It keeps
+the binder, labels, statuses, keywords, fields, entry types, targets and export settings, every
+item's synopsis and notes, and the text of front matter, back matter, notes and research. The
+book's own chapters and scenes are left empty, and bible entries, pictures, comments and
+snapshots are not kept. Your templates are kept on this computer and appear under Your Templates
+in the start window.
+
+## Interface language
+
+The interface is in English and Spanish. It follows your computer's language when it can, and
+uses English otherwise. To choose, run **Interface Language: English** or **Interface Language:
+Español** in the command palette. Anything not translated yet shows in English.
+
+The language of your *text*, used for spelling and curly quotes, is separate. It belongs to the
+project: set it in File › Book Details.
+
+## Screen readers
+
+The window works with screen readers. Every button, field, binder row, card and table cell has a
+name. The editor reads as a text field named after the document, and reports the paragraph you
+are in and where the caret is as you move.
+
+## Privacy
+
+- Manuscript sends no telemetry: no usage reports, no crash reports, nothing.
+- Your text, notes, bible and file names never leave your computer.
+- The only request it makes on its own is the **update check**: when it starts (and when you choose
+  Check for Updates) it asks GitHub for the list of Manuscript's releases. To turn it off, clear
+  "Check for updates when the app starts" in File › Preferences.

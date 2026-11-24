@@ -1,6 +1,6 @@
 # Wordsmith brand guide
 
-The identity of the Wordsmith suite, The J. C. J. Foundation's free, open-source writing apps: **Wordsmith Script** (screenplays), **Wordsmith Manuscript** (novels and long work) and **Wordsmith Book** (book and ebook formatting). One guide for all three: the shared system first, then what each app owns. Version 3, 23 November 2026. The app names are working names until the trademark check is done.
+The identity of the Wordsmith suite, The James C. J. Foundation's free, open-source writing apps: **Wordsmith Script** (screenplays), **Wordsmith Manuscript** (novels and long work) and **Wordsmith Book** (book and ebook formatting). One guide for all three: the shared system first, then what each app owns. Version 3, 23 November 2026. The app names are working names until the trademark check is done.
 
 ![The three apps](wordsmith-suite-overview.png)
 
@@ -150,7 +150,7 @@ Wordsmith talks like a writer helping another writer: plain, warm, short. It nam
 
 ## Growing the family
 
-A new Wordsmith product types its own name the same way, takes its own first letter for the icon, and picks a cursor color (at least 3:1 on both ink and paper, and different from the others in lightness as well as hue) and, if it helps, a cursor shape that comes from the product's own world. Wordsmith And Ink, the possible publishing imprint, would follow the same rule. The Foundation's own identity stays separate; a Wordsmith logo can say "a project of The J. C. J. Foundation" in text under it, never merged into it.
+A new Wordsmith product types its own name the same way, takes its own first letter for the icon, and picks a cursor color (at least 3:1 on both ink and paper, and different from the others in lightness as well as hue) and, if it helps, a cursor shape that comes from the product's own world. Wordsmith And Ink, the possible publishing imprint, would follow the same rule. The Foundation's own identity stays separate; a Wordsmith logo can say "a project of The James C. J. Foundation" in text under it, never merged into it.
 
 ## Files and repositories
 

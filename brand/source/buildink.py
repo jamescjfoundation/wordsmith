@@ -1,11 +1,11 @@
 """Wordsmith & Ink parent brand builder. Usage: python3 buildink.py <outdir>
-Needs the product builder (buildp.py, text.py) beside it and Courier Prime + Inter
-TTFs in WORDSMITH_FONT_DIR (see text.py). The parent mark is one color: the name
+Needs the product builder (buildp.py, text.py) beside it and the fonts (see text.py).
+Usually run through build.py. The parent mark is one color: the name
 typed in Courier Prime Bold, and a cursor that lets fall a drop of ink."""
 import sys, os, json
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 import buildp as B
-from text import text_path, fit_svg
+from text import text_path, fit_svg, make_ico
 import cairosvg
 from xml.sax.saxutils import escape
 _svg=B.svg
@@ -42,7 +42,7 @@ PALETTE=[("Iron Gall Ink","#1C2340","The mark, icon tile, spines, title pages"),
  ("Brad Brass","#B8862B","Wordsmith Script"),("Card Red","#D24B3E","Wordsmith Manuscript"),("Ribbon Green","#2E9473","Wordsmith Book")]
 APPS=[('script','Wordsmith Script'),('manuscript','Wordsmith Manuscript'),('book','Wordsmith Book')]
 def build(OUT):
-    for d in ('logo','icon','palette','lockups'): os.makedirs(f'{OUT}/{d}',exist_ok=True)
+    for d in ('logo','app-icon','palette','lockups'): os.makedirs(f'{OUT}/{d}',exist_ok=True)
     def save(n,s):
         open(f'{OUT}/{n}','w').write(s)
         if n.startswith('logo/') or 'endorsed' in n: fit_svg(f'{OUT}/{n}')
@@ -54,16 +54,16 @@ def build(OUT):
         w,h,b=block(['Wordsmith','& Ink'],100,fg,center=True); save(f'logo/wordsmith-and-ink-imprint-{nm}.svg',B.svg(w,h,b,NAME))
         # foundation line in text under the wordmark (never merged into it)
         w,h,b=block([NAME],100,fg); sub=SLATE if fg==INK else SLATE_DARK
-        lb,la=line('A project of The J. C. J. Foundation',30,0,h+52,sub)
-        save(f'logo/wordsmith-and-ink-foundation-{nm}.svg',B.svg(max(w,la),h+60,b+lb,NAME+', a project of The J. C. J. Foundation'))
-    save('icon/wordsmith-and-ink-icon.svg',B.svg(1024,1024,icon(),NAME+' icon'))
-    save('icon/wordsmith-and-ink-icon-small.svg',B.svg(1024,1024,icon(glyph=700),NAME+' icon, small sizes'))
-    save('icon/favicon.svg',B.svg(1024,1024,icon(glyph=700),NAME))
-    save('icon/wordsmith-and-ink-icon-macos.svg',B.svg(1024,1024,f'<g transform="translate(100 100) scale({824/1024})">{icon()}</g>',NAME+' icon (macOS grid)'))
-    for s in [1024,512,256,128,64]: cairosvg.svg2png(url=f'{OUT}/icon/wordsmith-and-ink-icon.svg',write_to=f'{OUT}/icon/icon-{s}.png',output_width=s,output_height=s)
-    for s in [48,32,16]: cairosvg.svg2png(url=f'{OUT}/icon/wordsmith-and-ink-icon-small.svg',write_to=f'{OUT}/icon/icon-{s}.png',output_width=s,output_height=s)
-    cairosvg.svg2png(url=f'{OUT}/icon/wordsmith-and-ink-icon-macos.svg',write_to=f'{OUT}/icon/icon-macos-1024.png',output_width=1024,output_height=1024)
-    os.system(f'cd "{OUT}/icon" && convert icon-16.png icon-32.png icon-48.png icon-64.png icon-128.png icon-256.png wordsmith-and-ink.ico')
+        lb,la=line('A project of The James C. J. Foundation',30,0,h+52,sub)
+        save(f'logo/wordsmith-and-ink-foundation-{nm}.svg',B.svg(max(w,la),h+60,b+lb,NAME+', a project of The James C. J. Foundation'))
+    save('app-icon/wordsmith-and-ink-icon.svg',B.svg(1024,1024,icon(),NAME+' icon'))
+    save('app-icon/wordsmith-and-ink-icon-small.svg',B.svg(1024,1024,icon(glyph=700),NAME+' icon, small sizes'))
+    save('app-icon/favicon.svg',B.svg(1024,1024,icon(glyph=700),NAME))
+    save('app-icon/wordsmith-and-ink-icon-macos.svg',B.svg(1024,1024,f'<g transform="translate(100 100) scale({824/1024})">{icon()}</g>',NAME+' icon (macOS grid)'))
+    for s in [1024,512,256,128,64]: cairosvg.svg2png(url=f'{OUT}/app-icon/wordsmith-and-ink-icon.svg',write_to=f'{OUT}/app-icon/icon-{s}.png',output_width=s,output_height=s)
+    for s in [48,32,16]: cairosvg.svg2png(url=f'{OUT}/app-icon/wordsmith-and-ink-icon-small.svg',write_to=f'{OUT}/app-icon/icon-{s}.png',output_width=s,output_height=s)
+    cairosvg.svg2png(url=f'{OUT}/app-icon/wordsmith-and-ink-icon-macos.svg',write_to=f'{OUT}/app-icon/icon-macos-1024.png',output_width=1024,output_height=1024)
+    make_ico(f'{OUT}/app-icon','wordsmith-and-ink.ico')
     B.write_palette(NAME,'wordsmith-and-ink',PALETTE,f'{OUT}/palette/')
     # endorsed product lockups: product wordmark, and under it "a Wordsmith & Ink app" in Inter
     for key,pname in APPS:

@@ -23,15 +23,17 @@ These come from the project's public promises on the website. Don't break them.
 - **Privacy:** no telemetry, analytics, accounts, trackers or third-party requests. The website self-hosts its fonts for this reason; no CDNs, Google Fonts or embeds. The only network request any app makes on its own is the update check with GitHub, and it can be turned off.
 - **Licensing:** code is MIT OR Apache-2.0. Only add dependencies with compatible licenses, and credit them (README/NOTICE).
 - **Names:** "Wordsmith", "Wordsmith & Ink", "Wordsmith Script", "Wordsmith Manuscript", "Wordsmith Book" are trademarks. Use them exactly as written. The launcher is "Wordsmith Launcher".
-- **Brand assets:** `brand/` is the brand kit and the source for every logo, icon, color and font choice. Read `brand/suite/BRAND_GUIDE.md` before any visual work. Copies elsewhere (`website/assets/brand/`, the app repos) are taken from `brand/` unchanged. Never edit, recolor or redraw a brand file. If one is wrong, it gets fixed in the design masters and copied into `brand/` again.
+- **Brand assets:** `brand/` is the brand kit and the source for every logo, icon, color and font choice. Read `brand/suite/BRAND_GUIDE.md` before any visual work. Copies elsewhere (`website/assets/brand/`, the app repos) are taken from `brand/` unchanged. Never edit, recolor or redraw a brand file by hand. Logos, icons, palettes and the guideline PDFs change only through `brand/source/` and a rebuild.
+- **The Foundation's name** is always "The James C. J. Foundation", never "The J. C. J. Foundation".
 - **Writing style:** plain, short, friendly sentences for writers, not developers. No marketing superlatives. Don't claim a feature exists before it does; mark planned things as planned.
 
 ## brand/
 
-- A byte-for-byte copy of the design masters in the Foundation's shared drive (`10. Open Source / 01. Wordsmith`), with folder names lowercased and hyphenated. Filenames stay as the kit names them. `brand/README.md` maps each folder to its drive folder.
-- Update it by copying the new masters in. Don't hand-edit them. Keep `brand/README.md` in step with the kit's README, and note the kit version.
+- Started from the kit in the Foundation's shared drive (`10. Open Source / 01. Wordsmith`), with folder names lowercased and hyphenated. Filenames stay as the kit names them. `brand/README.md` maps each folder to its drive folder and explains the build.
+- Generated files (logos, icons, lockups, palettes, `production/` sets, the Brand Guidelines and Product Assets PDFs) come from `brand/source/build.py`. To change one, edit the script in `brand/source/`, run `python3 brand/source/build.py` to see what changes, then rerun it with `--write` (add `--pdf` for the PDFs). Nothing runs in CI. The fonts must come from `brand/source/fetch_fonts.py`, because other versions change the outlines.
+- Hand-written files (READMEs, `suite/BRAND_GUIDE.md`, the apps' `tokens.json`, the Introduction PDF) are edited directly, and must be kept in step with the generated files.
+- Never commit `brand/build/`, `brand/source/fonts/` or `brand/source/node_modules/`.
 - Use the `-ink` versions on light backgrounds and `-paper` versions on dark backgrounds. Each app's `production/` folder is the ready-made set to copy into that app's repo.
-- The build scripts in `*/source/` aren't wired up for this repo yet (see `brand/README.md`). Don't run them to regenerate files here.
 
 ## website/
 

@@ -1,5 +1,16 @@
 import os, json, html
-S=os.environ['S']; K='/mnt/project-files/wordsmith/brand-kit'; F=S+'/fonts'
+HERE=os.path.dirname(os.path.abspath(__file__))
+K=os.environ.get('WORDSMITH_BRAND',os.path.abspath(os.path.join(HERE,'..','..')))   # the brand/ folder the pages show
+S=os.environ.get('WORDSMITH_PDF_OUT',os.path.join(K,'build','pdf'))                 # where the HTML (and PDFs) go
+F=os.environ.get('WORDSMITH_FONT_DIR',os.path.join(HERE,'..','fonts'))
+os.makedirs(S,exist_ok=True)
+def ff(n):
+    """font file by name, .ttf or .otf"""
+    t=os.path.join(F,n+'.ttf'); return t if os.path.exists(t) else os.path.join(F,n+'.otf')
+# the kit's drive folder names, as they are named in this repository
+DIRS={'00. PDFs':'pdfs','01. Wordsmith & Ink':'wordsmith-and-ink','02. Wordsmith Script':'wordsmith-script',
+      '03. Wordsmith Manuscript':'wordsmith-manuscript','04. Wordsmith Book':'wordsmith-book','05. Suite':'suite',
+      'Logo':'logo','App icon':'app-icon','Lockups':'lockups','Palette':'palette'}
 INK='#1C2340'; PAPER='#FAFAF7'; NIGHT='#12162B'; SLATE='#5A6080'; BLUE='#3B4FA8'
 APPS={'script':dict(dir='02. Wordsmith Script',name='Wordsmith Script',short='Script',color='#B8862B',cname='Brad Brass',text='#8A6418',letter='S',
         what='Screenplays',cursor='A solid brass bar, as tall as the capitals and 0.15 em wide, sitting on the baseline. It comes from the brass brads that bind a script. It may blink in motion pieces (530 ms on, 530 ms off, no fades); everywhere else it is solid.',
@@ -13,13 +24,14 @@ APPS={'script':dict(dir='02. Wordsmith Script',name='Wordsmith Script',short='Sc
         what='Print books and ebooks',cursor='A ribbon bookmark: a bar 0.15 em wide that starts at the height of the capitals and drops 0.30 em below the baseline, ending in a V notch. The writing is finished; keep your place. It never blinks; it may drop into place once (300 ms) when an export finishes.',
         product=['Brand fonts stay in the app\'s chrome. Book previews always use the fonts of the chosen book design, never Courier Prime or Inter.','Print previews show the page on white or cream stock, fixed in both themes.','Green also marks a passed preflight check, always with text and a check icon.'],
         mark='wordsmith-book-mark')}
-def p(*a): return 'file://'+os.path.join(K,*a)
+def path(*a): return os.path.join(K,*[DIRS.get(x,x) for x in a])
+def p(*a): return 'file://'+path(*a)
 CSS=f'''
-@font-face{{font-family:"Courier Prime";font-weight:700;src:url(file://{F}/CourierPrime-700.ttf)}}
-@font-face{{font-family:"Courier Prime";font-weight:400;src:url(file://{F}/CourierPrime-400.ttf)}}
-@font-face{{font-family:"Inter";font-weight:400;src:url(file://{F}/Inter-400.ttf)}}
-@font-face{{font-family:"Inter";font-weight:500;src:url(file://{F}/Inter-500.ttf)}}
-@font-face{{font-family:"Inter";font-weight:600;src:url(file://{F}/Inter-600.ttf)}}
+@font-face{{font-family:"Courier Prime";font-weight:700;src:url(file://{ff('CourierPrime-700')})}}
+@font-face{{font-family:"Courier Prime";font-weight:400;src:url(file://{ff('CourierPrime-400')})}}
+@font-face{{font-family:"Inter";font-weight:400;src:url(file://{ff('Inter-400')})}}
+@font-face{{font-family:"Inter";font-weight:500;src:url(file://{ff('Inter-500')})}}
+@font-face{{font-family:"Inter";font-weight:600;src:url(file://{ff('Inter-600')})}}
 @page{{size:297mm 210mm;margin:0}}
 *{{box-sizing:border-box;margin:0;padding:0}}
 body{{font-family:Inter;color:{INK};-webkit-print-color-adjust:exact;print-color-adjust:exact}}

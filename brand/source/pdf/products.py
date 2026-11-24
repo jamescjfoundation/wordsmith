@@ -5,7 +5,7 @@ pg=[]
 # cover
 icons=''.join(f'<div style="text-align:center">{img(p(a["dir"],"App icon","icon-512.png"),h="46mm")}<div style="font:600 11pt Inter;margin-top:4mm">{a["short"]}</div><div style="font-size:8.5pt;color:#9EA3BD">{a["what"]}</div></div>' for a in APPS.values())
 pg.append(page(f'''<div class="kick">Wordsmith &amp; Ink · Product assets</div>
-<h1 style="font-size:40pt">The Wordsmith apps</h1><p style="max-width:170mm;font-size:11pt">Three free, open-source writing apps from The J. C. J. Foundation: logos, app icons, colors and type for each, and where to find every file.</p>
+<h1 style="font-size:40pt">The Wordsmith apps</h1><p style="max-width:170mm;font-size:11pt">Three free, open-source writing apps from The James C. J. Foundation: logos, app icons, colors and type for each, and where to find every file.</p>
 <div style="display:flex;gap:22mm;justify-content:center;align-items:flex-start;margin-top:auto;margin-bottom:14mm">{icons}</div>''','dark night',FOOT))
 # shared system
 pg.append(page(f'''<div class="kick">The shared system</div><h2>One idea, three cursors</h2>
@@ -53,8 +53,8 @@ for k,a in APPS.items():
     pg.append(page(f'''<div class="kick">{a["name"]} · App icon and color</div><h2>App icon</h2>
 <div style="display:flex;gap:6mm;align-items:flex-end">{sizes}<div style="text-align:center;margin-left:6mm">{img(I("icon-macos-1024.png"),h="40mm")}<div class="cap">macOS grid</div></div></div>
 <p style="font-size:8.5pt;color:{SLATE};margin-top:3mm">Master: <code>{slug}-icon.svg</code>, PNGs 1024 to 64. Small sizes (48, 32, 16) use <code>{slug}-icon-small.svg</code> with a larger letter. macOS: <code>{slug}-icon-macos.svg</code> on the 824 px grid; build the .icns from <code>icon-macos-1024.png</code>. Windows: <code>{slug.replace("wordsmith-","wordsmith-")}.ico</code>. Web: <code>favicon.svg</code>.</p>
-<h2 style="margin-top:7mm">Palette</h2>{swatches(f"{K}/{D}/Palette/{slug}.json")}
-<p style="font-size:8.5pt;color:{SLATE};margin-top:3mm">{a["cname"]} is a spice: one thing per screen, usually the cursor itself. Use {a["text"]} for text. Palette files for design apps in <code>Palette/</code>: .ase, .gpl, .css, .json and a swatch card. Full design tokens with dark values: <code>tokens.json</code>.</p>''','',FOOT))
+<h2 style="margin-top:7mm">Palette</h2>{swatches(path(D,"Palette",f"{slug}.json"))}
+<p style="font-size:8.5pt;color:{SLATE};margin-top:3mm">{a["cname"]} is a spice: one thing per screen, usually the cursor itself. Use {a["text"]} for text. Palette files for design apps in <code>palette/</code>: .ase, .gpl, .css, .json and a swatch card. Full design tokens with dark values: <code>tokens.json</code>.</p>''','',FOOT))
 # typography + files
 pg.append(page(f'''<div class="kick">Shared</div><h2>Typography and files</h2><div class="cols c2"><div>
 <div style="font:700 26pt 'Courier Prime'">Courier Prime Bold</div><p>Display: logos, title screens, headings of a few words in sentence case. SIL OFL 1.1.</p>
@@ -62,13 +62,13 @@ pg.append(page(f'''<div class="kick">Shared</div><h2>Typography and files</h2><d
 <div style="font:400 12pt 'Courier Prime';margin-top:6mm;background:#fff;border:.3mm solid #E4E5EC;padding:5mm;border-radius:2mm">INT. WRITING ROOM - NIGHT<br><br>A cursor blinks at the end of a line.</div>
 <p style="margin-top:3mm">Never set long paragraphs in Courier outside a script or manuscript page.</p></div>
 <div><table><tr><th>Folder</th><th>What is in it</th></tr>
-<tr><td><code>00. PDFs</code></td><td>This document and the Wordsmith &amp; Ink brand guidelines</td></tr>
-<tr><td><code>01. Wordsmith &amp; Ink</code></td><td>The parent brand: Logo, App icon, Lockups, Palette, Source, tokens.json</td></tr>
-<tr><td><code>02. Wordsmith Script</code></td><td>production (ready-to-use set with README), Logo, App icon, Palette, Source, tokens.json</td></tr>
-<tr><td><code>03. Wordsmith Manuscript</code></td><td>production (ready-to-use set with README), Logo, App icon, Palette, Source, tokens.json</td></tr>
-<tr><td><code>04. Wordsmith Book</code></td><td>production (ready-to-use set with README), Logo, App icon, Palette, Source, tokens.json</td></tr>
-<tr><td><code>05. Suite</code></td><td>The suite brand guide (Markdown) and the overview image</td></tr>
+<tr><td><code>pdfs/</code></td><td>This document and the Wordsmith &amp; Ink brand guidelines</td></tr>
+<tr><td><code>wordsmith-and-ink/</code></td><td>The parent brand: logo, app-icon, lockups, palette, tokens.json</td></tr>
+<tr><td><code>wordsmith-script/</code></td><td>production (ready-to-use set with README), logo, app-icon, palette, tokens.json</td></tr>
+<tr><td><code>wordsmith-manuscript/</code></td><td>production (ready-to-use set with README), logo, app-icon, palette, tokens.json</td></tr>
+<tr><td><code>wordsmith-book/</code></td><td>production (ready-to-use set with README), logo, app-icon, palette, tokens.json</td></tr>
+<tr><td><code>suite/</code></td><td>The suite brand guide (Markdown) and the overview image</td></tr>
 </table>
-<p style="margin-top:4mm">Logos and icons are rebuilt by the scripts in each <code>Source/</code> folder if a name changes. They need the Courier Prime and Inter font files (both SIL OFL 1.1).</p>
+<p style="margin-top:4mm">Logos, icons and these PDFs are rebuilt by <code>brand/source/build.py</code> if a name changes. They need the Courier Prime and Inter font files (both SIL OFL 1.1).</p>
 <p>The apps' code is open source; the names and logos are the Foundation's trademarks. They may be used unmodified to refer to the project, not for forks or other products.</p></div></div>''','',FOOT))
-open(S+'/pdf/products.html','w').write(doc('Wordsmith apps: product assets',pg))
+open(os.path.join(S,'products.html'),'w').write(doc('Wordsmith apps: product assets',pg))

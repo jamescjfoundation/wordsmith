@@ -2,7 +2,7 @@
 
 User guides for Wordsmith Script, Manuscript and Book, published at https://wordsmithand.ink/wiki/.
 
-Built with [Fumadocs](https://fumadocs.dev) on Next.js and exported as static files. It's its own project, separate from the main site's plain HTML, and shares only the domain, the fonts and the logos.
+Built with [Fumadocs](https://fumadocs.dev) on Next.js and exported as static files. It's its own project, separate from the main site's plain HTML, and shares only the domain and the fonts.
 
 ## Writing pages
 
@@ -18,9 +18,19 @@ Pages are MDX (Markdown with a few components) in `content/docs/`:
 - Each folder's `meta.json` sets the page order (`pages`) and, for the tabs, `"root": true`.
 - Link to other pages by their file: `[Views](./views.mdx)` or `<Card title="Views" href="./views.mdx" />`.
 - Put pictures next to the pages (`script/images/…`) and link them relatively: `![The page view](./images/page-view.webp)`.
-- Components you can use without an import: `Callout`, `Cards`/`Card`, `Steps`/`Step`, `Tabs`/`Tab`, `Accordions`/`Accordion`, `Files`/`Folder`/`File`, `Kbd` (`<Kbd>Ctrl</Kbd>+<Kbd>S</Kbd>`) and `Status` (`<Status value="available|in-progress|planned" />`). They're registered in `components/mdx.tsx`.
+- Give a page or folder an app's icon with `icon: brand:wordsmith-script` (or `-manuscript`, `-book`, `-and-ink`).
+- Components you can use without an import: `Callout`, `Cards`/`Card`, `Steps`/`Step`, `Tabs`/`Tab`, `Accordions`/`Accordion`, `Files`/`Folder`/`File`, `Kbd` (`<Kbd>Ctrl</Kbd>+<Kbd>S</Kbd>`), `AppIcon` (`<AppIcon app="wordsmith-book" />`), `Wordmark` and `Status` (`<Status value="available|in-progress|planned" />`). They're registered in `components/mdx.tsx`.
 - Don't put `<Status>` or other components inside a heading: the page fails with "Status is not defined". Put it on the line under the heading.
 - Write for writers, in plain, short sentences. Only describe what an app does today, and mark the rest as planned. The rules are in the repository's `AGENTS.md`.
+
+## Brand
+
+The wiki follows `brand/suite/BRAND_GUIDE.md`:
+
+- **Logos and icons** are the kit's own files, copied unchanged into `public/brand/` (same folder names as `brand/`) by `npm run brand`. Never edit the copies. If the kit changes, run `npm run brand` again and commit the result. `npm run brand:check` fails if a copy is missing or out of date, and the deploy runs it. To use another kit file, add it to `scripts/brand.mjs`.
+- **Colors** are the kit's tokens, set in `app/global.css`: ink, paper and Margin Blue everywhere, and each app's own color (Brad Brass, Card Red, Ribbon Green) in its own section only, used sparingly: the sidebar's current page and the section switcher.
+- **Each app's home page** is titled with its wordmark, and each section uses the app's favicon.
+- **Fonts** (Courier Prime for headings, Inter for text) are the main site's self-hosted files in `/assets/fonts/`.
 
 ## Running it
 
@@ -29,7 +39,7 @@ Needs Node.js 22 or later.
 ```sh
 cd website/wiki
 npm install
-npm run dev        # http://localhost:3000/wiki/ (the fonts and logos come from the main site, so they're missing here)
+npm run dev        # http://localhost:3000/wiki/ (the fonts come from the main site, so they're missing here)
 npm run build      # static export into out/, the same as the deploy
 ```
 

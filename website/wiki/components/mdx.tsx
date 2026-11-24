@@ -4,9 +4,9 @@ import { File, Files, Folder } from 'fumadocs-ui/components/files';
 import { ImageZoom } from 'fumadocs-ui/components/image-zoom';
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
-import { BookOpen, Clapperboard, NotebookPen } from 'lucide-react';
 import type { MDXComponents } from 'mdx/types';
 import { Kbd, Status } from './wiki';
+import { AppIcon, Wordmark } from '@/lib/brand';
 
 /* Everything here can be used in any .mdx page without an import. */
 export function getMDXComponents(components?: MDXComponents) {
@@ -24,10 +24,9 @@ export function getMDXComponents(components?: MDXComponents) {
     Tabs,
     Kbd,
     Status,
-    // the apps' icons, for <Card icon={<Clapperboard />}>
-    BookOpen,
-    Clapperboard,
-    NotebookPen,
+    // the brand kit's app icons and wordmarks: <Card icon={<AppIcon app="wordsmith-script" />}>
+    AppIcon,
+    Wordmark,
     ...components,
   } satisfies MDXComponents;
 }

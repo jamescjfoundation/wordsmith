@@ -2,7 +2,9 @@
 @import 'fumadocs-ui/css/neutral.css';
 @import 'fumadocs-ui/css/preset.css';
 
-/* Wordsmith brand (brand/wordsmith-and-ink/tokens.json; same values as website/assets/css/site.css).
+/* Wordsmith brand: the shared tokens in brand/wordsmith-and-ink/tokens.json and the apps' own
+   colors in brand/wordsmith-<app>/tokens.json (see brand/suite/BRAND_GUIDE.md, "Color").
+   Logos and icons are the kit's files, copied into public/brand/ by scripts/brand.mjs.
    Fonts are the main site's self-hosted files, served from the site root. */
 @font-face { font-family: "Courier Prime"; font-weight: 400; font-style: normal; font-display: swap; src: url("/assets/fonts/courier-prime-latin-400-normal.woff2") format("woff2"); }
 @font-face { font-family: "Courier Prime"; font-weight: 700; font-style: normal; font-display: swap; src: url("/assets/fonts/courier-prime-latin-700-normal.woff2") format("woff2"); }
@@ -31,12 +33,10 @@
   --color-fd-accent-foreground: #1C2340;
   --color-fd-ring: #3B4FA8;
 
-  --color-script: #B8862B;
-  --color-script-text: #8A6418;
-  --color-manuscript: #D24B3E;
-  --color-manuscript-text: #A8322A;
-  --color-book: #2E9473;
-  --color-book-text: #1F7358;
+  /* callouts: accent, danger and success */
+  --color-fd-info: #3B4FA8;
+  --color-fd-error: #B3261E;
+  --color-fd-success: #2E7D4F;
 }
 
 .dark {
@@ -57,9 +57,26 @@
   --color-fd-accent-foreground: #E9EAF2;
   --color-fd-ring: #9AABF2;
 
-  --color-script-text: #D9AE55;
-  --color-manuscript-text: #F08A7E;
-  --color-book-text: #6CCBA6;
+  --color-fd-info: #9AABF2;
+  --color-fd-error: #F28B82;
+  --color-fd-success: #7CC79A;
+}
+
+/* Each app's section takes the app's own color, as a spice: the sidebar's current page and the
+   section switcher. Text uses the text-safe version; the graphic color only marks. Links, focus
+   and buttons stay Margin Blue. The page sets data-ws-app (see app/(docs)/[[...slug]]/page.tsx). */
+html:has([data-ws-app="wordsmith-script"]) { --ws-app: #B8862B; --ws-app-text: #8A6418; }
+html:has([data-ws-app="wordsmith-manuscript"]) { --ws-app: #D24B3E; --ws-app-text: #A8322A; }
+html:has([data-ws-app="wordsmith-book"]) { --ws-app: #2E9473; --ws-app-text: #1F7358; }
+html.dark:has([data-ws-app="wordsmith-script"]) { --ws-app-text: #D9AE55; }
+html.dark:has([data-ws-app="wordsmith-manuscript"]) { --ws-app-text: #F08A7E; }
+html.dark:has([data-ws-app="wordsmith-book"]) { --ws-app-text: #6CCBA6; }
+
+html:has([data-ws-app]) #nd-sidebar {
+  --color-fd-primary: var(--ws-app-text);
+}
+html:has([data-ws-app]) #nd-sidebar a[data-active="true"] {
+  box-shadow: inset 3px 0 0 var(--ws-app);
 }
 
 .dark #nd-sidebar {
@@ -85,12 +102,25 @@ html > body[data-scroll-locked] {
   letter-spacing: 0;
 }
 
-/* Logo in the nav: ink on light, paper on dark */
+/* Wordmarks: the ink version on light grounds, the paper version on dark */
+.ws-wordmark { display: inline-flex; }
+.ws-wordmark img { width: auto; height: 100%; }
+.ws-on-dark { display: none; }
+.dark .ws-on-light { display: none; }
+.dark .ws-on-dark { display: inline; }
+
+/* An app's home page is titled with its wordmark (at least 140 px wide, 160 for Manuscript) */
+.ws-app-title .ws-wordmark { height: 2.25rem; }
+
+.ws-app-icon { display: inline-block; flex-shrink: 0; border-radius: 22.5%; }
+/* the tile is brand-ink in both themes: a hairline keeps its edge on dark grounds */
+.dark .ws-app-icon { box-shadow: 0 0 0 1px #2C3358; }
+/* a card's app icon stands on its own, without the framed box other card icons get */
+:where(.prose) :has(> .ws-app-icon) { padding: 0; border: 0; box-shadow: none; background: none; }
+
+/* Logo in the nav */
 .ws-logo { display: inline-flex; align-items: center; gap: 0.5rem; }
-.ws-logo img { height: 1.05rem; width: auto; }
-.ws-logo-paper { display: none; }
-.dark .ws-logo-ink { display: none; }
-.dark .ws-logo-paper { display: inline; }
+.ws-logo .ws-wordmark { height: 1.05rem; }
 .ws-logo-label {
   font-family: var(--font-mono);
   font-weight: 700;
@@ -120,6 +150,6 @@ html > body[data-scroll-locked] {
   vertical-align: 0.15em;
   border: 1px solid currentColor;
 }
-.ws-status-available { color: var(--color-book-text); }
-.ws-status-in-progress { color: var(--color-script-text); }
+.ws-status-available { color: var(--color-fd-success); }
+.ws-status-in-progress { color: var(--color-fd-primary); }
 .ws-status-planned { color: var(--color-fd-muted-foreground); }

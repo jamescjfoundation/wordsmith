@@ -1,6 +1,6 @@
 # Wordsmith
 
-Shared pieces of the [Wordsmith](https://jamescjfoundation.github.io/wordsmith/) project: free, open-source writing apps for screenwriters, novelists and authors, from The James C. J. Foundation.
+Shared pieces of the [Wordsmith](https://wordsmithand.ink) project: free, open-source writing apps for screenwriters, novelists and authors, from The James C. J. Foundation.
 
 The apps themselves live in their own repositories. This repository is a small monorepo for everything that belongs to the project as a whole.
 

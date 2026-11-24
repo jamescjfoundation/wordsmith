@@ -1,0 +1,20 @@
+{
+  "title": "Wordsmith Manuscript",
+  "description": "Novels and long work",
+  "icon": "NotebookPen",
+  "root": true,
+  "pages": [
+    "index",
+    "getting-started",
+    "binder",
+    "writing",
+    "planning",
+    "story-bible",
+    "drafts-and-progress",
+    "import-and-export",
+    "sending-to-book",
+    "files",
+    "keyboard-shortcuts",
+    "whats-next"
+  ]
+}

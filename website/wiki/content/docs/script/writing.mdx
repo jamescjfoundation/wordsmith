@@ -1,0 +1,185 @@
+---
+title: Writing
+description: The script elements, Return and Tab, autocomplete, spelling, find, notes, text styles and macros.
+icon: PenLine
+---
+
+In these pages, **Mod** means <Kbd>Cmd</Kbd> on macOS and <Kbd>Ctrl</Kbd> on
+Windows and Linux, and **Alt** is <Kbd>Option</Kbd> on a Mac.
+
+## Elements
+
+Every paragraph in a script is one **element**. The screenplay elements are:
+
+| Element | Key | Element | Key |
+| --- | --- | --- | --- |
+| General | <Kbd>Mod</Kbd>+<Kbd>0</Kbd> | Transition | <Kbd>Mod</Kbd>+<Kbd>6</Kbd> |
+| Scene Heading | <Kbd>Mod</Kbd>+<Kbd>1</Kbd> | Shot | <Kbd>Mod</Kbd>+<Kbd>7</Kbd> |
+| Action | <Kbd>Mod</Kbd>+<Kbd>2</Kbd> | Cast List | <Kbd>Mod</Kbd>+<Kbd>8</Kbd> |
+| Character | <Kbd>Mod</Kbd>+<Kbd>3</Kbd> | New Act | <Kbd>Mod</Kbd>+<Kbd>9</Kbd> |
+| Parenthetical | <Kbd>Mod</Kbd>+<Kbd>4</Kbd> | End of Act | <Kbd>Mod</Kbd>+<Kbd>Shift</Kbd>+<Kbd>7</Kbd> |
+| Dialogue | <Kbd>Mod</Kbd>+<Kbd>5</Kbd> | Sequence | <Kbd>Mod</Kbd>+<Kbd>Shift</Kbd>+<Kbd>6</Kbd> |
+
+There are also **outline elements** (Outline 1 to 3, Summary and Note) for
+planning inside the script; see [Planning](./planning.mdx).
+
+You can change an element from the tiles on the **Write** tab (the rest are
+under **More**), from the right-click menu, or with its key. The **Element**
+panel in the Inspector shows the element at the caret too.
+
+## Return and Tab
+
+**Return** at the end of a paragraph starts the element that usually comes
+next. Return in the middle of a paragraph splits it. **Tab** changes the
+paragraph you are in to the other likely element.
+
+| You are in | Return gives | Tab gives |
+| --- | --- | --- |
+| Scene Heading | Action | Action |
+| Action | Action | Character |
+| Character | Dialogue | Transition (on an empty line) |
+| Dialogue | Action | Parenthetical |
+| Parenthetical | Dialogue | Dialogue |
+| Transition | Scene Heading | Scene Heading |
+
+You never set indents by hand, and the status bar always says what Return and
+Tab will make.
+
+In a **scene heading**, Tab after the intro (INT, EXT, I/E) adds `. ` and Tab
+after the place adds ` - `. The separators and the list of intros can be changed.
+
+If you'd like Return after a line of dialogue to start the next speaker instead
+of Action, search for **Character After Dialogue** in the command search box
+(<Kbd>Mod</Kbd>+<Kbd>Shift</Kbd>+<Kbd>P</Kbd>).
+
+### Element settings
+
+Each element's look and behavior are set once for the whole script in
+**Element Settings** (on the **Write** tab, under the elements' **More**
+button): font, size, style, alignment, line spacing, space before, indents, the
+element Return goes to, whether it starts a new page, and a shortcut. You can
+add elements of your own here, give an element a color, a highlight or
+strike-through, and put every element back to the template's formatting with
+**Template Formatting for All**.
+
+## Autocomplete
+
+Wordsmith Script keeps six lists, learned from what you write: characters,
+character extensions (like V.O.), scene intros, locations, times of day and
+transitions. When you type where one of them fits, matches appear under the
+caret.
+
+- <Kbd>Tab</Kbd> or <Kbd>Return</Kbd> takes the highlighted match.
+- <Kbd>Up</Kbd> and <Kbd>Down</Kbd> move through the list.
+- <Kbd>Escape</Kbd> hides it.
+- Simply typing on ignores it. **Nothing is ever filled in for you.**
+
+The lists can be edited, rebuilt from the script, or switched off one by one.
+
+## Spelling
+
+Misspelled words are underlined. Right-click one for suggestions, **Ignore in
+This Script** or **Add to Dictionary** (your dictionary is kept between
+sessions). Character names and scene intros are never flagged. Turn spelling on
+or off on the **Review** tab.
+
+<Callout type="info">
+Spelling is in English only for now.
+</Callout>
+
+## Find and replace
+
+<Kbd>Mod</Kbd>+<Kbd>F</Kbd> opens the find bar, with replace, match case and
+whole words. You can limit a search to one element (only dialogue, say).
+**Replace All** is one step to undo. The **Find** panel in the Script panel
+shows every result in context and shares its search with the find bar.
+
+## Going places
+
+- **Go To** (<Kbd>Mod</Kbd>+<Kbd>G</Kbd>): a page (a number, or a label such
+  as 12A when pages are locked), a scene number, or a bookmark.
+- **Bookmarks:** <Kbd>Mod</Kbd>+<Kbd>M</Kbd> adds one at the caret, and
+  <Kbd>Mod</Kbd>+<Kbd>Shift</Kbd>+<Kbd>M</Kbd> lists them. A bookmark stays with
+  its paragraph as you edit.
+- **Select Scene** (<Kbd>Mod</Kbd>+<Kbd>Shift</Kbd>+<Kbd>A</Kbd>), **New
+  Scene** (<Kbd>Mod</Kbd>+<Kbd>Shift</Kbd>+<Kbd>N</Kbd>) and **Page Break**
+  (<Kbd>Mod</Kbd>+<Kbd>Shift</Kbd>+<Kbd>Return</Kbd>).
+
+## Notes
+
+Select some text and press <Kbd>Mod</Kbd>+<Kbd>Alt</Kbd>+<Kbd>N</Kbd> to attach
+a note. Noted text is tinted on the page. Put the caret in it and press the same
+keys again to read or change the note. A note can have a title, a type, a color
+and a date. Step through notes with <Kbd>Mod</Kbd>+<Kbd>Alt</Kbd>+<Kbd>Down</Kbd>
+and <Kbd>Mod</Kbd>+<Kbd>Alt</Kbd>+<Kbd>Up</Kbd>.
+
+Notes are kept with the script and never printed. All of them are listed in the
+**Notes** panel and in the tables (see [Views](./views.mdx#tables)).
+
+## Text styles
+
+<Kbd>Mod</Kbd>+<Kbd>B</Kbd>, <Kbd>Mod</Kbd>+<Kbd>I</Kbd> and
+<Kbd>Mod</Kbd>+<Kbd>U</Kbd> make text bold, italic or underlined. With the
+caret inside a word, they style the whole word. With nothing selected, a style
+applies to what you type next.
+
+The **Write** tab's **Text** group also has double, word and dotted underlines,
+strike-through, raised and lowered text, capitals, small capitals and small
+letters, a highlighter with twelve named colors, and the ink color.
+**Plain Text** (<Kbd>Mod</Kbd>+<Kbd>Shift</Kbd>+<Kbd>T</Kbd>) removes them all.
+
+## Typing helpers
+
+- **Toggle Case** (<Kbd>Mod</Kbd>+<Kbd>Shift</Kbd>+<Kbd>K</Kbd>) puts the
+  selection in capitals, or back.
+- **Reset to Element** (<Kbd>Mod</Kbd>+<Kbd>Shift</Kbd>+<Kbd>R</Kbd>) drops
+  formatting set by hand. Notes, revision marks and bookmarks stay.
+- **Smart Quotes** and **Capitalize Sentences** are off until you turn them on
+  for a script (**Write** tab, **Typing** group). Common abbreviations such as
+  "Mr." don't start a new sentence.
+
+## Macros
+
+Each script has twenty macro slots (**Write** tab › **Macros** › **All Macros**
+› **Edit Macros**). A macro can make the paragraph an element, type some text
+(a line break acts as Return), and then start a new paragraph of another
+element.
+
+New scripts come with ten macros on <Kbd>Mod</Kbd>+<Kbd>Alt</Kbd>+<Kbd>Shift</Kbd>
+and a digit:
+
+| Digit | Macro | Digit | Macro |
+| --- | --- | --- | --- |
+| 1 | INT. | 6 and 7 | parentheticals |
+| 2 | EXT. | 8 | CUT TO: |
+| 3 | DAY | 9 | DISSOLVE TO: |
+| 4 | NIGHT | 0 | FADE OUT. |
+| 5 | CONTINUOUS | | |
+
+Run a macro from its key, from the **Macros** group, or by typing its **alias**:
+a word that is replaced with the macro's text when you finish the word. Options
+let an alias match capitals, ask first, match whole words only, and work only in
+some elements. **Copy from a script** replaces a script's macros with another
+script's.
+
+## Dual dialogue
+
+When two characters speak at once, put the caret in the second of two speeches
+in a row and choose **Dual Dialogue** (<Kbd>Mod</Kbd>+<Kbd>Shift</Kbd>+<Kbd>D</Kbd>,
+or the **Insert** tab). The two speeches print side by side.
+
+<Callout type="info">
+The page view shows dual dialogue side by side, but you edit the second speech
+in the normal or draft view.
+</Callout>
+
+## Tidying a script
+
+- **Check Format** (**Review** tab) finds paragraphs that start with spaces,
+  empty paragraphs, names with no speech, the same speaker twice in a row, and
+  dialogue with no name. The first three can be fixed in one click. You can
+  have the check offered or run before printing.
+- **Reformat** (**Review** tab) steps through the paragraphs one by one: press
+  a digit to make the paragraph that element and move on, <Kbd>D</Kbd> to
+  delete it, and the arrow keys to move. It's handy after importing a script
+  from plain text.

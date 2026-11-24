@@ -10,7 +10,7 @@ The apps themselves live in their own repositories. This repository is a small m
 | --- | --- | --- |
 | [`brand/`](brand/) | The brand kit: logos, app icons, palettes, tokens and brand guidelines | v1.0 |
 | [`website/`](website/) | The public website, plain HTML and CSS, published with GitHub Pages | Draft, live |
-| [`wiki/`](wiki/) | User and contributor documentation for the whole suite | Not started |
+| [`website/wiki/`](website/wiki/) | The wiki: user guides for Script, Manuscript and Book (Fumadocs), at wordsmithand.ink/wiki/ | Draft |
 | [`launcher/`](launcher/) | Wordsmith Launcher, a Rust app that installs, updates and opens the Wordsmith apps | Not started |
 
 ## The Wordsmith repositories
@@ -27,8 +27,8 @@ The apps themselves live in their own repositories. This repository is a small m
 
 Each folder has its own README with how to build, preview and publish it.
 
-- **Website:** `python3 website/tools/build.py` rewrites the pages; preview with `python3 -m http.server -d website`. Every push to `main` that touches `website/` deploys it.
-- **Wiki:** see [`wiki/README.md`](wiki/README.md).
+- **Website:** `python3 website/tools/build.py` rewrites the pages; preview with `python3 -m http.server -d website`. Every push to `main` that touches `website/` deploys it, wiki included.
+- **Wiki:** `npm install && npm run dev` in `website/wiki`; see [`website/wiki/README.md`](website/wiki/README.md). It deploys with the website.
 - **Launcher:** see [`launcher/README.md`](launcher/README.md).
 
 Contributors and coding agents: read [`AGENTS.md`](AGENTS.md) first.

@@ -1,0 +1,125 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+
+/* Wordsmith brand (brand/wordsmith-and-ink/tokens.json; same values as website/assets/css/site.css).
+   Fonts are the main site's self-hosted files, served from the site root. */
+@font-face { font-family: "Courier Prime"; font-weight: 400; font-style: normal; font-display: swap; src: url("/assets/fonts/courier-prime-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Courier Prime"; font-weight: 700; font-style: normal; font-display: swap; src: url("/assets/fonts/courier-prime-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 400; font-style: normal; font-display: swap; src: url("/assets/fonts/inter-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 500; font-style: normal; font-display: swap; src: url("/assets/fonts/inter-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 600; font-style: normal; font-display: swap; src: url("/assets/fonts/inter-latin-600-normal.woff2") format("woff2"); }
+
+@theme {
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Courier Prime", "Courier New", Courier, monospace;
+
+  --color-fd-background: #FAFAF7;
+  --color-fd-foreground: #1C2340;
+  --color-fd-muted: #EEEFF4;
+  --color-fd-muted-foreground: #5A6080;
+  --color-fd-popover: #FFFFFF;
+  --color-fd-popover-foreground: #1C2340;
+  --color-fd-card: #FFFFFF;
+  --color-fd-card-foreground: #1C2340;
+  --color-fd-border: #D9DBE6;
+  --color-fd-primary: #3B4FA8;
+  --color-fd-primary-foreground: #FFFFFF;
+  --color-fd-secondary: #EEEFF4;
+  --color-fd-secondary-foreground: #1C2340;
+  --color-fd-accent: #E4E6F0;
+  --color-fd-accent-foreground: #1C2340;
+  --color-fd-ring: #3B4FA8;
+
+  --color-script: #B8862B;
+  --color-script-text: #8A6418;
+  --color-manuscript: #D24B3E;
+  --color-manuscript-text: #A8322A;
+  --color-book: #2E9473;
+  --color-book-text: #1F7358;
+}
+
+.dark {
+  --color-fd-background: #12162B;
+  --color-fd-foreground: #E9EAF2;
+  --color-fd-muted: #1C2340;
+  --color-fd-muted-foreground: #9EA3BD;
+  --color-fd-popover: #1C2340;
+  --color-fd-popover-foreground: #E9EAF2;
+  --color-fd-card: #1C2340;
+  --color-fd-card-foreground: #E9EAF2;
+  --color-fd-border: #2C3358;
+  --color-fd-primary: #9AABF2;
+  --color-fd-primary-foreground: #12162B;
+  --color-fd-secondary: #1C2340;
+  --color-fd-secondary-foreground: #E9EAF2;
+  --color-fd-accent: #262D52;
+  --color-fd-accent-foreground: #E9EAF2;
+  --color-fd-ring: #9AABF2;
+
+  --color-script-text: #D9AE55;
+  --color-manuscript-text: #F08A7E;
+  --color-book-text: #6CCBA6;
+}
+
+.dark #nd-sidebar {
+  --color-fd-muted: #1C2340;
+  --color-fd-secondary: #1C2340;
+  --color-fd-muted-foreground: #9EA3BD;
+}
+
+html {
+  scrollbar-gutter: stable;
+}
+
+html > body[data-scroll-locked] {
+  margin-right: 0px !important;
+  --removed-body-scroll-bar-size: 0px !important;
+}
+
+/* Headings are typed, like the logos */
+.prose :where(h1, h2, h3):not(:where(.not-prose *)),
+#nd-page h1 {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+/* Logo in the nav: ink on light, paper on dark */
+.ws-logo { display: inline-flex; align-items: center; gap: 0.5rem; }
+.ws-logo img { height: 1.05rem; width: auto; }
+.ws-logo-paper { display: none; }
+.dark .ws-logo-ink { display: none; }
+.dark .ws-logo-paper { display: inline; }
+.ws-logo-label {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding-left: 0.5rem;
+  border-left: 1px solid var(--color-fd-border);
+}
+
+.ws-kbd {
+  font-family: var(--font-sans);
+  font-size: 0.8em;
+  padding: 0.1em 0.4em;
+  border: 1px solid var(--color-fd-border);
+  border-bottom-width: 2px;
+  border-radius: 0.3em;
+  background: var(--color-fd-card);
+  white-space: nowrap;
+}
+
+.ws-status {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0.3em 0.55em;
+  border-radius: 999px;
+  vertical-align: 0.15em;
+  border: 1px solid currentColor;
+}
+.ws-status-available { color: var(--color-book-text); }
+.ws-status-in-progress { color: var(--color-script-text); }
+.ws-status-planned { color: var(--color-fd-muted-foreground); }

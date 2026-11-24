@@ -1,0 +1,18 @@
+{
+  "title": "Wordsmith Book",
+  "description": "Print books and ebooks",
+  "icon": "BookOpen",
+  "root": true,
+  "pages": [
+    "index",
+    "getting-started",
+    "bringing-your-book-in",
+    "front-and-back-matter",
+    "designs",
+    "print",
+    "ebooks",
+    "preflight-and-export",
+    "files",
+    "whats-next"
+  ]
+}

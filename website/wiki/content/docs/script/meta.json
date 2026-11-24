@@ -1,0 +1,20 @@
+{
+  "title": "Wordsmith Script",
+  "description": "Screenplays, TV and stage plays",
+  "icon": "Clapperboard",
+  "root": true,
+  "pages": [
+    "index",
+    "getting-started",
+    "the-window",
+    "writing",
+    "views",
+    "planning",
+    "pages-and-printing",
+    "production",
+    "characters-and-reports",
+    "files",
+    "keyboard-shortcuts",
+    "whats-next"
+  ]
+}

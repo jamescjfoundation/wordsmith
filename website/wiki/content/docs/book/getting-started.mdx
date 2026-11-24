@@ -1,0 +1,178 @@
+---
+title: Getting started
+description: Build Wordsmith Book from source and open a book made from a Manuscript project.
+icon: Rocket
+---
+
+Wordsmith Book is still being built, so there are no installers yet. If you'd like a look at it
+now, you can build it from its source code. This page shows the steps that work today.
+
+<Callout type="warn" title="An early look, not a finished app">
+  You can open a book, see its outline, choose a design, add editions and tidy the text. You can't
+  make a PDF or an EPUB from the window yet, and a few steps below are done by hand because their
+  screens aren't built. Please don't use it for a book you're about to publish.
+</Callout>
+
+## What you need
+
+- A computer running macOS, Windows or Linux.
+- **Rust**, the programming language Book is written in. Install it with **rustup** from
+  [rust-lang.org](https://www.rust-lang.org/tools/install). Book asks for one exact version of Rust
+  (1.100.0), and rustup downloads it for you the first time you build.
+- **Git**, to download the code.
+- A finished book in **Wordsmith Manuscript**, as a project folder (`.wsm`) or a packed project
+  (`.wsmz`). If you don't have one, Book's code comes with a sample you can use.
+
+## Build and run
+
+<Steps>
+<Step>
+
+### Download the code
+
+Open a terminal and run:
+
+```sh
+git clone https://github.com/jamescjfoundation/wordsmith-book.git
+cd wordsmith-book
+```
+
+</Step>
+<Step>
+
+### Start the app
+
+```sh
+cargo run -p wordsmith-book
+```
+
+The first build downloads and compiles everything Book needs, so it takes a while. Later runs
+start much faster. When it's done, the Wordsmith Book window opens with the start window.
+
+</Step>
+</Steps>
+
+<Callout type="info">
+  The start window lists three ways to make a new book: from a Manuscript project, an empty book,
+  or by importing a file. Their "where should it go?" step isn't built yet, so for now they show a
+  message instead of making a book. Make your first book by hand, as below.
+</Callout>
+
+## Make a book from a Manuscript project
+
+A Book project is a folder whose name ends in `.wsbk`, holding a small settings file called
+`book.toml`. You only need to make it once; after that, Book keeps it up to date.
+
+<Tabs items={["Your own manuscript", "The sample book"]}>
+<Tab value="Your own manuscript">
+
+<Steps>
+<Step>
+
+### Make the folder
+
+Next to your Manuscript project, make a new folder with the same name ending in `.wsbk`. For
+`My Novel.wsm`, make `My Novel.wsbk`.
+
+</Step>
+<Step>
+
+### Add the settings file
+
+Inside it, make a plain-text file called `book.toml` with this in it. Change `My Novel.wsm` to
+your project's name (or `My Novel.wsmz` for a packed project):
+
+```toml
+schema = 1
+
+[source]
+manuscript = "../My Novel.wsm"
+
+[[elements]]
+id = "half-title"
+kind = "half-title"
+
+[[elements]]
+id = "title-page"
+kind = "title-page"
+
+[[elements]]
+id = "copyright"
+kind = "copyright"
+
+[[elements]]
+id = "contents"
+kind = "contents"
+
+[[elements]]
+id = "about-the-author"
+kind = "about-the-author"
+placement = "back"
+
+[[elements]]
+id = "also-by"
+kind = "also-by"
+placement = "back"
+```
+
+The `manuscript` line says where your Manuscript project is, starting from inside the `.wsbk`
+folder: `..` means "the folder above". The `elements` are the front and back matter pages Book
+makes for you.
+
+</Step>
+</Steps>
+
+</Tab>
+<Tab value="The sample book">
+
+Book's code comes with *Gulliver's Travels* as a Manuscript project, at
+`tests/fixtures/novels/gullivers-travels.wsm` inside the `wordsmith-book` folder.
+
+Make a folder called `Gulliver.wsbk` in `tests/fixtures/novels`, next to the sample, and put a
+`book.toml` file in it as shown in the other tab, with this `manuscript` line:
+
+```toml
+manuscript = "../gullivers-travels.wsm"
+```
+
+</Tab>
+</Tabs>
+
+## Open the book
+
+Choose **Open…** (<Kbd>Ctrl</Kbd>+<Kbd>O</Kbd>, or <Kbd>⌘</Kbd>+<Kbd>O</Kbd> on a Mac) and type
+the full path of your `.wsbk` folder, then choose **Open**.
+
+Or give the path when you start the app:
+
+```sh
+cargo run -p wordsmith-book -- "/path/to/My Novel.wsbk"
+```
+
+A packed book (`.wsbkz`) opens too: Book unpacks it into a new folder beside it.
+
+## Look around
+
+- **Outline**, on the left: the front matter, parts, chapters and back matter. Click one to read
+  it. Drag the pages Book makes to move them. See [Front and back matter](./front-and-back-matter.mdx).
+- **Details**: the book's title and author from the manuscript, what is still needed, and your
+  editions with their ISBNs.
+- **Designs**: the six book designs with a preview of your first chapter. See
+  [Book designs](./designs.mdx).
+- **Fix**, beside each paragraph: correct a typo. For a linked manuscript, the fix is offered to
+  the writer in Manuscript. See [Bringing your book in](./bringing-your-book-in.mdx).
+
+Your changes are saved for you as you work. <Kbd>Ctrl</Kbd>+<Kbd>S</Kbd> saves now,
+<Kbd>Ctrl</Kbd>+<Kbd>Z</Kbd> undoes and <Kbd>Ctrl</Kbd>+<Kbd>Shift</Kbd>+<Kbd>Z</Kbd> redoes
+(<Kbd>⌘</Kbd> on a Mac). <Kbd>Ctrl</Kbd>+<Kbd>W</Kbd> closes the book.
+
+## Keeping up to date
+
+Book changes every few days while it's being built. To get the newest version, run this in the
+`wordsmith-book` folder, then start the app again:
+
+```sh
+git pull
+```
+
+Book doesn't check for updates on its own yet; that comes with the first release.

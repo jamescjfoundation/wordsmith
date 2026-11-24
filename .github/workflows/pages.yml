@@ -1,4 +1,4 @@
-name: Deploy website to GitHub Pages
+name: Deploy website and wiki to GitHub Pages
 
 on:
   push:
@@ -23,10 +23,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: website/wiki/package-lock.json
+      - name: Build the wiki
+        working-directory: website/wiki
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+        run: |
+          npm ci
+          npm run build
+      # The site is website/ as it is, with the wiki's static export in place of its source.
+      - name: Put the site together
+        run: |
+          mkdir _site
+          rsync -a --exclude /wiki website/ _site/
+          cp -R website/wiki/out _site/wiki
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
         with:
-          path: website
+          path: _site
 
   deploy:
     needs: build

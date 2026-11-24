@@ -124,6 +124,10 @@ def page(file, title, desc, body, cls=""):
 </html>
 """
     html = re.sub(r'<a ([^>]*?)href="(https?://[^"]+)"', lambda m: f'<a {m.group(1)}href="{m.group(2)}" target="_blank" rel="noopener"', html)
+    if file == "404.html":
+        # GitHub Pages serves this page at any missing address, even inside a folder (/foo/bar),
+        # where relative links would point into that folder. Make its local links start at the site root.
+        html = re.sub(r'\b(href|src|srcset)="(?![#/]|[a-z]+:)', r'\1="/', html)
     (OUT / file).write_text(html, encoding="utf-8")
 
 

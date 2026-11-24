@@ -1,0 +1,80 @@
+---
+title: Ebooks
+description: The EPUB that Book makes, with its navigation, accessibility information, fonts and cover.
+icon: Tablet
+---
+
+For the ebook, Wordsmith Book writes an EPUB 3 file: the standard format that ebook stores and
+reading apps take. It comes from the same book and the same design as the print edition, so the
+two match.
+
+<Callout type="warn" title="Built, not in the window yet">
+  Book's EPUB writer has just landed. It works inside Book and is tested on every sample book, but
+  you can't export an EPUB from the window yet. Book's own checks of the finished EPUB are the next
+  step. <Status value="in-progress" />
+</Callout>
+
+## What's in the EPUB
+
+- **One file per chapter or page**, marked up so reading apps know what each one is: title page,
+  copyright page, dedication, chapter, part and so on.
+- **A table of contents** that reading apps show in their menu, with parts holding their chapters.
+  Book also adds the older form of contents that older e-readers use.
+- **Landmarks**, so a reader can jump to the cover, the contents or the start of the story.
+- **Notes** linked both ways: tap the number to read the note at the end of the chapter, and tap
+  again to go back.
+- **Pictures** from your manuscript, and the right language marked on every page and on any
+  passage in another language.
+- **A style sheet from your design**: the chapter openings with a drop cap or small-capital lead-in
+  as the design says. It is kept simple, so readers can still change the font and text size in
+  their reading app.
+
+The ebook leaves out the half title, which only makes sense in print. The contents page is the
+ebook's own navigation, placed where the contents stand in your book.
+
+## The ebook's identity
+
+If the ebook edition has an ISBN, it becomes the ebook's identifier. If not, Book makes a stable
+identifier from the book, so the same book always gets the same one.
+
+Building the same book twice gives exactly the same file, byte for byte.
+
+## Accessibility
+
+Accessible ebooks are a legal requirement in some markets, and they are better for every reader.
+Book writes the accessibility information stores ask for, worked out from what the book holds:
+
+- how the book can be read (as text, plus pictures if it has any)
+- its features, such as a table of contents, structural navigation and a reading order
+- that it has no hazards such as flashing content
+- a short accessibility summary, and the standard it aims for
+
+**Every picture needs a short description** (alternative text) for readers who can't see it. A
+picture without one blocks the ebook until you add one, or mark the picture as decorative.
+Decorative pictures, such as an ornament, are hidden from screen readers.
+
+## Fonts
+
+Each ebook edition can embed the design's fonts, so the book looks as designed in reading apps
+that use them, or leave them out and let the reader's app choose. Book only embeds fonts whose
+license allows it.
+
+## The cover
+
+The ebook edition names its cover picture, a PNG or JPEG in the book project. Book puts it first
+in the ebook, marks it as the cover for stores and reading apps, and checks its size, file size
+and shape against what stores usually ask for: at least 1,600 pixels on the long side, no more than
+4 MB, and about 1.6 times as tall as it is wide.
+
+Book doesn't design covers. You make the cover art elsewhere and bring in the picture.
+
+## Coming later
+
+- **Book's own EPUB checks**: the package, navigation, links and every word checked against your
+  source. <Status value="in-progress" />
+- **The standard EPUB validator**, run for you if you have it installed. <Status value="planned" />
+- **Ebook preview** at phone, e-reader and tablet sizes, with larger text and a dark page, and
+  "Open in a reading app". <Status value="planned" />
+- **Export** from the window. <Status value="planned" />
+- Pop-up notes where reading apps support them, and page numbers that match the print edition.
+  <Status value="planned" />

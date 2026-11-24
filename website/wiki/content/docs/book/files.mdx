@@ -1,0 +1,83 @@
+---
+title: Files and saving
+description: What a Book project is, what's inside it, and how Book keeps your work safe.
+icon: FolderOpen
+---
+
+## A book project
+
+A Wordsmith Book project is a **folder whose name ends in `.wsbk`**. Almost everything in it is
+plain text, so you can open it, keep it in version control, and it doesn't depend on Book to be
+read. The same book always gives the same files.
+
+<Files>
+  <Folder name="My Novel.wsbk" defaultOpen>
+    <File name="book.toml" />
+    <Folder name="designs">
+      <File name="my-design.toml" />
+    </Folder>
+    <Folder name="source.wsm" />
+    <Folder name="assets" />
+    <Folder name="builds" />
+  </Folder>
+</Files>
+
+| File or folder | What it holds |
+| --- | --- |
+| `book.toml` | The book's settings: where its text comes from, the design, editions and ISBNs, front and back matter, chapter settings, extra details, cleanup choices and fixes. |
+| `designs/` | Your own designs, one small text file each. |
+| `source.wsm/` | The book's own text, when it was imported rather than linked. It is a Wordsmith Manuscript project folder. |
+| `assets/` | Cover images, pictures and fonts you added (each font with its license beside it). |
+| `builds/` | A short record of the last build of each edition, so Book can tell what changed since. |
+| `.recovery/` | Unsaved work while the app is open. Never packed or shared. |
+
+A book linked to a Manuscript project has no `source.wsm` folder. Its `book.toml` says where the
+Manuscript project is, and Book reads it from there without changing it.
+
+## One file for sending
+
+A **packed project** is the whole book in one file ending in **`.wsbkz`**: handy for sending,
+backups and recovery. When the book is linked to a Manuscript project, the packed file carries a
+read-only copy of it too, so the book opens whole on another computer.
+
+Opening a `.wsbkz` file unpacks it into a new folder beside it. Book never unpacks over a folder
+that already holds something.
+
+**Save as One File** makes a packed copy of the open book. <Status value="in-progress" />
+
+## Saving
+
+<Status value="available" />
+
+Book saves your work as you go. <Kbd>Ctrl</Kbd>+<Kbd>S</Kbd> (<Kbd>⌘</Kbd>+<Kbd>S</Kbd> on a Mac)
+saves straight away. A save only writes the files that changed, each one safely: it is written
+next to the old one and then moved into place, with `book.toml` last, so an interrupted save never
+leaves a half-written book.
+
+## Crash recovery
+
+<Status value="available" />
+
+While you have unsaved changes, Book keeps a copy of them in the project's `.recovery` folder.
+If the app or the computer stops suddenly, the next time you open the book Book tells you it
+recovered your unsaved work. Save to keep it.
+
+## Backups
+
+<Status value="available" />
+
+**Back Up Now** makes a packed copy of the book named with the date and time. Book keeps a set
+number of backups and removes the oldest beyond that.
+
+## Opening books from older and newer versions
+
+Every project records the version of the format it uses. A book from a newer version of Book is
+refused with a message that names both versions, rather than being opened and damaged.
+
+Book reads files carefully: a damaged or oversized file is refused with a message, never trusted.
+
+## Your files stay yours
+
+Book works on your computer. It doesn't need an account, and it sends nothing anywhere: no
+telemetry, no tracking. Today it makes no network requests at all. The first release will add a
+check for new versions, which you can turn off.

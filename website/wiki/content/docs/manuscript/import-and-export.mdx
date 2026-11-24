@@ -1,0 +1,132 @@
+---
+title: Importing and exporting
+description: Bring documents, outlines and notes into a project, and export a standard manuscript and other formats.
+icon: ArrowLeftRight
+---
+
+Every import and every export in Manuscript is **checked word for word**. An import whose words
+don't all arrive, in order, is not made. An export is read back and checked before the file is
+kept. Neither ever changes the words of your project.
+
+## Importing
+
+File › Import brings documents into the open project. Each import shows a **preview** first (the
+binder it will make) and a **report**: what was made, what formatting couldn't be kept, and the
+result of the word-for-word check.
+
+### Documents
+
+Manuscript imports **DOCX** (Word), **ODT** (OpenDocument), **RTF**, **Markdown**, **HTML** (web
+pages), **EPUB** and **plain text**.
+
+- **Headings** become parts, chapters and scenes. With three heading levels: part, chapter and
+  scene. With two: part and chapter. With one: chapter.
+- A line on its own like **"Chapter 12"**, "CHAPTER XII." or "Part Two" starts a chapter or part
+  even without a heading style. You can switch this rule off.
+- **Scene breaks** (a line of `***`, `* * *`, `#`, a run of one symbol, a short centered symbol
+  line, or a mark you choose) split a chapter into scenes, or stay as scene breaks.
+- Italic, bold, small caps, strikethrough, text in another language, notes and comments are kept.
+  Underlined text becomes italic, or is left plain. Fonts, sizes and colors are dropped, and the
+  report lists them.
+- **Plain text**: hard-wrapped lines are joined into paragraphs (or every line is kept), and text
+  with no chapters is split at separator lines.
+- **Web pages**, such as a draft or a serial's chapter saved from a browser: when the page marks
+  its main text, only that is imported, without menus, headers or footers.
+- **EPUB books** come back as an editable manuscript, one chapter per reading page.
+
+### Outlines
+
+An **OPML** file from an outliner becomes binder items. Each outline line becomes an item, and its
+note becomes the item's synopsis. Lines with lines under them become folders. A title like "Part
+Two", "Book I", "Act One" or "Chapter 12" sets the role; otherwise the shape does (the innermost
+lines are scenes, the ones above them chapters, anything above that parts).
+
+### A set of documents
+
+**Document Set (a Folder)** imports every document in a folder, placed by what its name says:
+
+| Name contains | Goes to |
+| --- | --- |
+| (Plan), (Outline) | Notes |
+| (Rough Work), (Notes), (Research) | Research |
+| (First Draft), (Second Draft), (Third Draft), (Final Draft), (Draft), or nothing | The manuscript |
+
+Several files of one draft ("Part 1", "Part 2", or numbered names) are joined in name order. When
+the set holds several drafts, the latest is the one you write and the earlier ones are kept as
+[drafts](./drafts-and-progress.mdx#drafts), matched chapter by chapter so you can compare them.
+
+### Notes for the story bible
+
+A folder of Markdown notes can become story bible entries. See
+[The story bible](./story-bible.mdx#importing-a-folder-of-notes).
+
+## Exporting
+
+File › Export (<Kbd>Mod</Kbd>+<Kbd>E</Kbd>) writes the manuscript to a file.
+
+| Format | For |
+| --- | --- |
+| Standard manuscript (DOCX, PDF) | Agents, editors and publishers |
+| Word processor (DOCX), OpenDocument (ODT), rich text (RTF) | Other word processors |
+| Markdown, plain text, web page (HTML) | The web and other tools |
+| Reading copy (EPUB) | Reading your draft on a phone or e-reader |
+| Book package (`.wsmz`) | Wordsmith Book (see [Sending to Wordsmith Book](./sending-to-book.mdx)) |
+
+### Options
+
+- **Which items**: by default, every manuscript item that is included in export.
+- **Chapter and part titles**: their own titles, "Chapter 1", "Chapter One", "One", "Chapter 1:
+  Title", or none.
+- **Scene titles** as headings, or not.
+- **The scene-break symbol.**
+- **Front and back matter**, in or out.
+- **Replace-text rules.**
+- **END** after the last line.
+- **Comments as review comments**, for DOCX, ODT and RTF.
+
+You can save your options as a preset to use again.
+
+### The standard manuscript
+
+This is the format agents, editors and publishers expect:
+
+- Letter or A4 paper, 1-inch margins, 12-point serif or monospaced type, double spacing,
+  half-inch indents.
+- A title page with your name and contact lines, the word count rounded ("about 82,000 words"),
+  the title a third of the way down, and the name you publish under.
+- From the first page of text, a header with your surname, the short title and the page number.
+- Each chapter starts on a new page, a third of the way down. Scene breaks are a centered `#`.
+  The text ends with END.
+
+Set your name, pen name, surname, short title and contact lines in File › Book Details. View ›
+[Pages](./writing.mdx#pages) shows the pages before you export.
+
+### The reading copy
+
+The EPUB reading copy is for reading your own draft on a phone or e-reader. Each part and chapter
+starts its own page with a contents entry, and notes are numbered at the end of their chapter. It
+is not a finished ebook; for that, use Wordsmith Book.
+
+### Other formats, through a converter
+
+For a format Manuscript doesn't write, you can use a document converter you have installed
+yourself (Manuscript never comes with one). On File › Export, choose **Another format, through a
+converter you installed**. Give the converter program and its arguments, with `{input}` where it
+takes the manuscript (Manuscript hands it a DOCX), `{output}` where it writes the file, and
+`{format}` for the file's extension.
+
+The program runs on your computer only, and is stopped if it runs for more than five minutes.
+When Manuscript can read the result back it checks every word; otherwise the report says it was
+not checked.
+
+## The command line
+
+Manuscript also comes with a command-line tool, `manuscript-cli`, that can convert, export,
+count and check projects without opening the window. For example, to turn a Word document into a
+project:
+
+```sh
+cargo run --release -p wordsmith-manuscript-cli -- convert draft.docx novel.wsm
+```
+
+Run it with `help` to see every command.

@@ -1,0 +1,146 @@
+---
+title: Files
+description: The .wss script file, Fountain, importing and exporting, auto-save, backups and recovery.
+icon: FileText
+---
+
+## Script files (.wss)
+
+Wordsmith Script saves each script as one `.wss` file. It's plain text that you
+can open in any text editor:
+
+```text
+Wordsmith Script 5
+=== settings ===
+{
+  "core": { "title": "..." },
+  ...
+}
+=== script ===
+@SceneHeading
+INT. KITCHEN - NIGHT
+
+@Action
+Rain *hammers* the window.
+
+@Character
+ANNA
+```
+
+- The first line names the app and the file's format version.
+- The **settings** part holds everything about this script: the page, each
+  element's formatting, the title page, notes, revision sets, locked pages,
+  scene numbers, the story boards and the outline.
+- The **script** part has one paragraph per element: its name on an `@` line,
+  then its text. `**bold**`, `*italic*` and `_underline_` look like what they
+  mean.
+
+Because it's plain text, a `.wss` file reads well when you compare two versions,
+and it works well with version control. Everything about a script lives in the
+one file, so you can copy it, back it up or email it like any other document.
+
+<Callout type="warn" title="Newer files don't open in older versions">
+Each version of the app opens every older script. A script saved by a newer
+version can't be opened by an older one: the app refuses it with a message
+naming both versions, rather than open it wrongly. The version you build from
+source today saves format 5, which the 0.1 releases can't open.
+</Callout>
+
+If a file is damaged, the app refuses it and says why. It never opens half a
+script.
+
+## Opening and importing
+
+- **Open** (<Kbd>Mod</Kbd>+<Kbd>O</Kbd>) reads `.wss` scripts and
+  **Fountain** scripts (`.fountain`). A Fountain script opens as a new script;
+  saving it asks where to put the `.wss`.
+- **Import** (on the File page's **Open**) reads **plain text**, **RTF** and
+  **PDFs made from text**. For text and RTF you're asked whether the file is a
+  script. If it is, scene headings, characters, dialogue and transitions are
+  recognised, by indentation when the file has it and by convention when it
+  doesn't. A PDF that Wordsmith Script made comes back as the same elements,
+  title page included.
+
+<Callout type="info" title="What imports leave behind">
+Scanned PDFs (pictures of pages) can't be imported. Bold, italic and underline
+aren't kept from plain text, RTF or PDF, and line breaks inside a paragraph
+become spaces. After an import, **Reformat** and **Check Format** on the
+**Review** tab help you tidy up (see [Writing](./writing.mdx#tidying-a-script)).
+</Callout>
+
+A file you can't write to opens as a copy, and Save asks where to keep it.
+
+### Fountain
+
+[Fountain](https://fountain.io) is an open plain-text screenplay format. Wordsmith
+Script reads and writes it, keeping:
+
+- bold, italic and underline;
+- the title page;
+- scene numbers (`#12A#`);
+- dual dialogue (a `^` after the second name);
+- sections and synopses, which become outline elements;
+- notes, when exporting (notes inside a line of text aren't read on import).
+
+## Exporting
+
+**Export** on the File page saves the script as:
+
+| Format | For |
+| --- | --- |
+| **PDF** | The pages as they print (also <Kbd>Mod</Kbd>+<Kbd>Shift</Kbd>+<Kbd>E</Kbd>). |
+| **Revised Pages as PDF** | Only the pages with revised text. |
+| **Fountain** | Other screenwriting apps and plain-text tools. |
+| **Rich Text (RTF)** | Word processors. |
+| **Plain Text** | The words alone. |
+| **Web Page (HTML)** | Reading in a browser. |
+| **Story Board as PDF** | The board showing, on one landscape page. |
+| **Index Cards as PDF** | A grid of cards on Letter pages. |
+
+The scenes and characters tables and the reports save as CSV for a spreadsheet.
+
+## Saving, auto-save and backups
+
+- **Save** (<Kbd>Mod</Kbd>+<Kbd>S</Kbd>), **Save As**
+  (<Kbd>Mod</Kbd>+<Kbd>Shift</Kbd>+<Kbd>S</Kbd>) and **Revert** (back to the
+  last save) are on the File page. Every save is made safely: the file is either
+  written in full or left as it was.
+- New, Open, Import and closing the window ask before unsaved changes are lost.
+- **Auto-save** saves a script that already has a file every 15 minutes, once
+  you have stopped typing for 10 seconds.
+- **Backups:** every save also keeps a timestamped copy in a **Backups** folder.
+  The newest 1,000 copies of each script are kept.
+- **Recovery:** if the app stops unexpectedly, the next start offers to recover
+  your unsaved scripts. You can also find **Recover Unsaved Scripts** on the
+  File page.
+
+Auto-save and backups can be turned off or changed in **File › Preferences**.
+The Backups folder is inside the app's settings folder:
+
+<Tabs items={['macOS', 'Windows', 'Linux']}>
+  <Tab value="macOS">`~/Library/Application Support/Wordsmith Script/Backups`</Tab>
+  <Tab value="Windows">`%APPDATA%\Wordsmith Script\Backups`</Tab>
+  <Tab value="Linux">`~/.config/wordsmith-script/Backups`</Tab>
+</Tabs>
+
+## From the command line
+
+Wordsmith Script has a command-line tool for converting and exporting scripts
+without opening the window, handy for a batch of files. From the folder where
+you downloaded the source:
+
+```sh
+cargo run --release -p wordsmith-cli -- convert draft.fountain draft.wss
+cargo run --release -p wordsmith-cli -- export-pdf draft.wss draft.pdf
+cargo run --release -p wordsmith-cli -- export-pdf draft.wss blue-pages.pdf --revised-only
+cargo run --release -p wordsmith-cli -- report characters draft.wss cast.csv
+cargo run --release -p wordsmith-cli -- info draft.wss
+```
+
+Inputs can be `.wss` or Fountain; plain text, RTF and PDF are imported. The
+output's extension picks its format (`wss`, `fountain`, `txt`, `rtf`, `html` or
+`pdf`).
+
+<Callout type="info">
+Saves made from the command line don't make a backup copy.
+</Callout>

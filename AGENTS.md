@@ -10,7 +10,7 @@ A monorepo for the shared, project-wide pieces of Wordsmith. The apps (Script, M
 | --- | --- | --- |
 | `brand/` | SVG, PNG, ICO, JSON tokens, PDFs | The brand kit: logos, icons, palettes, guidelines |
 | `website/` | Plain HTML/CSS/JS, a Python 3 page generator, no dependencies | The public site |
-| `wiki/` | Not chosen yet | Suite-wide user and contributor docs |
+| `website/wiki/` | Fumadocs (Next.js, MDX), static export | The wiki: user guides for the apps, at `/wiki/` |
 | `launcher/` | Rust (planned) | Wordsmith Launcher desktop app |
 | `.github/workflows/` | GitHub Actions | CI and deploys, one workflow per folder |
 
@@ -41,16 +41,16 @@ These come from the project's public promises on the website. Don't break them.
 - Styles: `website/assets/css/site.css` (brand color tokens, dark theme follows the system). JS: `website/assets/js/site.js`; the site must work with JS off.
 - Links between pages stay relative, so the site also works from a local preview or a subpath. It is served at `https://wordsmithand.ink/`; the only absolute URLs are the canonical, `og:url` and `og:image` tags, built from `SITE` in `build.py`. The 404 page is the exception: `build.py` makes its local links start at `/`, because Pages shows it at any missing address, including ones inside folders.
 - Preview: `python3 -m http.server -d website` then http://localhost:8000.
-- Deploy: `.github/workflows/pages.yml` publishes `website/` on every push to `main` that touches it. Pages is set to the "GitHub Actions" source, with the custom domain `wordsmithand.ink` set in the repository's Pages settings.
+- Deploy: `.github/workflows/pages.yml` runs on every push to `main` that touches `website/`. It builds the wiki, then publishes `website/` with the wiki's static export in place of `website/wiki/`, so the wiki's source is never published. Pages is set to the "GitHub Actions" source, with the custom domain `wordsmithand.ink` set in the repository's Pages settings.
 - Check before committing: every page builds, no broken relative links or missing assets, images have `alt` text, and the page reads well at phone width and in dark mode.
 
-## wiki/
+## website/wiki/
 
-Not built yet. The tool hasn't been picked. When it is:
-
-- Record the choice and the build/preview commands in `wiki/README.md` and here.
-- A repository has one GitHub Pages site. To publish the wiki on Pages, build it into the website's Pages artifact (for example under `/wiki/`) in `pages.yml` rather than adding a second Pages deploy.
-- Write for writers first; contributor docs go in their own section.
+- A separate project from the main site: Fumadocs on Next.js, exported as static files with `basePath: '/wiki'`, published at `https://wordsmithand.ink/wiki/` by the same Pages workflow (one repository has one Pages site). `website/wiki/README.md` has the commands.
+- Pages are MDX in `website/wiki/content/docs/`: `start/` (shared Getting started) and one folder per app (`script/`, `manuscript/`, `book/`), each a sidebar tab (`root: true` in its `meta.json`). `meta.json` sets the page order.
+- It reuses the main site's fonts and logos from `/assets/` instead of copying them, so it only looks right when served with the main site (the deploy, or the local preview at `https://wordwiki.test`).
+- Content rules: write for writers, document only what the app does today, and check claims against the app's repo (code, CHANGELOG, progress notes). Mark anything not built with `<Status value="planned" />` or `"in-progress"`. Never use an app repo's `.private/` notes or internal reviews as content.
+- Check before committing: `npm run build` in `website/wiki` passes, and every page and internal link loads.
 
 ## launcher/
 

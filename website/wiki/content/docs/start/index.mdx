@@ -1,0 +1,57 @@
+---
+title: The Wordsmith apps
+description: What each app is for, how far along it is, and how they fit together.
+icon: Compass
+---
+
+Wordsmith is three apps, one for each kind of writing. They share a look, the same keys for the
+same things, and the same promises: free, open source, no account and no tracking.
+
+## Which app is for me?
+
+<Cards>
+  <Card title="Wordsmith Script" href="../script/index.mdx" icon={<Clapperboard />}>
+    For screenplays, TV episodes and stage plays. It keeps the industry page format for you,
+    and has what a production needs: revision colors, locked pages, scene numbers and reports.
+  </Card>
+  <Card title="Wordsmith Manuscript" href="../manuscript/index.mdx" icon={<NotebookPen />}>
+    For novels and other long work. Write in scenes, plan on a corkboard or outline, keep a story
+    bible of your characters and places, and export a standard manuscript.
+  </Card>
+  <Card title="Wordsmith Book" href="../book/index.mdx" icon={<BookOpen />}>
+    For the last step: turning a finished manuscript into a typeset print book and an ebook.
+  </Card>
+</Cards>
+
+A screenwriter may only ever need Script. A novelist will usually write in Manuscript and, when the
+book is done, take it into Book.
+
+## How far along each app is
+
+| App | Status | What that means today |
+| --- | --- | --- |
+| Wordsmith Script | <Status value="available">Pre-release</Status> | Ready for real writing. Build it from source; installers come with the first release. |
+| Wordsmith Manuscript | <Status value="available">Pre-release</Status> | Ready for real writing. Build it from source; installers come with the first release. |
+| Wordsmith Book | <Status value="in-progress">In development</Status> | Opens and lays out a book, but can't make a new book from its window or export a PDF or EPUB yet. |
+
+Each app's section has a **What's next** page with its plans.
+
+## How they fit together
+
+- **Script and Manuscript:** a Manuscript project can keep Script files alongside your chapters,
+  for example a screenplay adaptation. Manuscript shows them read-only and opens them in Script
+  when you want to edit.
+- **Manuscript to Book:** Book reads your Manuscript project as it is and never changes it. If
+  Book spots something to fix, it offers the fix back, and you accept or reject it in Manuscript.
+
+[Moving between the apps](./moving-between-apps.mdx) has the details.
+
+## Who makes Wordsmith
+
+Wordsmith is made by Wordsmith & Ink, a project of The James C. J. Foundation. All three apps are
+written in Rust and built on one shared base, open-source-core, which is based on WordCraft by the
+ArtCraft team. Each app credits the open-source work it uses in its README and NOTICE files.
+
+The apps' code is licensed under the MIT license or the Apache License 2.0, at your option. The
+names Wordsmith, Wordsmith & Ink, Wordsmith Script, Wordsmith Manuscript and Wordsmith Book, and
+their logos, are trademarks of The James C. J. Foundation.

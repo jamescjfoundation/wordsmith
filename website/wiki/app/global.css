@@ -94,6 +94,8 @@ html {
    text keeps its own reading width. */
 #nd-docs-layout {
   --fd-layout-width: 100vw;
+  /* a little wider than the default 268px, to fit the Manuscript wordmark in the tab switcher */
+  --fd-sidebar-width: 292px;
 }
 
 html > body[data-scroll-locked] {
@@ -124,6 +126,15 @@ html > body[data-scroll-locked] {
 .dark .ws-app-icon { box-shadow: 0 0 0 1px #2C3358; }
 /* a card's app icon stands on its own, without the framed box other card icons get */
 :where(.prose) :has(> .ws-app-icon) { padding: 0; border: 0; box-shadow: none; background: none; }
+
+/* The tab switcher shows the apps' wordmarks at one scale, so their letters match in size.
+   Widths are each file's viewBox width x 0.165; Book's (the shortest) stays above the brand
+   guide's 140 px minimum. */
+.ws-tab-wordmark { display: inline-flex; height: auto; padding: 0.2rem 0; }
+.ws-tab-wordmark img { height: auto; }
+.ws-tab-wordsmith-script img { width: 161.5px; }
+.ws-tab-wordsmith-manuscript img { width: 204px; }
+.ws-tab-wordsmith-book img { width: 141.7px; }
 
 /* Logo in the nav */
 .ws-logo { display: inline-flex; align-items: center; gap: 0.5rem; }

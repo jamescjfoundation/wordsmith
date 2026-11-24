@@ -1,6 +1,5 @@
 {
   "title": "Wordsmith Book",
-  "description": "Print books and ebooks",
   "icon": "brand:wordsmith-book",
   "root": true,
   "pages": [

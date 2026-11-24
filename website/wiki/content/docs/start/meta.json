@@ -1,6 +1,5 @@
 {
   "title": "Wordsmith apps",
-  "description": "The suite, installing, your files",
   "icon": "brand:wordsmith-and-ink",
   "root": true,
   "pages": [

@@ -5,7 +5,6 @@ import {
   DocsPage,
   DocsTitle,
   EditOnGitHub,
-  MarkdownCopyButton,
   ViewOptionsPopover,
 } from 'fumadocs-ui/layouts/docs/page';
 import { notFound } from 'next/navigation';
@@ -33,18 +32,20 @@ export default async function Page(props: PageProps<'/[[...slug]]'>) {
   return (
     <DocsPage toc={page.data.toc} full={page.data.full}>
       {app && <span data-ws-app={app} hidden />}
-      {isAppHome ? (
-        <DocsTitle className="ws-app-title">
-          <Wordmark brand={app} label={apps[app].name} />
-        </DocsTitle>
-      ) : (
-        <DocsTitle>{page.data.title}</DocsTitle>
-      )}
-      <DocsDescription className="mb-0">{page.data.description}</DocsDescription>
-      <div className="flex flex-row gap-2 items-center border-b pb-6">
-        <MarkdownCopyButton markdownUrl={markdownUrl} />
-        <ViewOptionsPopover markdownUrl={markdownUrl} githubUrl={githubUrl} />
+      {/* the title with the "Open" menu (view the page's Markdown or open it on GitHub) beside it */}
+      <div className="flex flex-row items-start justify-between gap-4">
+        {isAppHome ? (
+          <DocsTitle className="ws-app-title">
+            <Wordmark brand={app} label={apps[app].name} />
+          </DocsTitle>
+        ) : (
+          <DocsTitle>{page.data.title}</DocsTitle>
+        )}
+        <div className="shrink-0 pt-1">
+          <ViewOptionsPopover markdownUrl={markdownUrl} githubUrl={githubUrl} />
+        </div>
       </div>
+      <DocsDescription className="mb-0 border-b pb-6">{page.data.description}</DocsDescription>
       <DocsBody>
         <MDX
           components={getMDXComponents({

@@ -1,0 +1,11 @@
+# Rust
+target/
+
+# Python
+__pycache__/
+
+# Editors and OS
+.DS_Store
+.idea/
+.vscode/
+*.swp

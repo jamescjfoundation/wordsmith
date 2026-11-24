@@ -2,7 +2,7 @@
 
 The front door to the Wordsmith suite: a small desktop app, written in Rust, that installs the Wordsmith apps you want, keeps them up to date, and opens your recent work from any of them.
 
-**Status:** planned, not started. See the [launcher page](https://jamescjfoundation.github.io/wordsmith/launcher.html) for the idea.
+**Status:** planned, not started. See the [launcher page](https://wordsmithand.ink/launcher.html) for the idea.
 
 ## What it should do
 

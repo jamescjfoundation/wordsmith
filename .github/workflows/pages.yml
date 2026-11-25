@@ -34,6 +34,7 @@ jobs:
           NEXT_TELEMETRY_DISABLED: "1"
         run: |
           npm ci
+          npm run brand:check
           npm run build
       # The site is website/ as it is, with the wiki's static export in place of its source.
       - name: Put the site together

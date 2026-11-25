@@ -1,7 +1,15 @@
 {
-  "title": "Getting started",
-  "description": "The suite, installing, your files",
-  "icon": "Compass",
+  "title": "Wordsmith apps",
+  "icon": "brand:wordsmith-and-ink",
   "root": true,
-  "pages": ["index", "install", "files", "moving-between-apps", "privacy", "help", "faq"]
+  "pages": [
+    "../index",
+    "index",
+    "install",
+    "files",
+    "moving-between-apps",
+    "help",
+    "faq",
+    "privacy"
+  ]
 }

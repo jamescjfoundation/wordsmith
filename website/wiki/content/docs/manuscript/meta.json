@@ -1,7 +1,6 @@
 {
   "title": "Wordsmith Manuscript",
-  "description": "Novels and long work",
-  "icon": "NotebookPen",
+  "icon": "brand:wordsmith-manuscript",
   "root": true,
   "pages": [
     "index",

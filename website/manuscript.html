@@ -19,22 +19,20 @@
   <link rel="preload" href="assets/fonts/courier-prime-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/css/site.css">
+  <script>document.documentElement.classList.add("js")</script>
 </head>
 <body class="p-manuscript">
   <a class="skip" href="#main">Skip to content</a>
   <header class="site-header">
-    <div class="wrap">
+    <div class="header-inner">
       <a class="brand-link" href="index.html" aria-label="Wordsmith home">
         <picture><source srcset="assets/brand/wordsmith-and-ink-wordmark-paper.svg" media="(prefers-color-scheme: dark)"><img src="assets/brand/wordsmith-and-ink-wordmark-ink.svg" alt="Wordsmith &amp; Ink"></picture>
       </a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="bars" aria-hidden="true"></span>Menu</button>
       <nav class="nav" id="site-nav" aria-label="Main">
         <div class="nav-links">
-        <div class="nav-group"><a href="index.html">Home</a><a href="about.html">About</a></div>
-        <span class="nav-sep" aria-hidden="true"></span>
-        <div class="nav-group"><a href="script.html" class="n-script">Script</a><a href="manuscript.html" class="n-manuscript" aria-current="page">Manuscript</a><a href="book.html" class="n-book">Book</a></div>
-        <span class="nav-sep" aria-hidden="true"></span>
-        <div class="nav-group"><a href="launcher.html">Launcher</a><a href="open-source.html">Open source</a></div>
+          <div class="nav-group"><a href="script.html" class="n-script">Script</a><a href="manuscript.html" class="n-manuscript" aria-current="page">Manuscript</a><a href="book.html" class="n-book">Book</a></div>
+          <div class="nav-group"><a href="launcher.html">Launcher</a><a href="wiki/">Wiki</a><a href="open-source.html">Open source</a><a href="about.html">About</a></div>
         </div>
         <div class="nav-actions">
           <a class="btn btn-ghost btn-sm" href="https://github.com/jamescjfoundation" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
@@ -46,25 +44,28 @@
 
   <main id="main">
 
-    <section class="p-hero">
+    <section class="p-hero app-hero">
       <div class="wrap">
-        <div class="app-id">
-          <img class="icon" src="assets/brand/wordsmith-manuscript-icon.svg" alt="" width="72" height="72">
-          <picture><source srcset="assets/brand/wordsmith-manuscript-wordmark-paper.svg" media="(prefers-color-scheme: dark)"><img class="wordmark" src="assets/brand/wordsmith-manuscript-wordmark-ink.svg" alt="Wordsmith Manuscript"></picture>
-        </div>
-        <p class="endorse">a Wordsmith &amp; Ink app</p>
-        <h1>The whole novel, in one place.</h1>
-        <p class="lede">A free, open-source app for writing novels and other long work. Plan on a corkboard, draft in a
+        <div class="app-hero-copy">
+          <div class="app-id">
+            <img class="icon" src="assets/brand/wordsmith-manuscript-icon.svg" alt="" width="72" height="72">
+            <div>
+              <picture><source srcset="assets/brand/wordsmith-manuscript-wordmark-paper.svg" media="(prefers-color-scheme: dark)"><img class="wordmark" src="assets/brand/wordsmith-manuscript-wordmark-ink.svg" alt="Wordsmith Manuscript"></picture>
+              <p class="endorse">a Wordsmith &amp; Ink app</p>
+            </div>
+          </div>
+          <h1>The whole novel, in one place.</h1>
+          <p class="lede">A free, open-source app for writing novels and other long work. Plan on a corkboard, draft in a
           binder of chapters and scenes, keep your story bible beside the text, and hand the finished manuscript to
           Wordsmith Book.</p>
-        <div class="actions">
-          <a class="btn btn-primary" href="https://github.com/jamescjfoundation/wordsmith-manuscript" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> View on GitHub</a>
-          <a class="btn btn-ghost" href="https://github.com/jamescjfoundation/wordsmith-manuscript/blob/main/docs/guide/README.md" target="_blank" rel="noopener">Read the guide</a>
+          <div class="actions">
+            <a class="btn btn-primary" href="https://github.com/jamescjfoundation/wordsmith-manuscript" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> View on GitHub</a>
+            <a class="btn btn-ghost" href="https://github.com/jamescjfoundation/wordsmith-manuscript/blob/main/docs/guide/README.md" target="_blank" rel="noopener">Read the guide</a>
+          </div>
+          <div class="meta"><span class="chip pre">Pre-release</span><span>macOS, Windows, Linux</span><span>No downloads yet: build from source</span></div>
         </div>
-        <div class="meta"><span class="chip pre">Pre-release</span><span>macOS, Windows, Linux</span><span>No downloads yet: build from source</span></div>
-
         <figure class="visual">
-          <div class="mock" role="img" aria-label="Illustration of Wordsmith Manuscript: a binder of chapters, the text of a scene, and the inspector with the scene's synopsis and label">
+          <div class="stage"><div class="mock" role="img" aria-label="Illustration of Wordsmith Manuscript: a binder of chapters, the text of a scene, and the inspector with the scene's synopsis and label">
             <div class="mock-bar"><i></i><i></i><i></i><span class="title">Little Women</span><span>· Draft 2</span></div>
             <div class="mock-body">
               <div class="mock-side">
@@ -76,11 +77,11 @@
                 <div class="row in">2. A Merry Christmas</div>
                 <div class="row in">3. The Laurence Boy</div>
                 <div class="row in">4. Burdens</div>
-                <h4 style="margin-top:14px">Story bible</h4>
+                <h4 class="gap">Story bible</h4>
                 <div class="row"><span class="dot"></span>Jo March</div>
                 <div class="row"><span class="dot"></span>Meg March</div>
-                <div class="row"><span class="dot" style="background:var(--muted)"></span>Orchard House</div>
-                <h4 style="margin-top:14px">Research</h4>
+                <div class="row"><span class="dot muted-dot"></span>Orchard House</div>
+                <h4 class="gap">Research</h4>
                 <div class="row">Pilgrim's Progress notes</div>
               </div>
               <div class="mock-page">
@@ -99,7 +100,7 @@
               </div>
             </div>
             <div class="mock-foot"><span>Scene: 412 words</span><span>Session 1,240 of 1,800 <span class="target"><b></b></span></span></div>
-          </div>
+          </div></div>
           <figcaption>An illustration of the main window, not a screenshot. The text is from <i>Little Women</i> (1868), in the public domain.</figcaption>
         </figure>
       </div>
@@ -112,15 +113,15 @@
           <h2>Plan it, write it, revise it, finish it.</h2>
         </div>
         <div class="features">
-          <div class="feature"><h3>The binder</h3><p>Parts, chapters and scenes in one list. Drag to reorder, split and merge, and read any run of scenes as one continuous text.</p></div>
-          <div class="feature"><h3>Corkboard and outline</h3><p>Index cards for every scene, a freeform board with lines between ideas, and an outline with your own columns.</p></div>
-          <div class="feature"><h3>Story bible</h3><p>Characters, places and anything else, with your own templates, relationships read from both sides, and suggested links from the names in a scene.</p></div>
-          <div class="feature"><h3>Drafts</h3><p>Keep the manuscript as it is and start a new draft. Compare drafts chapter by chapter and choose which one goes to print.</p></div>
-          <div class="feature"><h3>Snapshots</h3><p>Save a scene before a big change and compare it word by word later. Restore it in one click.</p></div>
-          <div class="feature"><h3>Targets and history</h3><p>Word targets for the session and the book, a writing calendar kept on your computer, and progress you can see.</p></div>
-          <div class="feature"><h3>Threads and timeline</h3><p>Lanes for plot threads or points of view, and a timeline of the story's own dates.</p></div>
-          <div class="feature"><h3>Series</h3><p>Several books can share one story bible, so what you learn about a character in book one is there in book three.</p></div>
-          <div class="feature"><h3>Revision tools</h3><p>Split the editor, leave comments, mark revision passes in color, and turn on offline grammar hints if you want them.</p></div>
+          <div class="feature"><span class="ficon"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg></span><h3>The binder</h3><p>Parts, chapters and scenes in one list. Drag to reorder, split and merge, and read any run of scenes as one continuous text.</p></div>
+          <div class="feature"><span class="ficon"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="8" height="7" rx="1.2"/><rect x="13" y="4" width="8" height="7" rx="1.2"/><rect x="3" y="13" width="8" height="7" rx="1.2"/><rect x="13" y="13" width="8" height="7" rx="1.2"/></svg></span><h3>Corkboard and outline</h3><p>Index cards for every scene, a freeform board with lines between ideas, and an outline with your own columns.</p></div>
+          <div class="feature"><span class="ficon"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 4.5a3.5 3.5 0 0 1 0 7M18 14c2 .7 3 2.8 3 6"/></svg></span><h3>Story bible</h3><p>Characters, places and anything else, with your own templates, relationships read from both sides, and suggested links from the names in a scene.</p></div>
+          <div class="feature"><span class="ficon"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 3 8l9 5 9-5z"/><path d="m3 13 9 5 9-5"/></svg></span><h3>Drafts</h3><p>Keep the manuscript as it is and start a new draft. Compare drafts chapter by chapter and choose which one goes to print.</p></div>
+          <div class="feature"><span class="ficon"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5M12 8v4l3 2"/></svg></span><h3>Snapshots</h3><p>Save a scene before a big change and compare it word by word later. Restore it in one click.</p></div>
+          <div class="feature"><span class="ficon"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span><h3>Targets and history</h3><p>Word targets for the session and the book, a writing calendar kept on your computer, and progress you can see.</p></div>
+          <div class="feature"><span class="ficon"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h18M7 8v8M12 6v12M17 9v6"/></svg></span><h3>Threads and timeline</h3><p>Lanes for plot threads or points of view, and a timeline of the story's own dates.</p></div>
+          <div class="feature"><span class="ficon"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4v16H5zM11 4h4v16h-4zM17 5l3.5.9-3.2 13.6-3.4-.9"/></svg></span><h3>Series</h3><p>Several books can share one story bible, so what you learn about a character in book one is there in book three.</p></div>
+          <div class="feature"><span class="ficon"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13 7 4 4"/></svg></span><h3>Revision tools</h3><p>Split the editor, leave comments, mark revision passes in color, and turn on offline grammar hints if you want them.</p></div>
         </div>
       </div>
     </section>
@@ -133,14 +134,14 @@
           <p class="muted">Every scene is a card. Write a line on it, color it by thread or point of view, and move it
             around until the story works. The text moves with it.</p>
         </div>
-        <div class="cork" role="img" aria-label="Illustration of a corkboard with six index cards, one per chapter">
+        <div class="stage"><div class="cork" role="img" aria-label="Illustration of a corkboard with six index cards, one per chapter">
           <div class="icard"><b>Playing Pilgrims</b><span>Christmas Eve by the fire. Mother's letter from the war.</span></div>
           <div class="icard"><b>A Merry Christmas</b><span>The girls give their breakfast away.</span></div>
           <div class="icard"><b>The Laurence Boy</b><span>Jo meets Laurie at the New Year's party.</span></div>
           <div class="icard"><b>Burdens</b><span>Each sister and her own trouble.</span></div>
           <div class="icard"><b>Being Neighborly</b><span>Jo crosses the snow to the big house.</span></div>
           <div class="icard"><b>Beth Finds the Palace Beautiful</b><span>The piano, and Mr. Laurence.</span></div>
-        </div>
+        </div></div>
       </div>
     </section>
 
@@ -153,7 +154,7 @@
             folder of documents at once. Chapters and scene breaks are found for you, and every import is checked word
             for word against the source. If a single word doesn't match, the import isn't made.</p>
         </div>
-        <ul class="ticks">
+        <ul class="ticks boxed">
           <li>A project is a folder of plain text files, readable in any text editor</li>
           <li>One file per scene, so version control and synced folders work well</li>
           <li>Export a standard manuscript for agents and editors, as DOCX or PDF</li>
@@ -169,7 +170,7 @@
         <div class="callout p-book">
           <img src="assets/brand/wordsmith-book-icon.svg" alt="" width="64" height="64">
           <div><h3>Finished? Make it a book.</h3><p>Wordsmith Book opens your Manuscript project directly and typesets it for print and ebook. If it spots a typo, it offers the fix back instead of changing your words.</p></div>
-          <a class="btn btn-ghost" href="book.html">About Book</a>
+          <a class="btn btn-ghost" href="book.html">About Book <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </div>
       </div>
     </section>
@@ -182,9 +183,9 @@
           <p class="muted">There are no installers yet. With <a href="https://rustup.rs" target="_blank" rel="noopener">Rust</a> installed you can run
             the current version now. The interface is in English and Spanish so far, and more languages can be added.</p>
         </div>
-        <pre><code>git clone https://github.com/jamescjfoundation/wordsmith-manuscript
+        <div class="terminal"><div class="terminal-bar" aria-hidden="true"><i></i><i></i><i></i><span>Terminal</span></div><pre><code>git clone https://github.com/jamescjfoundation/wordsmith-manuscript
 cd wordsmith-manuscript
-cargo run -p wordsmith-manuscript</code></pre>
+cargo run -p wordsmith-manuscript</code></pre></div>
       </div>
     </section>
 
@@ -197,9 +198,14 @@ cargo run -p wordsmith-manuscript</code></pre>
           <img src="assets/brand/wordsmith-and-ink-wordmark-paper.svg" alt="Wordsmith &amp; Ink">
           <p>Free, open-source writing apps for screenwriters, novelists and authors. A project of
             <a href="https://jamescj.org" target="_blank" rel="noopener">The James C. J. Foundation</a>.</p>
+          <div class="foot-icons">
+            <a href="script.html" aria-label="Wordsmith Script"><img src="assets/brand/wordsmith-script-icon.svg" alt="" width="36" height="36"></a>
+            <a href="manuscript.html" aria-label="Wordsmith Manuscript"><img src="assets/brand/wordsmith-manuscript-icon.svg" alt="" width="36" height="36"></a>
+            <a href="book.html" aria-label="Wordsmith Book"><img src="assets/brand/wordsmith-book-icon.svg" alt="" width="36" height="36"></a>
+          </div>
         </div>
         <div>
-          <h4>Apps</h4>
+          <h2>Apps</h2>
           <ul>
             <li><a href="script.html">Wordsmith Script</a></li>
             <li><a href="manuscript.html">Wordsmith Manuscript</a></li>
@@ -208,8 +214,9 @@ cargo run -p wordsmith-manuscript</code></pre>
           </ul>
         </div>
         <div>
-          <h4>Project</h4>
+          <h2>Project</h2>
           <ul>
+            <li><a href="wiki/">Wiki</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="open-source.html">Open source</a></li>
             <li><a href="open-source.html#roadmap">Road to 1.0</a></li>
@@ -218,7 +225,7 @@ cargo run -p wordsmith-manuscript</code></pre>
           </ul>
         </div>
         <div>
-          <h4>Elsewhere</h4>
+          <h2>Elsewhere</h2>
           <ul>
             <li><a href="https://github.com/jamescjfoundation" target="_blank" rel="noopener">GitHub</a></li>
             <li><a href="https://jamescj.org" target="_blank" rel="noopener">The James C. J. Foundation</a></li>

@@ -17,22 +17,20 @@
   <link rel="preload" href="/assets/fonts/courier-prime-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/site.css">
+  <script>document.documentElement.classList.add("js")</script>
 </head>
 <body class="">
   <a class="skip" href="#main">Skip to content</a>
   <header class="site-header">
-    <div class="wrap">
+    <div class="header-inner">
       <a class="brand-link" href="/index.html" aria-label="Wordsmith home">
         <picture><source srcset="/assets/brand/wordsmith-and-ink-wordmark-paper.svg" media="(prefers-color-scheme: dark)"><img src="/assets/brand/wordsmith-and-ink-wordmark-ink.svg" alt="Wordsmith &amp; Ink"></picture>
       </a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="bars" aria-hidden="true"></span>Menu</button>
       <nav class="nav" id="site-nav" aria-label="Main">
         <div class="nav-links">
-        <div class="nav-group"><a href="/index.html">Home</a><a href="/about.html">About</a></div>
-        <span class="nav-sep" aria-hidden="true"></span>
-        <div class="nav-group"><a href="/script.html" class="n-script">Script</a><a href="/manuscript.html" class="n-manuscript">Manuscript</a><a href="/book.html" class="n-book">Book</a></div>
-        <span class="nav-sep" aria-hidden="true"></span>
-        <div class="nav-group"><a href="/launcher.html">Launcher</a><a href="/open-source.html">Open source</a></div>
+          <div class="nav-group"><a href="/script.html" class="n-script">Script</a><a href="/manuscript.html" class="n-manuscript">Manuscript</a><a href="/book.html" class="n-book">Book</a></div>
+          <div class="nav-group"><a href="/launcher.html">Launcher</a><a href="/wiki/">Wiki</a><a href="/open-source.html">Open source</a><a href="/about.html">About</a></div>
         </div>
         <div class="nav-actions">
           <a class="btn btn-ghost btn-sm" href="https://github.com/jamescjfoundation" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
@@ -44,12 +42,13 @@
 
   <main id="main">
 
-    <section class="section">
-      <div class="wrap" style="text-align:center">
+    <section class="section notfound">
+      <div class="wrap">
+        <div class="sheet" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
         <p class="eyebrow">Page not found</p>
         <h1>This page is still a blank sheet.</h1>
-        <p class="lede" style="margin:0 auto">The page you were looking for isn't here.</p>
-        <div class="actions" style="justify-content:center"><a class="btn btn-primary" href="/index.html">Back to the start</a></div>
+        <p class="lede">The page you were looking for isn't here.</p>
+        <div class="actions"><a class="btn btn-primary" href="/index.html">Back to the start</a><a class="btn btn-ghost" href="/wiki/">Open the wiki</a></div>
       </div>
     </section>
 
@@ -62,9 +61,14 @@
           <img src="/assets/brand/wordsmith-and-ink-wordmark-paper.svg" alt="Wordsmith &amp; Ink">
           <p>Free, open-source writing apps for screenwriters, novelists and authors. A project of
             <a href="https://jamescj.org" target="_blank" rel="noopener">The James C. J. Foundation</a>.</p>
+          <div class="foot-icons">
+            <a href="/script.html" aria-label="Wordsmith Script"><img src="/assets/brand/wordsmith-script-icon.svg" alt="" width="36" height="36"></a>
+            <a href="/manuscript.html" aria-label="Wordsmith Manuscript"><img src="/assets/brand/wordsmith-manuscript-icon.svg" alt="" width="36" height="36"></a>
+            <a href="/book.html" aria-label="Wordsmith Book"><img src="/assets/brand/wordsmith-book-icon.svg" alt="" width="36" height="36"></a>
+          </div>
         </div>
         <div>
-          <h4>Apps</h4>
+          <h2>Apps</h2>
           <ul>
             <li><a href="/script.html">Wordsmith Script</a></li>
             <li><a href="/manuscript.html">Wordsmith Manuscript</a></li>
@@ -73,8 +77,9 @@
           </ul>
         </div>
         <div>
-          <h4>Project</h4>
+          <h2>Project</h2>
           <ul>
+            <li><a href="/wiki/">Wiki</a></li>
             <li><a href="/about.html">About</a></li>
             <li><a href="/open-source.html">Open source</a></li>
             <li><a href="/open-source.html#roadmap">Road to 1.0</a></li>
@@ -83,7 +88,7 @@
           </ul>
         </div>
         <div>
-          <h4>Elsewhere</h4>
+          <h2>Elsewhere</h2>
           <ul>
             <li><a href="https://github.com/jamescjfoundation" target="_blank" rel="noopener">GitHub</a></li>
             <li><a href="https://jamescj.org" target="_blank" rel="noopener">The James C. J. Foundation</a></li>

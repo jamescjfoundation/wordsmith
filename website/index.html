@@ -19,22 +19,20 @@
   <link rel="preload" href="assets/fonts/courier-prime-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/css/site.css">
+  <script>document.documentElement.classList.add("js")</script>
 </head>
 <body class="">
   <a class="skip" href="#main">Skip to content</a>
   <header class="site-header">
-    <div class="wrap">
+    <div class="header-inner">
       <a class="brand-link" href="index.html" aria-label="Wordsmith home">
         <picture><source srcset="assets/brand/wordsmith-and-ink-wordmark-paper.svg" media="(prefers-color-scheme: dark)"><img src="assets/brand/wordsmith-and-ink-wordmark-ink.svg" alt="Wordsmith &amp; Ink"></picture>
       </a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="bars" aria-hidden="true"></span>Menu</button>
       <nav class="nav" id="site-nav" aria-label="Main">
         <div class="nav-links">
-        <div class="nav-group"><a href="index.html" aria-current="page">Home</a><a href="about.html">About</a></div>
-        <span class="nav-sep" aria-hidden="true"></span>
-        <div class="nav-group"><a href="script.html" class="n-script">Script</a><a href="manuscript.html" class="n-manuscript">Manuscript</a><a href="book.html" class="n-book">Book</a></div>
-        <span class="nav-sep" aria-hidden="true"></span>
-        <div class="nav-group"><a href="launcher.html">Launcher</a><a href="open-source.html">Open source</a></div>
+          <div class="nav-group"><a href="script.html" class="n-script">Script</a><a href="manuscript.html" class="n-manuscript">Manuscript</a><a href="book.html" class="n-book">Book</a></div>
+          <div class="nav-group"><a href="launcher.html">Launcher</a><a href="wiki/">Wiki</a><a href="open-source.html">Open source</a><a href="about.html">About</a></div>
         </div>
         <div class="nav-actions">
           <a class="btn btn-ghost btn-sm" href="https://github.com/jamescjfoundation" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
@@ -48,71 +46,141 @@
 
     <section class="hero">
       <div class="wrap hero-grid">
-        <div>
-          <p class="eyebrow">Free &middot; Open source &middot; For writers</p>
+        <div class="hero-copy">
+          <p class="kicker"><span class="chip pre">Early days</span><span>No downloads yet. <a href="open-source.html#roadmap">See the road to 1.0</a></span></p>
           <h1>Free writing tools, from first page to finished book.</h1>
           <p class="lede">A family of open-source apps for screenwriters, novelists and authors. Write a screenplay,
             draft a novel, and turn it into a print book and an ebook.</p>
           <div class="actions">
-            <a class="btn btn-primary" href="#apps">Get the apps <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
+            <a class="btn btn-primary" href="#apps">Meet the apps <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
             <a class="btn btn-ghost" href="https://github.com/jamescjfoundation" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> Follow on GitHub</a>
           </div>
-          <p class="hero-note"><span class="chip pre">Early days</span> No downloads yet. <a href="open-source.html#roadmap">See the road to 1.0</a></p>
+          <ul class="hero-apps" aria-label="The Wordsmith apps">
+            <li><a href="script.html" class="n-script"><img src="assets/brand/wordsmith-script-icon.svg" alt="" width="48" height="48"><span><b>Script</b><small>Screenplays</small></span></a></li>
+            <li><a href="manuscript.html" class="n-manuscript"><img src="assets/brand/wordsmith-manuscript-icon.svg" alt="" width="48" height="48"><span><b>Manuscript</b><small>Novels</small></span></a></li>
+            <li><a href="book.html" class="n-book"><img src="assets/brand/wordsmith-book-icon.svg" alt="" width="48" height="48"><span><b>Book</b><small>Print and ebook</small></span></a></li>
+          </ul>
         </div>
-        <div class="icon-stack" aria-label="The Wordsmith apps">
-          <a href="script.html" class="n-script"><img src="assets/brand/wordsmith-script-icon.svg" alt="" width="200" height="200"><span>Script</span><small>Screenplays</small></a>
-          <a href="manuscript.html" class="n-manuscript"><img src="assets/brand/wordsmith-manuscript-icon.svg" alt="" width="200" height="200"><span>Manuscript</span><small>Novels</small></a>
-          <a href="book.html" class="n-book"><img src="assets/brand/wordsmith-book-icon.svg" alt="" width="200" height="200"><span>Book</span><small>Print and ebook</small></a>
+        <div class="desk" role="img" aria-label="A Wordsmith Script screenplay page, with an index card and a typeset book page laid on top: the three apps on one desk">
+          <div class="desk-shot"><img src="assets/img/script-page-view.webp" alt="" width="1600" height="983"></div>
+          <div class="desk-card">
+            <img class="badge" src="assets/brand/wordsmith-manuscript-icon.svg" alt="" width="40" height="40">
+            <b>Playing Pilgrims</b>
+            <span>Christmas Eve by the fire. The four sisters wish for presents, and Mother's letter comes from the war.</span>
+          </div>
+          <div class="desk-leaf">
+            <img class="badge" src="assets/brand/wordsmith-book-icon.svg" alt="" width="40" height="40">
+            <div class="ch-num">CHAPTER I</div>
+            <div class="orn">&#10087;</div>
+            <p class="first"><span class="sc">It is a truth</span> universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.</p>
+            <p>However little known the feelings or views of such a man may be on his first entering a neighbourhood, this truth is so well fixed in the minds of the surrounding families.</p>
+          </div>
+          <img class="badge badge-shot" src="assets/brand/wordsmith-script-icon.svg" alt="" width="40" height="40">
         </div>
+      </div>
+    </section>
+
+    <section class="promises" aria-label="What we promise">
+      <div class="wrap">
+        <ul class="promise-list">
+          <li><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><div><b>Free, for good</b><span>No price, no subscription, no premium tier.</span></div></li>
+          <li><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><div><b>Your files are yours</b><span>Plain, open files on your own computer.</span></div></li>
+          <li><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 3 18 18M10.6 6.1A9.8 9.8 0 0 1 12 6c5 0 9 6 9 6a15 15 0 0 1-2.6 3.2M6.6 6.6C4.3 8.1 3 12 3 12s4 6 9 6c1.6 0 3-.4 4.3-1.1M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg><div><b>No tracking</b><span>No accounts, no telemetry, no ads.</span></div></li>
+          <li><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/></svg><div><b>Open source</b><span>Anyone can read, fix and translate the code.</span></div></li>
+        </ul>
       </div>
     </section>
 
     <section class="section" id="apps">
       <div class="wrap">
-        <div class="section-head">
+        <div class="section-head center">
           <p class="eyebrow">The apps</p>
           <h2>One family, three desks.</h2>
           <p class="lede">Each app does one job well, and they work together. All three run on macOS, Windows and Linux,
             and keep your work as plain files on your own computer.</p>
         </div>
-        <div class="cards">
-          <a class="card p-script" href="script.html">
-            <div class="card-top"><img src="assets/brand/wordsmith-script-icon.svg" alt="" width="56" height="56"><span class="chip pre">Pre-release</span></div>
+        <div class="app-rows">
+        <article class="app-row p-script">
+          <div class="app-copy">
+            <div class="app-head"><img src="assets/brand/wordsmith-script-icon.svg" alt="" width="64" height="64"><span class="chip pre">Pre-release</span></div>
             <picture><source srcset="assets/brand/wordsmith-script-wordmark-paper.svg" media="(prefers-color-scheme: dark)"><img class="wordmark" src="assets/brand/wordsmith-script-wordmark-ink.svg" alt="Wordsmith Script"></picture>
-            <p>Write screenplays, TV episodes and stage plays, formatted as you type and ready for production.</p>
-            <span class="more">Explore Script <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </a>
-          <a class="card p-manuscript" href="manuscript.html">
-            <div class="card-top"><img src="assets/brand/wordsmith-manuscript-icon.svg" alt="" width="56" height="56"><span class="chip pre">Pre-release</span></div>
+            <p class="app-for">Screenplays, TV and stage plays</p>
+            <p class="app-text">Write screenplays, TV episodes and stage plays, formatted as you type and ready for production.</p>
+            <ul class="ticks"><li>Return and Tab do the formatting</li><li>Pages, PDFs and printouts that match the screen</li><li>Revision colors, scene numbers and locked pages</li></ul>
+            <a class="btn btn-ghost" href="script.html">Explore Script <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+          <div class="app-visual stage">
+            <div class="shot"><img src="assets/img/script-index-cards.webp" alt="Wordsmith Script showing index cards, one per scene" width="1600" height="983" loading="lazy"></div>
+          </div>
+        </article>
+
+        <article class="app-row p-manuscript">
+          <div class="app-copy">
+            <div class="app-head"><img src="assets/brand/wordsmith-manuscript-icon.svg" alt="" width="64" height="64"><span class="chip pre">Pre-release</span></div>
             <picture><source srcset="assets/brand/wordsmith-manuscript-wordmark-paper.svg" media="(prefers-color-scheme: dark)"><img class="wordmark" src="assets/brand/wordsmith-manuscript-wordmark-ink.svg" alt="Wordsmith Manuscript"></picture>
-            <p>Plan, draft and revise novels and other long work, with your story bible beside the text.</p>
-            <span class="more">Explore Manuscript <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </a>
-          <a class="card p-book" href="book.html">
-            <div class="card-top"><img src="assets/brand/wordsmith-book-icon.svg" alt="" width="56" height="56"><span class="chip dev">In development</span></div>
+            <p class="app-for">Novels and long work</p>
+            <p class="app-text">Plan, draft and revise novels and other long work, with your story bible beside the text.</p>
+            <ul class="ticks"><li>Parts, chapters and scenes in one binder</li><li>A corkboard, an outline and a story bible</li><li>Drafts and snapshots you can compare</li></ul>
+            <a class="btn btn-ghost" href="manuscript.html">Explore Manuscript <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+          <div class="app-visual stage">
+            <div class="cork" role="img" aria-label="Illustration of a corkboard with six index cards, one per chapter">
+          <div class="icard"><b>Playing Pilgrims</b><span>Christmas Eve by the fire. Mother's letter from the war.</span></div>
+          <div class="icard"><b>A Merry Christmas</b><span>The girls give their breakfast away.</span></div>
+          <div class="icard"><b>The Laurence Boy</b><span>Jo meets Laurie at the New Year's party.</span></div>
+          <div class="icard"><b>Burdens</b><span>Each sister and her own trouble.</span></div>
+          <div class="icard"><b>Being Neighborly</b><span>Jo crosses the snow to the big house.</span></div>
+          <div class="icard"><b>Beth Finds the Palace Beautiful</b><span>The piano, and Mr. Laurence.</span></div>
+        </div>
+          </div>
+        </article>
+
+        <article class="app-row p-book">
+          <div class="app-copy">
+            <div class="app-head"><img src="assets/brand/wordsmith-book-icon.svg" alt="" width="64" height="64"><span class="chip dev">In development</span></div>
             <picture><source srcset="assets/brand/wordsmith-book-wordmark-paper.svg" media="(prefers-color-scheme: dark)"><img class="wordmark" src="assets/brand/wordsmith-book-wordmark-ink.svg" alt="Wordsmith Book"></picture>
-            <p>Design and typeset a finished manuscript as a print-ready book and an ebook for every store.</p>
-            <span class="more">Explore Book <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </a>
+            <p class="app-for">Print books and ebooks</p>
+            <p class="app-text">Design and typeset a finished manuscript as a print-ready book and an ebook for every store.</p>
+            <p class="ticks-label">What it will do</p><ul class="ticks"><li>Book designs with chapter openings and drop caps</li><li>A print-ready PDF and an accessible EPUB 3</li><li>Preflight checks before you upload</li></ul>
+            <a class="btn btn-ghost" href="book.html">Explore Book <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+          <div class="app-visual stage">
+            <div role="img" aria-label="Illustration of a typeset two-page book spread"><div class="spread">
+              <div class="leaf left">
+                <div class="ch-num" style="margin-top:58%">VOLUME I</div>
+                <div class="orn" style="margin-top:1.2em">&#10087;</div>
+              </div>
+              <div class="leaf right">
+                
+                <div class="ch-num">CHAPTER I</div>
+                <div class="orn" style="margin-top:0.8em">&#10087;</div>
+                <p class="first"><span class="sc">It is a truth</span> universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.</p>
+                <p>However little known the feelings or views of such a man may be on his first entering a neighbourhood, this truth is so well fixed in the minds of the surrounding families, that he is considered the rightful property of some one or other of their daughters.</p>
+                <p>“My dear Mr. Bennet,” said his lady to him one day, “have you heard that Netherfield Park is let at last?”</p>
+                <p>Mr. Bennet replied that he had not.</p>
+                <p>“But it is,” returned she; “for Mrs. Long has just been here, and she told me all about it.”</p>
+                <div class="folio">1</div>
+              </div>
+            </div></div>
+          </div>
+        </article>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section sunken">
       <div class="wrap">
-        <div class="section-head">
+        <div class="section-head center">
           <p class="eyebrow">How it works</p>
           <h2>Write <span class="arr">&rarr;</span> Finish <span class="arr">&rarr;</span> Publish.</h2>
           <p class="lede">One shared foundation means the apps look alike, work alike and pass your work along without
             copying and pasting.</p>
         </div>
-        <div class="flow">
-          <a class="step n-script" href="script.html"><img src="assets/brand/wordsmith-script-icon.svg" alt="" width="72" height="72"><h3>Script</h3><p>Write the screenplay, and keep it in your novel's project too.</p></a>
-          <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-          <a class="step n-manuscript" href="manuscript.html"><img src="assets/brand/wordsmith-manuscript-icon.svg" alt="" width="72" height="72"><h3>Manuscript</h3><p>Draft and revise the story, with characters and places in one bible.</p></a>
-          <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-          <a class="step n-book" href="book.html"><img src="assets/brand/wordsmith-book-icon.svg" alt="" width="72" height="72"><h3>Book</h3><p>Turn the finished manuscript into a print book and an ebook.</p></a>
-        </div>
+        <ol class="flow">
+          <li><a class="step n-script" href="script.html"><span class="step-num">1</span><img src="assets/brand/wordsmith-script-icon.svg" alt="" width="72" height="72"><h3>Script</h3><p>Write the screenplay, and keep it in your novel's project too.</p></a></li>
+          <li><a class="step n-manuscript" href="manuscript.html"><span class="step-num">2</span><img src="assets/brand/wordsmith-manuscript-icon.svg" alt="" width="72" height="72"><h3>Manuscript</h3><p>Draft and revise the story, with characters and places in one bible.</p></a></li>
+          <li><a class="step n-book" href="book.html"><span class="step-num">3</span><img src="assets/brand/wordsmith-book-icon.svg" alt="" width="72" height="72"><h3>Book</h3><p>Turn the finished manuscript into a print book and an ebook.</p></a></li>
+        </ol>
         <p class="flow-note">The planned <a href="launcher.html">Wordsmith Launcher</a> will bring all three together in one download.</p>
       </div>
     </section>
@@ -161,15 +229,23 @@
 
     <section class="section">
       <div class="wrap">
-        <div class="section-head">
-          <p class="eyebrow">Early days</p>
-          <h2>Help us get to 1.0.</h2>
-          <p class="lede">The apps are young and there are no downloads yet. If you write, code, design or translate,
-            there's a place for you. Watch the repositories to hear about the first releases.</p>
-          <div class="actions">
-            <a class="btn btn-primary" href="open-source.html#get-involved">Get involved</a>
-            <a class="btn btn-ghost" href="https://github.com/jamescjfoundation" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> jamescjfoundation on GitHub</a>
+        <div class="cta-panel">
+          <div class="cta-copy">
+            <p class="eyebrow">Early days</p>
+            <h2>Help us get to 1.0.</h2>
+            <p class="lede">The apps are young and there are no downloads yet. If you write, code, design or translate,
+              there's a place for you. Watch the repositories to hear about the first releases.</p>
+            <div class="actions">
+              <a class="btn btn-primary" href="open-source.html#get-involved">Get involved</a>
+              <a class="btn btn-ghost" href="https://github.com/jamescjfoundation" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> jamescjfoundation on GitHub</a>
+            </div>
           </div>
+          <ol class="mini-road" aria-label="The road to 1.0">
+            <li class="now"><b>Now</b><span>Building the base</span></li>
+            <li><b>Next</b><span>First releases</span></li>
+            <li><b>1.0</b><span>Ready for real work</span></li>
+            <li><b>Beyond</b><span>Growing together</span></li>
+          </ol>
         </div>
       </div>
     </section>
@@ -183,9 +259,14 @@
           <img src="assets/brand/wordsmith-and-ink-wordmark-paper.svg" alt="Wordsmith &amp; Ink">
           <p>Free, open-source writing apps for screenwriters, novelists and authors. A project of
             <a href="https://jamescj.org" target="_blank" rel="noopener">The James C. J. Foundation</a>.</p>
+          <div class="foot-icons">
+            <a href="script.html" aria-label="Wordsmith Script"><img src="assets/brand/wordsmith-script-icon.svg" alt="" width="36" height="36"></a>
+            <a href="manuscript.html" aria-label="Wordsmith Manuscript"><img src="assets/brand/wordsmith-manuscript-icon.svg" alt="" width="36" height="36"></a>
+            <a href="book.html" aria-label="Wordsmith Book"><img src="assets/brand/wordsmith-book-icon.svg" alt="" width="36" height="36"></a>
+          </div>
         </div>
         <div>
-          <h4>Apps</h4>
+          <h2>Apps</h2>
           <ul>
             <li><a href="script.html">Wordsmith Script</a></li>
             <li><a href="manuscript.html">Wordsmith Manuscript</a></li>
@@ -194,8 +275,9 @@
           </ul>
         </div>
         <div>
-          <h4>Project</h4>
+          <h2>Project</h2>
           <ul>
+            <li><a href="wiki/">Wiki</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="open-source.html">Open source</a></li>
             <li><a href="open-source.html#roadmap">Road to 1.0</a></li>
@@ -204,7 +286,7 @@
           </ul>
         </div>
         <div>
-          <h4>Elsewhere</h4>
+          <h2>Elsewhere</h2>
           <ul>
             <li><a href="https://github.com/jamescjfoundation" target="_blank" rel="noopener">GitHub</a></li>
             <li><a href="https://jamescj.org" target="_blank" rel="noopener">The James C. J. Foundation</a></li>

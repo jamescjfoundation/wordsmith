@@ -1,14 +1,12 @@
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
+import { Globe } from 'lucide-react';
 import { gitConfig, siteUrl } from './shared';
+import { Wordmark } from './brand';
 
-/* Brand files are the main site's own (website/assets/brand), served from the site root,
-   so the wiki uses them without keeping copies. Plain <img>: next/image would add the /wiki base path. */
-/* eslint-disable @next/next/no-img-element */
 function Logo() {
   return (
     <span className="ws-logo">
-      <img className="ws-logo-ink" src="/assets/brand/wordsmith-and-ink-wordmark-ink.svg" alt="Wordsmith &amp; Ink" />
-      <img className="ws-logo-paper" src="/assets/brand/wordsmith-and-ink-wordmark-paper.svg" alt="" aria-hidden="true" />
+      <Wordmark brand="wordsmith-and-ink" label="Wordsmith &amp; Ink" />
       <span className="ws-logo-label">Wiki</span>
     </span>
   );
@@ -20,8 +18,9 @@ export function baseOptions(): BaseLayoutProps {
       title: <Logo />,
       url: '/',
     },
+    // an icon link sits in the sidebar's footer, next to GitHub
     links: [
-      { text: 'Website', url: siteUrl, external: true },
+      { type: 'icon', text: 'Website', label: 'Wordsmith website', icon: <Globe />, url: siteUrl, external: true },
     ],
     githubUrl: `https://github.com/${gitConfig.user}`,
   };

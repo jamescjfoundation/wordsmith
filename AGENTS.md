@@ -23,7 +23,7 @@ These come from the project's public promises on the website. Don't break them.
 - **Privacy:** no telemetry, analytics, accounts, trackers or third-party requests. The website self-hosts its fonts for this reason; no CDNs, Google Fonts or embeds. The only network request any app makes on its own is the update check with GitHub, and it can be turned off.
 - **Licensing:** code is MIT OR Apache-2.0. Only add dependencies with compatible licenses, and credit them (README/NOTICE).
 - **Names:** "Wordsmith", "Wordsmith & Ink", "Wordsmith Script", "Wordsmith Manuscript", "Wordsmith Book" are trademarks. Use them exactly as written. The launcher is "Wordsmith Launcher".
-- **Brand assets:** `brand/` is the brand kit and the source for every logo, icon, color and font choice. Read `brand/suite/BRAND_GUIDE.md` before any visual work. Copies elsewhere (`website/assets/brand/`, the app repos) are taken from `brand/` unchanged. Never edit, recolor or redraw a brand file by hand. Logos, icons, palettes and the guideline PDFs change only through `brand/source/` and a rebuild.
+- **Brand assets:** `brand/` is the brand kit and the source for every logo, icon, color and font choice. Read `brand/suite/BRAND_GUIDE.md` before any visual work. Copies elsewhere (`website/assets/brand/`, `website/wiki/public/brand/`, the app repos) are taken from `brand/` unchanged. Never edit, recolor or redraw a brand file by hand. Logos, icons, palettes and the guideline PDFs change only through `brand/source/` and a rebuild.
 - **The Foundation's name** is always "The James C. J. Foundation", never "The J. C. J. Foundation".
 - **Writing style:** plain, short, friendly sentences for writers, not developers. No marketing superlatives. Don't claim a feature exists before it does; mark planned things as planned.
 
@@ -47,10 +47,10 @@ These come from the project's public promises on the website. Don't break them.
 ## website/wiki/
 
 - A separate project from the main site: Fumadocs on Next.js, exported as static files with `basePath: '/wiki'`, published at `https://wordsmithand.ink/wiki/` by the same Pages workflow (one repository has one Pages site). `website/wiki/README.md` has the commands.
-- Pages are MDX in `website/wiki/content/docs/`: `start/` (shared Getting started) and one folder per app (`script/`, `manuscript/`, `book/`), each a sidebar tab (`root: true` in its `meta.json`). `meta.json` sets the page order.
-- It reuses the main site's fonts and logos from `/assets/` instead of copying them, so it only looks right when served with the main site (the deploy, or the local preview at `https://wordwiki.test`).
+- Pages are MDX in `website/wiki/content/docs/`: `start/` (the shared "Wordsmith apps" tab, which also holds the home page) and one folder per app (`script/`, `manuscript/`, `book/`), each a sidebar tab (`root: true` in its `meta.json`). `meta.json` sets the page order.
+- Its logos, app icons and favicons are copies of `brand/` files in `website/wiki/public/brand/`, made by `npm run brand` and checked by `npm run brand:check` (the deploy runs it). Never edit the copies. Each app's section uses that app's color only for small marks; links stay Margin Blue. The fonts come from the main site's `/assets/fonts/`, so the wiki only looks right when served with the main site (the deploy, or the local preview at `https://wordwiki.test`).
 - Content rules: write for writers, document only what the app does today, and check claims against the app's repo (code, CHANGELOG, progress notes). Mark anything not built with `<Status value="planned" />` or `"in-progress"`. Never use an app repo's `.private/` notes or internal reviews as content.
-- Check before committing: `npm run build` in `website/wiki` passes, and every page and internal link loads.
+- Check before committing: `npm run brand:check`, `npm run lint` and `npm run build` in `website/wiki` pass, and every page and internal link loads.
 
 ## launcher/
 

@@ -2,7 +2,7 @@
 
 The marketing site for the Wordsmith apps (Script, Manuscript, Book and the planned Launcher), from Wordsmith & Ink, a project of The James C. J. Foundation.
 
-Plain HTML and CSS with no build step, so GitHub Pages can serve this folder as it is. Open `index.html` in a browser to preview it locally, or run `python3 -m http.server` in this folder and visit http://localhost:8000.
+Plain HTML and CSS, so GitHub Pages can serve this folder as it is. To preview it locally, run `python3 website/tools/serve.py` from the repository root and visit http://localhost:8000. It works like `python3 -m http.server`, but serves `/about` from `about.html` the way Pages does.
 
 ## Files
 
@@ -14,6 +14,8 @@ Plain HTML and CSS with no build step, so GitHub Pages can serve this folder as 
 | `about.html` | The Foundation, James, principles, Wordsmith & Ink |
 | `open-source.html` | The road to 1.0, status, how to help, privacy, licenses |
 | `404.html` | Page not found |
+| `tools/build.py` | Writes every page: the shared header and footer and all the page text |
+| `tools/serve.py` | Local preview server that serves `/about` from `about.html`, like Pages |
 | `assets/css/site.css` | All styles. Colors are the brand kit's tokens, with a dark theme that follows the system |
 | `assets/js/site.js` | The menu button on small screens (the site works without it) |
 | `assets/brand/` | Logos and icons copied unchanged from the brand kit, and `og-image.png` for link previews |
@@ -32,4 +34,4 @@ The shared header, footer and page text live in `tools/build.py`. Edit it and ru
 
 The workflow in `.github/workflows/pages.yml` publishes this folder whenever a push to `main` changes it (or run it by hand from the Actions tab). It builds the wiki first and publishes its static export at `/wiki/` in place of the wiki's source. Pages is enabled with Source set to "GitHub Actions", and the site is live at https://wordsmithand.ink, a custom domain set in the repository's Pages settings (DNS is on Cloudflare). The deploy doesn't need a `CNAME` file.
 
-All links between pages are relative, so the site works at a domain root or under a repository path.
+All links between pages are relative and leave off `.html` (`about`, not `about.html`). GitHub Pages serves `/about` from `about.html`, and old `.html` addresses still work.

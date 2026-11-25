@@ -75,19 +75,20 @@ def terminal(cmds):
             f'<pre><code>{cmds}</code></pre></div>')
 
 
-NAV = [[("script.html", "Script", "n-script"), ("manuscript.html", "Manuscript", "n-manuscript"), ("book.html", "Book", "n-book")],
-       [("launcher.html", "Launcher", ""), ("wiki/", "Wiki", ""), ("open-source.html", "Open source", ""), ("about.html", "About", "")]]
+NAV = [[("script", "Script", "n-script"), ("manuscript", "Manuscript", "n-manuscript"), ("book", "Book", "n-book")],
+       [("launcher", "Launcher", ""), ("wiki/", "Wiki", ""), ("open-source", "Open source", ""), ("about", "About", "")]]
 
 
 def page(file, title, desc, body, cls=""):
+    # Pages are written as name.html, but links leave off ".html" (GitHub Pages serves /name from name.html).
     groups = []
     for g in NAV:
         links = "".join(
-            f'<a href="{h}"{f' class="{c}"' if c else ""}{' aria-current="page"' if h == file else ""}>{t}</a>' for h, t, c in g)
+            f'<a href="{h}"{f' class="{c}"' if c else ""}{' aria-current="page"' if h == file.removesuffix(".html") else ""}>{t}</a>' for h, t, c in g)
         groups.append(f'          <div class="nav-group">{links}</div>')
     nav = "\n".join(groups)
     full_title = title if file == "index.html" else f"{title} · Wordsmith"
-    url = SITE if file == "index.html" else SITE + file
+    url = SITE if file == "index.html" else SITE + file.removesuffix(".html")
     canonical = "" if file == "404.html" else f'\n  <link rel="canonical" href="{url}">\n  <meta property="og:url" content="{url}">'
     html = f"""<!doctype html>
 <html lang="en">
@@ -114,7 +115,7 @@ def page(file, title, desc, body, cls=""):
   <a class="skip" href="#main">Skip to content</a>
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand-link" href="index.html" aria-label="Wordsmith home">
+      <a class="brand-link" href="./" aria-label="Wordsmith home">
         {logo("wordsmith-and-ink-wordmark", "Wordsmith &amp; Ink")}
       </a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="bars" aria-hidden="true"></span>Menu</button>
@@ -142,29 +143,29 @@ def page(file, title, desc, body, cls=""):
           <p>Free, open-source writing apps for screenwriters, novelists and authors. A project of
             <a href="{FOUNDATION}">The James C. J. Foundation</a>.</p>
           <div class="foot-icons">
-            <a href="script.html" aria-label="Wordsmith Script"><img src="{B}wordsmith-script-icon.svg" alt="" width="36" height="36"></a>
-            <a href="manuscript.html" aria-label="Wordsmith Manuscript"><img src="{B}wordsmith-manuscript-icon.svg" alt="" width="36" height="36"></a>
-            <a href="book.html" aria-label="Wordsmith Book"><img src="{B}wordsmith-book-icon.svg" alt="" width="36" height="36"></a>
+            <a href="script" aria-label="Wordsmith Script"><img src="{B}wordsmith-script-icon.svg" alt="" width="36" height="36"></a>
+            <a href="manuscript" aria-label="Wordsmith Manuscript"><img src="{B}wordsmith-manuscript-icon.svg" alt="" width="36" height="36"></a>
+            <a href="book" aria-label="Wordsmith Book"><img src="{B}wordsmith-book-icon.svg" alt="" width="36" height="36"></a>
           </div>
         </div>
         <div>
           <h2>Apps</h2>
           <ul>
-            <li><a href="script.html">Wordsmith Script</a></li>
-            <li><a href="manuscript.html">Wordsmith Manuscript</a></li>
-            <li><a href="book.html">Wordsmith Book</a></li>
-            <li><a href="launcher.html">Wordsmith Launcher</a></li>
+            <li><a href="script">Wordsmith Script</a></li>
+            <li><a href="manuscript">Wordsmith Manuscript</a></li>
+            <li><a href="book">Wordsmith Book</a></li>
+            <li><a href="launcher">Wordsmith Launcher</a></li>
           </ul>
         </div>
         <div>
           <h2>Project</h2>
           <ul>
             <li><a href="wiki/">Wiki</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="open-source.html">Open source</a></li>
-            <li><a href="open-source.html#roadmap">Road to 1.0</a></li>
-            <li><a href="open-source.html#get-involved">Get involved</a></li>
-            <li><a href="open-source.html#privacy">Privacy</a></li>
+            <li><a href="about">About</a></li>
+            <li><a href="open-source">Open source</a></li>
+            <li><a href="open-source#roadmap">Road to 1.0</a></li>
+            <li><a href="open-source#get-involved">Get involved</a></li>
+            <li><a href="open-source#privacy">Privacy</a></li>
           </ul>
         </div>
         <div>
@@ -189,6 +190,7 @@ def page(file, title, desc, body, cls=""):
     if file == "404.html":
         # GitHub Pages serves this page at any missing address, even inside a folder (/foo/bar),
         # where relative links would point into that folder. Make its local links start at the site root.
+        html = html.replace('href="./"', 'href="/"')
         html = re.sub(r'\b(href|src|srcset)="(?![#/]|[a-z]+:)', r'\1="/', html)
     (OUT / file).write_text(html, encoding="utf-8")
 
@@ -286,7 +288,7 @@ def app_row(cls, slug, chip, chip_cls, for_, text, ticks, visual, ticks_label=""
             <p class="app-for">{for_}</p>
             <p class="app-text">{text}</p>
             {label}<ul class="ticks">{items}</ul>
-            <a class="btn btn-ghost" href="{slug}.html">Explore {name} {ARROW}</a>
+            <a class="btn btn-ghost" href="{slug}">Explore {name} {ARROW}</a>
           </div>
           <div class="app-visual stage">
             {visual}
@@ -298,7 +300,7 @@ home = f"""
     <section class="hero">
       <div class="wrap hero-grid">
         <div class="hero-copy">
-          <p class="kicker"><span class="chip pre">Early days</span><span>No downloads yet. <a href="open-source.html#roadmap">See the road to 1.0</a></span></p>
+          <p class="kicker"><span class="chip pre">Early days</span><span>No downloads yet. <a href="open-source#roadmap">See the road to 1.0</a></span></p>
           <h1>Free writing tools, from first page to finished book.</h1>
           <p class="lede">A family of open-source apps for screenwriters, novelists and authors. Write a screenplay,
             draft a novel, and turn it into a print book and an ebook.</p>
@@ -307,9 +309,9 @@ home = f"""
             <a class="btn btn-ghost" href="{ORG}">{GH} Follow on GitHub</a>
           </div>
           <ul class="hero-apps" aria-label="The Wordsmith apps">
-            <li><a href="script.html" class="n-script"><img src="{B}wordsmith-script-icon.svg" alt="" width="48" height="48"><span><b>Script</b><small>Screenplays</small></span></a></li>
-            <li><a href="manuscript.html" class="n-manuscript"><img src="{B}wordsmith-manuscript-icon.svg" alt="" width="48" height="48"><span><b>Manuscript</b><small>Novels</small></span></a></li>
-            <li><a href="book.html" class="n-book"><img src="{B}wordsmith-book-icon.svg" alt="" width="48" height="48"><span><b>Book</b><small>Print and ebook</small></span></a></li>
+            <li><a href="script" class="n-script"><img src="{B}wordsmith-script-icon.svg" alt="" width="48" height="48"><span><b>Script</b><small>Screenplays</small></span></a></li>
+            <li><a href="manuscript" class="n-manuscript"><img src="{B}wordsmith-manuscript-icon.svg" alt="" width="48" height="48"><span><b>Manuscript</b><small>Novels</small></span></a></li>
+            <li><a href="book" class="n-book"><img src="{B}wordsmith-book-icon.svg" alt="" width="48" height="48"><span><b>Book</b><small>Print and ebook</small></span></a></li>
           </ul>
         </div>
         {DESK}
@@ -361,11 +363,11 @@ home = f"""
             copying and pasting.</p>
         </div>
         <ol class="flow">
-          <li><a class="step n-script" href="script.html"><span class="step-num">1</span><img src="{B}wordsmith-script-icon.svg" alt="" width="72" height="72"><h3>Script</h3><p>Write the screenplay, and keep it in your novel's project too.</p></a></li>
-          <li><a class="step n-manuscript" href="manuscript.html"><span class="step-num">2</span><img src="{B}wordsmith-manuscript-icon.svg" alt="" width="72" height="72"><h3>Manuscript</h3><p>Draft and revise the story, with characters and places in one bible.</p></a></li>
-          <li><a class="step n-book" href="book.html"><span class="step-num">3</span><img src="{B}wordsmith-book-icon.svg" alt="" width="72" height="72"><h3>Book</h3><p>Turn the finished manuscript into a print book and an ebook.</p></a></li>
+          <li><a class="step n-script" href="script"><span class="step-num">1</span><img src="{B}wordsmith-script-icon.svg" alt="" width="72" height="72"><h3>Script</h3><p>Write the screenplay, and keep it in your novel's project too.</p></a></li>
+          <li><a class="step n-manuscript" href="manuscript"><span class="step-num">2</span><img src="{B}wordsmith-manuscript-icon.svg" alt="" width="72" height="72"><h3>Manuscript</h3><p>Draft and revise the story, with characters and places in one bible.</p></a></li>
+          <li><a class="step n-book" href="book"><span class="step-num">3</span><img src="{B}wordsmith-book-icon.svg" alt="" width="72" height="72"><h3>Book</h3><p>Turn the finished manuscript into a print book and an ebook.</p></a></li>
         </ol>
-        <p class="flow-note">The planned <a href="launcher.html">Wordsmith Launcher</a> will bring all three together in one download.</p>
+        <p class="flow-note">The planned <a href="launcher">Wordsmith Launcher</a> will bring all three together in one download.</p>
       </div>
     </section>
 
@@ -378,7 +380,7 @@ home = f"""
             Wordsmith is the first of them.</p>
           <div class="actions">
             <a class="btn btn-primary" href="{FOUNDATION}">Visit the Foundation</a>
-            <a class="btn btn-ghost" href="about.html">About the project</a>
+            <a class="btn btn-ghost" href="about">About the project</a>
           </div>
         </div>
         <div>{BOOKS}</div>
@@ -394,7 +396,7 @@ home = f"""
             <p class="lede">The apps are young and there are no downloads yet. If you write, code, design or translate,
               there's a place for you. Watch the repositories to hear about the first releases.</p>
             <div class="actions">
-              <a class="btn btn-primary" href="open-source.html#get-involved">Get involved</a>
+              <a class="btn btn-primary" href="open-source#get-involved">Get involved</a>
               <a class="btn btn-ghost" href="{ORG}">{GH} jamescjfoundation on GitHub</a>
             </div>
           </div>
@@ -465,7 +467,7 @@ about = f"""
             own name in Courier Prime with a cursor of its own: a brass bar for Script, a stack of pages for Manuscript, a
             ribbon bookmark for Book. The house itself is one color, ink on paper, with a drop of ink falling from its
             cursor.</p>
-          <div class="actions"><a class="btn btn-ghost" href="open-source.html">How the project works</a></div>
+          <div class="actions"><a class="btn btn-ghost" href="open-source">How the project works</a></div>
         </div>
         <div class="stage family">{logo("wordsmith-and-ink-family", "Wordsmith &amp; Ink and its three apps: Script, Manuscript and Book")}</div>
       </div>
@@ -687,7 +689,7 @@ manuscript = app_hero(
         <div class="callout p-book">
           <img src="{B}wordsmith-book-icon.svg" alt="" width="64" height="64">
           <div><h3>Finished? Make it a book.</h3><p>Wordsmith Book opens your Manuscript project directly and typesets it for print and ebook. If it spots a typo, it offers the fix back instead of changing your words.</p></div>
-          <a class="btn btn-ghost" href="book.html">About Book {ARROW}</a>
+          <a class="btn btn-ghost" href="book">About Book {ARROW}</a>
         </div>
       </div>
     </section>
@@ -833,7 +835,7 @@ launcher = f"""
         <div class="callout">
           <img src="{B}wordsmith-and-ink-icon.svg" alt="" width="64" height="64">
           <div><h3>Have ideas for the launcher?</h3><p>It hasn't been built yet, so now is the best time to shape it. Tell us what would help you.</p></div>
-          <a class="btn btn-ghost" href="open-source.html#get-involved">Get involved</a>
+          <a class="btn btn-ghost" href="open-source#get-involved">Get involved</a>
         </div>
       </div>
     </section>
@@ -949,7 +951,7 @@ notfound = """
         <p class="eyebrow">Page not found</p>
         <h1>This page is still a blank sheet.</h1>
         <p class="lede">The page you were looking for isn't here.</p>
-        <div class="actions"><a class="btn btn-primary" href="index.html">Back to the start</a><a class="btn btn-ghost" href="wiki/">Open the wiki</a></div>
+        <div class="actions"><a class="btn btn-primary" href="./">Back to the start</a><a class="btn btn-ghost" href="wiki/">Open the wiki</a></div>
       </div>
     </section>
 """

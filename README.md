@@ -31,7 +31,9 @@ How they fit together, and where each kind of change goes, is in the [project ma
 
 Each folder has its own README with how to build, preview and publish it.
 
-- **Website:** `python3 website/tools/build.py` rewrites the pages; preview with `python3 -m http.server -d website`. Every push to `main` that touches `website/` deploys it, wiki included.
+- **Project map:** [`project/README.md`](project/README.md). `python3 project/carry.py` checks the text that other repositories carry from it.
+- **Brand kit:** [`brand/README.md`](brand/README.md). Logos, icons and palettes are rebuilt from `brand/source/`, never edited by hand.
+- **Website:** `python3 website/tools/build.py` rewrites the pages; preview with `python3 website/tools/serve.py`, then http://localhost:8000. Every push to `main` that touches `website/` deploys it, wiki included.
 - **Wiki:** `npm install && npm run dev` in `website/wiki`; see [`website/wiki/README.md`](website/wiki/README.md). It deploys with the website.
 - **Launcher:** see [`launcher/README.md`](launcher/README.md).
 

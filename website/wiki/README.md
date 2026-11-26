@@ -39,23 +39,26 @@ Needs Node.js 22 or later.
 ```sh
 cd website/wiki
 npm install
-npm run dev        # http://localhost:3000/wiki/ (the fonts come from the main site, so they're missing here)
-npm run build      # static export into out/, the same as the deploy
+npm run dev          # http://localhost:3000/wiki/ (without the fonts: they come from the main site)
+npm run brand:check  # the copies in public/brand/ match brand/
+npm run lint
+npm run types:check
+npm run build        # static export into out/, the same as the deploy
 ```
 
-The deploy (`.github/workflows/pages.yml`) runs `npm ci && npm run build` and publishes `out/` at `/wiki/` next to the main site.
+The deploy (`.github/workflows/pages.yml`) runs `npm ci`, `npm run brand:check` and `npm run build`, and publishes `out/` at `/wiki/` next to the main site. `npm run lint` and `npm run types:check` run nowhere but on your machine, so run them before you push.
 
-### Local preview with the main site: wordwiki.test
+### Preview with the main site
 
-On the development machine, https://wordwiki.test serves the main site from `website/` and passes `/wiki/` to the wiki's dev server, so it looks exactly like the deployed site and updates as you save. It's temporary and not part of the deploy:
-
-- the nginx site `/etc/nginx/sites-available/wordwiki` (enabled in `sites-enabled`), with the certificate `/etc/nginx/certs/wordwiki.test{,-key}.pem`;
-- the supervisor program `wordwiki` (`/etc/supervisor/conf.d/wordwiki.conf`), which runs `next dev` on 127.0.0.1:3020. Logs: `/var/log/supervisor/wordwiki.log`. Restart it with `sudo supervisorctl restart wordwiki`.
-
-To remove it:
+The wiki takes its fonts from the main site, so it only looks as deployed when both are served together. Put the site together the way the deploy does, in a folder outside the repository, and serve that. From the repository root, after `npm run build`:
 
 ```sh
-sudo supervisorctl stop wordwiki
-sudo rm /etc/supervisor/conf.d/wordwiki.conf /etc/nginx/sites-enabled/wordwiki /etc/nginx/sites-available/wordwiki /etc/nginx/certs/wordwiki.test.pem /etc/nginx/certs/wordwiki.test-key.pem
-sudo supervisorctl update && sudo nginx -t && sudo systemctl reload nginx
+site="$(mktemp -d)"
+rsync -a --exclude /wiki website/ "$site"/
+cp -R website/wiki/out "$site"/wiki
+python3 "$site"/tools/serve.py       # http://localhost:8000/wiki/
 ```
+
+This is a built copy: build and copy again to see a change. Use `npm run dev` while writing.
+
+`npm run dev` writes an `AGENTS.md` into this folder: Next.js generates it, with a note for coding agents about its own documentation. It is not tracked; leave it out of your commit.

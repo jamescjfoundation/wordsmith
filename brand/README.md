@@ -2,23 +2,23 @@
 
 Brand and product assets for Wordsmith & Ink and the three Wordsmith apps, free and open-source writing tools from The James C. J. Foundation. Kit version 1.0, 24 November 2026.
 
-This folder is the source of truth for the brand inside the code. It started as a copy of the kit in the Foundation's shared drive (`10. Open Source / 01. Wordsmith`), with folder names lowercased and hyphenated so they're easy to use in paths. Filenames are unchanged. The logos, icons, palettes and guideline PDFs are now rebuilt here from [`source/`](source/).
+This folder is the source of every logo, icon and brand color. It started as a copy of the Foundation's brand kit, with folder names lowercased and hyphenated so they're easy to use in paths. Filenames are the kit's. The logos, icons, palettes and guideline PDFs are now rebuilt here from [`source/`](source/).
 
 Start with **[`suite/BRAND_GUIDE.md`](suite/BRAND_GUIDE.md)** for the ideas and rules. The PDFs in [`pdfs/`](pdfs/) show the same ideas laid out as pages.
 
 ## Folders
 
-| Folder | Drive folder | What's in it |
-| --- | --- | --- |
-| [`pdfs/`](pdfs/) | `00. PDFs` | **Wordsmith & Ink - Brand Guidelines** (the parent brand and how the apps sit under it), **Wordsmith Apps - Product Assets** (each app's logos, icons, colors and files), **Wordsmith - An Introduction** |
-| [`wordsmith-and-ink/`](wordsmith-and-ink/) | `01. Wordsmith & Ink` | The parent brand: `logo/`, `app-icon/`, `lockups/` (family and endorsed app logos), `palette/`, `tokens.json` |
-| [`wordsmith-script/`](wordsmith-script/) | `02. Wordsmith Script` | Screenplays: `production/`, `logo/`, `app-icon/`, `palette/`, `tokens.json` |
-| [`wordsmith-manuscript/`](wordsmith-manuscript/) | `03. Wordsmith Manuscript` | Novels and long work: same layout as Script |
-| [`wordsmith-book/`](wordsmith-book/) | `04. Wordsmith Book` | Print books and ebooks: same layout as Script |
-| [`suite/`](suite/) | `05. Suite` | The suite brand guide and the three-app overview image |
-| [`source/`](source/) | each `Source/` | The scripts that build all of the above (see [Rebuilding](#rebuilding)) |
+| Folder | What's in it |
+| --- | --- |
+| [`pdfs/`](pdfs/) | **Wordsmith & Ink - Brand Guidelines** (the parent brand and how the apps sit under it), **Wordsmith Apps - Product Assets** (each app's logos, icons, colors and files), **Wordsmith - An Introduction** |
+| [`wordsmith-and-ink/`](wordsmith-and-ink/) | The parent brand: `logo/`, `app-icon/`, `lockups/` (family and endorsed app logos), `palette/`, `tokens.json` |
+| [`wordsmith-script/`](wordsmith-script/) | Screenplays: `production/`, `logo/`, `app-icon/`, `palette/`, `tokens.json` |
+| [`wordsmith-manuscript/`](wordsmith-manuscript/) | Novels and long work: same layout as Script |
+| [`wordsmith-book/`](wordsmith-book/) | Print books and ebooks: same layout as Script |
+| [`suite/`](suite/) | The suite brand guide and the three-app overview image |
+| [`source/`](source/) | The scripts that build all of the above (see [Rebuilding](#rebuilding)) |
 
-The drive's `Wordsmith Brand Kit.zip` isn't copied here because it holds the same files. Each app's `Source/` folder on the drive held the same shared scripts, so they're kept once in `source/`.
+The original kit kept the same build scripts once per app; here they're kept once, in `source/`.
 
 ## Using the files
 
@@ -26,7 +26,8 @@ The drive's `Wordsmith Brand Kit.zip` isn't copied here because it holds the sam
 - **App icons:** each `app-icon/` folder has SVG masters (normal, `-small` for tiny sizes, `-macos` on the 824 px macOS grid), PNGs from 16 to 1024 px, a Windows `.ico` and a `favicon.svg`.
 - **Colors:** each `tokens.json` holds that brand's design tokens. Each `palette/` folder has the palette as CSS, JSON, GIMP (`.gpl`) and Adobe (`.ase`) swatches, plus a reference card.
 - **Ready-made sets:** each app's `production/` folder is a ready-to-use set of that app's key files and the parent brand's, with a README that explains each one. When an app repository needs brand files, copy them from here.
-- **Copy, don't edit.** Other parts of this repo (such as `website/assets/brand/`) and the app repositories copy files from here unchanged. To change a logo, icon, palette or PDF, change the script in `source/` and rebuild. Don't edit the output by hand.
+- **Copy, don't edit.** The website (`website/assets/brand/`), the wiki (`website/wiki/public/brand/`) and the app repositories (`assets/brand/` in each) copy files from here unchanged. To change a logo, icon, palette or PDF, change the script in `source/` and rebuild. Don't edit the output by hand.
+- **After a change, update the copies.** Only the wiki's copies are made and checked by a tool (`npm run brand` and `npm run brand:check` in `website/wiki`). The website's and the apps' are copied by hand, and nothing reports one that is out of date. The repository's [`AGENTS.md`](../AGENTS.md#brand) lists the copies, and Route F of the [project map](../project/README.md#route-f) has the steps.
 
 ## Rebuilding
 
@@ -50,7 +51,7 @@ What the build does and doesn't cover:
 - `build.py` runs `buildink.py` (the parent brand and its lockups), `buildp.py` (Manuscript and Book) and `buildc.py` (Script, which keeps its own builder). It then writes Script's palette and copies the endorsed lockups and `production/` sets into place.
 - It only changes files whose content changed. SVGs are compared without the C2PA "content credentials" metadata that the kit's export tool added, PNGs by their pixels and `.ico` files by their images. A fresh build matches every committed logo, icon and palette.
 - The fonts matter: other versions of Courier Prime or Inter change the letter outlines slightly. `fetch_fonts.py` gets Courier Prime from Google Fonts and Inter 4.0 (OTF) from its official release.
-- Hand-written files are never touched: the READMEs, `suite/BRAND_GUIDE.md`, the apps' `tokens.json`, `suite/wordsmith-suite-overview.png` and `pdfs/Wordsmith - An Introduction.pdf`. Update them by hand when something they describe changes.
+- Hand-written files are never touched: the READMEs, `suite/BRAND_GUIDE.md`, each brand's `tokens.json`, `suite/wordsmith-suite-overview.png` and `pdfs/Wordsmith - An Introduction.pdf`. Update them by hand when something they describe changes.
 - The `.ico` files are made with ImageMagick when it's installed, otherwise with Pillow.
 - [`source/explorations/`](source/explorations/) holds the logo-concept scripts from the kit's design rounds. They're kept for reference, aren't part of the build, and don't run as they are.
 

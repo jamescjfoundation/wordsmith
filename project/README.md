@@ -230,7 +230,7 @@ The brand kit in `brand/` here is the source. A logo, icon or palette file is ne
 
 1. Read `brand/suite/BRAND_GUIDE.md`. Change the script in `brand/source/`, run `python3 brand/source/build.py` to see what changes, then again with `--write` (add `--pdf` for the guideline PDFs). `brand/README.md` has the setup.
 2. Update by hand the files the build does not write: the kit's READMEs, `BRAND_GUIDE.md` and each `tokens.json`.
-3. Copies in this repository: run `npm run brand` in `website/wiki` (it writes `website/wiki/public/brand/`; `npm run brand:check` verifies it), and copy the changed files into `website/assets/brand/` by hand.
+3. Copies in this repository: run `npm run brand` in `website/wiki` (it writes `website/wiki/public/brand/`; `npm run brand:check` verifies it), and copy the changed files into `website/assets/brand/` by hand (`website/favicon.svg` is a kit file too). The repository's `AGENTS.md` lists the copies.
 4. Copies in each app: copy the changed files from `brand/wordsmith-<app>/production/` and `app-icon/` into the app's `assets/brand/`, unchanged, as a change in that app's repository that names the wordsmith commit.
 5. In each app, remake the files the app derives from the kit, and run `cargo xtask ci` (its `assets` check wants every file under `assets/` listed in `ATTRIBUTION.md`).
 

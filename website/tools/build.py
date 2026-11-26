@@ -6,7 +6,7 @@
     python3 website/tools/build.py --check    write them into a temporary folder, and fail when a
                                               page in website/ is not what this script writes
 """
-import difflib, pathlib, re, shutil, sys, tempfile
+import difflib, json, pathlib, re, shutil, sys, tempfile
 
 WEBSITE = pathlib.Path(__file__).resolve().parent.parent
 CHECK = sys.argv[1:] == ["--check"]
@@ -79,6 +79,24 @@ def logo(name, alt, cls=""):
     c = f' class="{cls}"' if cls else ""
     return (f'<picture><source srcset="{B}{name}-paper.svg" media="(prefers-color-scheme: dark)">'
             f'<img{c} src="{B}{name}-ink.svg" alt="{alt}"></picture>')
+
+
+# The screenshots are drawn by the apps and carried here by website/wiki/scripts/guide.mjs, which
+# records each one's size in its lock file. Which ones are carried: "screenshots" in data/apps/<app>.json.
+SHOTS = {copy["file"].removeprefix("website/"): copy
+         for entry in json.loads((WEBSITE / "wiki" / "guides.lock.json").read_text(encoding="utf-8"))["apps"].values()
+         for image in entry["images"] for copy in image["copies"]}
+
+
+def shot(app, name, alt, lazy=True):
+    """An app's screenshot, with the size the carried file has."""
+    file = f"{IMG}{app}-{name}.webp"
+    if file not in SHOTS:
+        sys.exit(f'build.py: no screenshot {file}. Name "{name}" under "screenshots" in website/data/apps/{app}.json '
+                 "and run `npm run guide` in website/wiki.")
+    size = SHOTS[file]
+    return (f'<img src="{file}" alt="{alt}" width="{size["width"]}" height="{size["height"]}"'
+            f'{' loading="lazy"' if lazy else ""}>')
 
 
 def terminal(cmds):
@@ -269,7 +287,7 @@ def spread(guides=True):
 
 # The home page's "desk": a real Script screenshot with an index card and a book page laid over it.
 DESK = f"""<div class="desk" role="img" aria-label="A Wordsmith Script screenplay page, with an index card and a typeset book page laid on top: the three apps on one desk">
-          <div class="desk-shot"><img src="{IMG}script-page-view.webp" alt="" width="1600" height="983"></div>
+          <div class="desk-shot">{shot("script", "page-view", "", lazy=False)}</div>
           <div class="desk-card">
             <img class="badge" src="{B}wordsmith-manuscript-icon.svg" alt="" width="40" height="40">
             <b>Playing Pilgrims</b>
@@ -351,7 +369,7 @@ home = f"""
         <div class="app-rows">{app_row("p-script", "script", "Pre-release", "pre", "Screenplays, TV and stage plays",
         "Write screenplays, TV episodes and stage plays, formatted as you type and ready for production.",
         ["Return and Tab do the formatting", "Pages, PDFs and printouts that match the screen", "Revision colors, scene numbers and locked pages"],
-        f'<div class="shot"><img src="{IMG}script-index-cards.webp" alt="Wordsmith Script showing index cards, one per scene" width="1600" height="983" loading="lazy"></div>')}
+        f'<div class="shot">{shot("script", "index-cards", "Wordsmith Script showing index cards, one per scene")}</div>')}
 {app_row("p-manuscript", "manuscript", "Pre-release", "pre", "Novels and long work",
         "Plan, draft and revise novels and other long work, with your story bible beside the text.",
         ["Parts, chapters and scenes in one binder", "A corkboard, an outline and a story bible", "Drafts and snapshots you can compare"],
@@ -519,9 +537,9 @@ script = app_hero(
     """A free, open-source screenwriting app. Type with two keys doing the formatting, see every page
           as it will print, and take the script into production with revision colors, locked pages and scene numbers.""",
     f"""<a class="btn btn-primary" href="{ORG}/wordsmith-script">{GH} View on GitHub</a>
-            <a class="btn btn-ghost" href="{ORG}/wordsmith-script/blob/main/docs/guide/README.md">Read the guide</a>""",
+            <a class="btn btn-ghost" href="wiki/script/">Read the guide</a>""",
     '<span class="chip pre">Pre-release</span><span>macOS, Windows, Linux</span><span>No downloads yet: build from source</span>',
-    f"""<div class="stage"><div class="shot"><img src="{IMG}script-page-view.webp" alt="Wordsmith Script showing a screenplay page, the list of scenes on the left and the scene inspector on the right" width="1600" height="983"></div></div>
+    f"""<div class="stage"><div class="shot">{shot("script", "page-view", "Wordsmith Script showing a screenplay page, the list of scenes on the left and the scene inspector on the right", lazy=False)}</div></div>
           <figcaption>The page view, with the scenes on the left and the scene at the caret on the right. Pictures are drawn by the app from "Everybody's Girl" (1918), a public-domain photoplay.</figcaption>""",
 ) + f"""
 
@@ -552,10 +570,10 @@ script = app_hero(
           <h2>Plan it, write it, shoot it.</h2>
         </div>
         <div class="gallery">
-          <figure><div class="shot"><img src="{IMG}script-index-cards.webp" alt="Index cards, one per scene, with scene summaries" width="1600" height="983" loading="lazy"></div><figcaption>Index cards: drag a card and the scene moves in the script.</figcaption></figure>
-          <figure><div class="shot"><img src="{IMG}script-story-board.webp" alt="The story board with beats arranged in acts" width="1600" height="983" loading="lazy"></div><figcaption>The story board: plan beats before you write them.</figcaption></figure>
-          <figure><div class="shot"><img src="{IMG}script-ribbon-production.webp" alt="The Production tab with revision tools" width="1600" height="983" loading="lazy"></div><figcaption>Production: revisions, scene numbers and locked pages.</figcaption></figure>
-          <figure><div class="shot"><img src="{IMG}script-draft-view-dark.webp" alt="The draft view in the dark theme" width="1600" height="983" loading="lazy"></div><figcaption>The draft view, in the dark theme.</figcaption></figure>
+          <figure><div class="shot">{shot("script", "index-cards", "Index cards, one per scene, with scene summaries")}</div><figcaption>Index cards: drag a card and the scene moves in the script.</figcaption></figure>
+          <figure><div class="shot">{shot("script", "story-board", "The story board with beats arranged in acts")}</div><figcaption>The story board: plan beats before you write them.</figcaption></figure>
+          <figure><div class="shot">{shot("script", "ribbon-production", "The Production tab with revision tools")}</div><figcaption>Production: revisions, scene numbers and locked pages.</figcaption></figure>
+          <figure><div class="shot">{shot("script", "draft-view-dark", "The draft view in the dark theme")}</div><figcaption>The draft view, in the dark theme.</figcaption></figure>
         </div>
       </div>
     </section>
@@ -602,7 +620,7 @@ manuscript = app_hero(
           binder of chapters and scenes, keep your story bible beside the text, and hand the finished manuscript to
           Wordsmith Book.""",
     f"""<a class="btn btn-primary" href="{ORG}/wordsmith-manuscript">{GH} View on GitHub</a>
-            <a class="btn btn-ghost" href="{ORG}/wordsmith-manuscript/blob/main/docs/guide/README.md">Read the guide</a>""",
+            <a class="btn btn-ghost" href="wiki/manuscript/">Read the guide</a>""",
     '<span class="chip pre">Pre-release</span><span>macOS, Windows, Linux</span><span>No downloads yet: build from source</span>',
     """<div class="stage"><div class="mock" role="img" aria-label="Illustration of Wordsmith Manuscript: a binder of chapters, the text of a scene, and the inspector with the scene's synopsis and label">
             <div class="mock-bar"><i></i><i></i><i></i><span class="title">Little Women</span><span>· Draft 2</span></div>

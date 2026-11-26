@@ -14,6 +14,7 @@ import { createRelativeLink } from 'fumadocs-ui/mdx';
 import { Card } from 'fumadocs-ui/components/card';
 import { getPageMarkdownUrl, gitConfig } from '@/lib/shared';
 import { appForSection, apps, brandUrl, Wordmark } from '@/lib/brand';
+import { guideSource } from '@/lib/guides';
 
 export default async function Page(props: PageProps<'/[[...slug]]'>) {
   const params = await props.params;
@@ -23,8 +24,11 @@ export default async function Page(props: PageProps<'/[[...slug]]'>) {
   const MDX = page.data.body;
   const markdownUrl = getPageMarkdownUrl(page).url;
   const filePath = `${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/${gitConfig.contentDir}/${encodeURI(page.path)}`;
-  const githubUrl = `https://github.com/${filePath}`;
-  const editUrl = `https://github.com/${filePath.replace('/blob/', '/edit/')}`;
+  // An app's pages are built from the guide in the app's repository (scripts/guide.mjs): they are
+  // read and edited there. The other pages are written here.
+  const guide = guideSource(page.path);
+  const githubUrl = guide ? guide.sourceUrl : `https://github.com/${filePath}`;
+  const editUrl = guide ? guide.editUrl : `https://github.com/${filePath.replace('/blob/', '/edit/')}`;
   // an app's section takes that app's color (see .ws-app-* in global.css), and its home page its wordmark
   const app = appForSection(page.slugs[0]);
   const isAppHome = app !== undefined && page.slugs.length === 1;
@@ -55,6 +59,12 @@ export default async function Page(props: PageProps<'/[[...slug]]'>) {
           })}
         />
       </DocsBody>
+      {guide && (
+        <p className="ws-guide-source">
+          From the <a href={guide.sourceUrl}>{guide.app} guide</a> at <code>{guide.commit}</code> ({guide.date}). The guide
+          is kept in the app&apos;s repository: edit it there, and this page follows.
+        </p>
+      )}
       <EditOnGitHub href={editUrl} />
     </DocsPage>
   );

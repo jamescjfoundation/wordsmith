@@ -195,3 +195,14 @@ html > body[data-scroll-locked] {
 .ws-status-available { color: var(--color-fd-success); }
 .ws-status-in-progress { color: var(--color-fd-primary); }
 .ws-status-planned { color: var(--color-fd-muted-foreground); }
+
+/* Under a page built from an app's guide: which guide, and at which commit */
+.ws-guide-source {
+  margin: 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-fd-border);
+  font-size: 0.875rem;
+  color: var(--color-fd-muted-foreground);
+}
+.ws-guide-source a { color: inherit; text-decoration: underline; }
+.ws-guide-source code { font-size: 0.85em; }

@@ -132,7 +132,7 @@ All are public, under [github.com/jamescjfoundation](https://github.com/jamescjf
 | From → to | What crosses | How it is held |
 | --- | --- | --- |
 | Each app → open-source-core | The `jcj-` crates | A git dependency on every `jcj-` line of the app's root `Cargo.toml`, all at the same release tag. `cargo xtask core-pin` (part of `cargo xtask ci`) fails if two tags are named or the lock file holds two cores |
-| Each app → open-source-core | Shared settings and tooling: the toolchain, format and lint settings, `deny.toml`, the shared `xtask/src/` modules, `.github/workflows/ci.yml` and `core-pin.yml`, `hooks/`, the patch block in `Cargo.toml`, and from core v0.1.18 the pull request template | `cargo xtask sync` copies them from the pinned core release; `cargo xtask sync --check` (part of `cargo xtask ci`) fails if they differ. They are changed in the core, never in the app |
+| Each app → open-source-core | Shared settings and tooling: the toolchain, format and lint settings, `deny.toml`, the shared `xtask/src/` modules, the shared gate behind each app's `xtask/src/main.rs`, `.github/workflows/ci.yml` and `core-pin.yml` (short callers of the core's shared workflows at its tag `workflows-v1`), `.github/dependabot.yml`, `hooks/`, the pull request template, and marked blocks in `Cargo.toml` (patches, lints and profiles), `.cargo/config.toml`, `.gitignore` and `.gitattributes` | `cargo xtask sync` copies them from the pinned core release; `cargo xtask sync --check` (part of `cargo xtask ci`) fails if they differ. They are changed in the core, never in the app |
 | Each app → open-source-core | The shared rules: marked blocks in `AGENTS.md`, `SECURITY.md` and `CONTRIBUTING.md`, and the whole `CODE_OF_CONDUCT.md` | The same `cargo xtask sync` and `--check`, from core v0.1.17 on. Their source is the core's `template/` ([Route N](#route-n)) |
 | Each app → wordsmith (the map) | The project block at the top of this file | A copy in the app's `AGENTS.md`, written by `python3 project/carry.py --write` here and checked by this repository's `carried.yml` workflow ([Route N](#route-n)) |
 | wordsmith → open-source-core | The core's `public`, `security` and `contributing` blocks and its code of conduct | Copies in this repository's `AGENTS.md`, `SECURITY.md`, `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md`, written and checked by the same tool against the core's newest release |
@@ -156,10 +156,10 @@ Each route is a list of steps. Follow the repository's own `AGENTS.md` at every 
 For a bug in a `jcj-` crate found from an app, or a feature that any app would share. The decision tree "Building between an app and the core" in each app's `AGENTS.md` says whether a change belongs in the core.
 
 1. Open an issue in [open-source-core](https://github.com/jamescjfoundation/open-source-core/issues) that describes the general need, not the app's feature.
-2. Have the core as a sibling folder of the app (see [Route M](#route-m)). In the app, run `cargo xtask dev-link ../open-source-core`, so the app builds against your core checkout.
+2. Have the core as a sibling folder of the app (see [Route M](#route-m)). In the app, run `cargo xtask dev-link ../open-source-core`, so the app builds against your core checkout. From core v0.1.20 the link is kept in a folder Git ignores, with its own lock file, so no tracked file changes; `cargo xtask ci --linked` runs the app's gate against the link.
 3. Build the general part in the core, with its own tests and a use in `apps/core-testbed`. No product name, color, logo, or screenplay, manuscript or book idea goes into the core.
 4. Build the app's use of it in the app. Never change a core interface from the app's side, and never work around a core bug in the app.
-5. In the core, run `cargo xtask ci`, land the change, and release the core ([Route I](#route-i)).
+5. In the core, run `cargo xtask ci` and land the change. To have GitHub check the app's half before the core is released, pin every `jcj-` line on an app branch to that core commit (`rev = "<the full commit id>"` in place of `tag`): `core-pin` passes on the branch and in its pull request with a warning, and fails on `main`. Then release the core ([Route I](#route-i)).
 6. In the app, run `cargo xtask dev-unlink`, move the app to the new core release ([Route I](#route-i), step 5), run `cargo xtask ci`, and land the app's change. Name the core issue in it.
 
 If the general shape is not clear yet, build it in the app first: mark the code `// core-candidate: open-source-core#N` with the number of a core issue labelled `core-candidate`, and move it later. When it moves, delete the app's copy and its marker in the same change. Never copy code from one app repository into another.
@@ -168,10 +168,10 @@ If the general shape is not clear yet, build it in the app first: mark the code 
 
 **Today:**
 
-- `dev-link` writes the link, with the full path of your core checkout, into the app's tracked `.cargo/config.toml`, and a build while linked changes `Cargo.lock`. Commit neither. After `dev-unlink`, run `git restore Cargo.lock` before the gate, or its `--locked` checks fail.
-- `dev-link` links only the core. It cannot link Manuscript into Book.
-- An app's CI builds only against a released core tag, so the app's half of a change is checked in CI only after the core release exists.
-- Book lists what it needs from the core in its `docs/core-candidates.md`. Script and Manuscript have no such list; their markers and the core's issues are the record.
+- An app on a core older than v0.1.20 has the older `dev-link`: it writes the link into the tracked `.cargo/config.toml` and a linked build changes `Cargo.lock`. Move the app to the newest core first ([Route I](#route-i)).
+- An app that builds on another app's crates names that app as a provider in its `xtask/src/main.rs` and links it the same way: `cargo xtask dev-link <name>=<folder>`. Book names Manuscript.
+- Nothing stops a pull request whose branch pins a core commit from being merged; the warning, and `core-pin` failing on `main` afterwards, are the only guards.
+- Each app lists the code it holds that waits for the core in its `docs/core-candidates.md`, with the core issue for each.
 
 <a id="route-b"></a>
 ### Route B: something one app needs from another
@@ -291,10 +291,12 @@ Releasing the core:
 Moving an app to it:
 
 5. In the app's root `Cargo.toml`, change the tag on every `jcj-` line; they all carry the same tag. Run `cargo metadata --format-version 1 > /dev/null` so `Cargo.lock` follows; do not run a blanket `cargo update`.
-6. Run `cargo xtask sync` to take the core-owned files of that release, and again until `cargo xtask sync --check` passes: a release that adds core-owned files needs two runs.
+6. Run `cargo xtask sync` to take the core-owned files of that release, then `cargo xtask sync --check`. From core v0.1.20 one run is enough; an app coming from an older core runs it again until the check passes.
 7. Read **What apps must do** in the core's [`CHANGELOG.md`](https://github.com/jamescjfoundation/open-source-core/blob/main/CHANGELOG.md) for every release between the old tag and the new one, and do it.
 8. Run `cargo xtask ci`. A golden file that changes is a deliberate change: review it and record it in the app's `docs/golden.md`.
 9. Script also names its core tag in its top-level `UPSTREAM.md`; update that line.
+
+A fix to CI itself does not wait for a release: the apps' CI is the core's shared workflow, called at the core's tag `workflows-v1`, and the fix reaches every app when that tag is moved to a commit of the core's `main` whose own CI passed (the core's `.github/workflows/README.md` has the steps).
 
 When to move: before starting new work on an app and before releasing it. `cargo xtask core-pin --behind` prints how far behind an app is, and a weekly workflow in each app (`core-pin.yml`) opens an issue there when it is more than three releases behind ([decision 0002](decisions/0002-how-changes-land-and-who-releases.md)).
 

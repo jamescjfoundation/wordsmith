@@ -50,6 +50,9 @@ Before you write a commit, branch name, issue, pull request or comment, check it
 Commit with a GitHub no-reply address or a foundation bot identity. Where a repository has
 `cargo xtask`, `cargo xtask privacy` checks its files and every commit. Never push with `--all`
 or `--mirror`.
+
+The Foundation's name is always written "The James C. J. Foundation", with its capital "The"
+wherever it stands in a sentence, never in a shorter form.
 <!-- END open-source-core: public -->
 
 Where the block and this repository differ:

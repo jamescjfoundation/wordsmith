@@ -21,6 +21,7 @@ Two repositories could hold a map and the rules that span the project: open-sour
 - One place answers "where does this go". A route is changed in one file.
 - The core stays usable by other projects. A rule that is true of any app on the core is written there once; a rule that is about Wordsmith is written here.
 - The carried block is a copy, so it can go stale. Until a tool checks the copies, whoever changes the block updates every repository's copy in the same piece of work.
+  - 2026-11-26: a tool now does both. `project/carry.py` writes the block into each app's `AGENTS.md`, and the `carried.yml` workflow in the wordsmith repository fails while a published copy differs ([Route N](../README.md#route-n)). The copies are in the three apps; open-source-core carries none, since it names no product, and the wordsmith repository reads the map itself.
 - Rules that were written into the core or an app but are really project-wide (naming other products, how changes land) move here, and the older text is corrected to point here.
 
 ## Revisit when

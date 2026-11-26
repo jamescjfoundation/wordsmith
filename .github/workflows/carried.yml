@@ -1,0 +1,47 @@
+name: Check the carried blocks
+
+# Some text is carried word for word in several repositories: the project block from
+# project/README.md in each app's AGENTS.md, and the core's shared rules here. This compares every
+# published copy with its source (each app's main, the core's newest release).
+#
+# It goes red while a copy is behind. That is the point: after the project block changes here, it
+# stays red until every app has taken the new block. To fix it, follow Route N in
+# project/README.md: run `python3 project/carry.py --write` with the repositories side by side,
+# then commit and push each one it changed.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "project/README.md"
+      - "project/carry.py"
+      - "project/test_carry.py"
+      - "AGENTS.md"
+      - ".github/workflows/carried.yml"
+  pull_request:
+    paths:
+      - "project/README.md"
+      - "project/carry.py"
+      - "project/test_carry.py"
+      - "AGENTS.md"
+      - ".github/workflows/carried.yml"
+  schedule:
+    - cron: "17 6 * * 1" # Mondays, 06:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: carried-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Test the tool
+        run: python3 project/test_carry.py
+      - name: Compare every published copy with its source
+        run: python3 project/carry.py --check --remote

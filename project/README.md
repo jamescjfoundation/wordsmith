@@ -2,7 +2,7 @@
 
 How the Wordsmith repositories fit together, where each kind of change goes, and the rules that hold in all of them. This folder owns the map: change it here, never in a copy.
 
-The block between the two marker lines below is written to be carried, word for word, in every Wordsmith repository's `AGENTS.md`. **Today:** copies are made by hand and nothing checks them, so whoever changes the block updates every copy in the same piece of work. A repository whose `AGENTS.md` has no copy yet is simply behind; this file is the map.
+The block between the two marker lines below is carried, word for word, in the `AGENTS.md` of each app repository. It is changed only here. `python3 project/carry.py --write` copies it into the apps, and the "Check the carried blocks" workflow in this repository fails while a published copy differs ([Route N](#route-n)).
 
 <!-- BEGIN wordsmith project block -->
 ## The Wordsmith project
@@ -37,15 +37,16 @@ Wordsmith is five repositories and two forks, all under [jamescjfoundation](http
 | A change in WordCraft or craft-libs | Our fork, then the core | [K](https://github.com/jamescjfoundation/wordsmith/blob/main/project/README.md#route-k) |
 | A change that spans two repositories | The provider first; each change names the other | [L](https://github.com/jamescjfoundation/wordsmith/blob/main/project/README.md#route-l) |
 | Working with all the repositories, or with only one | Side by side as sibling folders | [M](https://github.com/jamescjfoundation/wordsmith/blob/main/project/README.md#route-m) |
+| A rule or instruction that several repositories carry | The block's owner: the core's `template/`, or the project map for this block | [N](https://github.com/jamescjfoundation/wordsmith/blob/main/project/README.md#route-n) |
 
-Before changing a repository, read its own `AGENTS.md`. Its rules apply inside it; this block applies in all of them.
+Before changing a repository, read its own `AGENTS.md`. Its rules apply inside it; this block applies in all of them. The block is owned by the project map and copied from it by a tool: it is never edited in a copy.
 <!-- END wordsmith project block -->
 
 ## Contents
 
 - [The repositories](#the-repositories)
 - [How they depend on each other](#how-they-depend-on-each-other)
-- [Routes](#routes): A to M
+- [Routes](#routes): A to N
 - [Where to look, where to write](#where-to-look-where-to-write)
 - [Project rules](#project-rules)
 - [Decisions](decisions/README.md)
@@ -99,7 +100,7 @@ All are public, under [github.com/jamescjfoundation](https://github.com/jamescjf
 - **Owns:** what every app needs and none should write twice: the `jcj-` crates (document model, layout, engine, output, interchange, proofing, project files, theming, boards, entries, translation, shared features, the shell, agent control), and `template/`, the starting point for a new app and the source of the files every app carries.
 - **It is general.** Other projects can build on it, so its code holds no product name, brand, or screenplay, manuscript or book concept. Wordsmith-wide rules live here in `project/`, not in the core.
 - **Stack:** Rust. It is the only place that depends on the upstream projects, through `jcj-upstream`.
-- **Publishes:** release tags (`v0.1.16` and so on) with a GitHub release each. Apps name a tag. `CHANGELOG.md` says what each release asks of the apps.
+- **Publishes:** release tags (`v0.1.17` and so on) with a GitHub release each. Apps name a tag. `CHANGELOG.md` says what each release asks of the apps.
 - **Rules:** its [`AGENTS.md`](https://github.com/jamescjfoundation/open-source-core/blob/main/AGENTS.md).
 
 ### The forks: wordcraft and craft-libs
@@ -129,6 +130,9 @@ All are public, under [github.com/jamescjfoundation](https://github.com/jamescjf
 | --- | --- | --- |
 | Each app → open-source-core | The `jcj-` crates | A git dependency on every `jcj-` line of the app's root `Cargo.toml`, all at the same release tag. `cargo xtask core-pin` (part of `cargo xtask ci`) fails if two tags are named or the lock file holds two cores |
 | Each app → open-source-core | Shared settings and tooling: the toolchain, format and lint settings, `deny.toml`, the shared `xtask/src/` modules, `.github/workflows/ci.yml` and `core-pin.yml`, `hooks/`, the patch block in `Cargo.toml` | `cargo xtask sync` copies them from the pinned core release; `cargo xtask sync --check` (part of `cargo xtask ci`) fails if they differ. They are changed in the core, never in the app |
+| Each app → open-source-core | The shared rules: marked blocks in `AGENTS.md`, `SECURITY.md` and `CONTRIBUTING.md`, and the whole `CODE_OF_CONDUCT.md` | The same `cargo xtask sync` and `--check`, from core v0.1.17 on. Their source is the core's `template/` ([Route N](#route-n)) |
+| Each app → wordsmith (the map) | The project block at the top of this file | A copy in the app's `AGENTS.md`, written by `python3 project/carry.py --write` here and checked by this repository's `carried.yml` workflow ([Route N](#route-n)) |
+| wordsmith → open-source-core | The core's `public` block ("What is public") | A copy in this repository's `AGENTS.md`, written and checked by the same tool against the core's newest release |
 | open-source-core → the forks | WordCraft and craft-libs code | The patch block in the core's `Cargo.toml` points the upstream names at our fork's commits; `cargo xtask pins` checks it against `docs/UPSTREAM.md`. Apps never name an upstream crate or type |
 | Book → Manuscript (code) | The crates `wordsmith-manuscript-model` and `wordsmith-manuscript-format` | Git dependencies in Book's `Cargo.toml` at Manuscript's tag `book-view-1.1`, cut on the same core release Book pins. The contract is Manuscript's [`docs/book-handoff.md`](https://github.com/jamescjfoundation/wordsmith-manuscript/blob/main/docs/book-handoff.md) |
 | Book → Manuscript (files) | `.wsm` project folders and `.wsmz` packed projects, read; an offers file written beside the project | Book never writes a Manuscript project. It reads Manuscript's project schema, so a schema change in Manuscript reaches Book |
@@ -345,7 +349,40 @@ wordsmith/  wordsmith-script/  wordsmith-manuscript/  wordsmith-book/  open-sour
 - A new worktree has no `target/` folder, so the first build and the first push are slow.
 - `.private/` notes in a worktree are lost with it.
 
-**Only one repository.** The block at the top of this file is carried in each repository's `AGENTS.md`, so the others can be found from any one of them. When a route needs another repository, clone it beside the one you have (`git clone https://github.com/jamescjfoundation/<repository> ../<repository>`). To read one file, the links in this map go straight to it on GitHub.
+**Only one repository.** The block at the top of this file is carried in each app's `AGENTS.md`, and this repository's `AGENTS.md` starts from this file, so the others can be found from any of them. The core is general and carries no block. When a route needs another repository, clone it beside the one you have (`git clone https://github.com/jamescjfoundation/<repository> ../<repository>`). To read one file, the links in this map go straight to it on GitHub.
+
+<a id="route-n"></a>
+### Route N: a rule or instruction that several repositories carry
+
+Some text is the same, word for word, in several repositories. It sits between a `BEGIN` and an `END` marker line, it has one owner, and a copy is never edited: a tool writes the copies and a check fails when one differs.
+
+| Block | Owner: edit it here | Carried in | Written by | Checked by |
+| --- | --- | --- | --- | --- |
+| The project block (`wordsmith project block`) | [`project/README.md`](#the-wordsmith-project-map) here | Each app's `AGENTS.md` | `python3 project/carry.py --write`, here | `.github/workflows/carried.yml`, here |
+| The core's rules (`open-source-core: public`, `app-and-core`, `app`, `security`, `contributing`) | The core's `template/AGENTS.md`, `template/SECURITY.md`, `template/CONTRIBUTING.md` | Each app's file of the same name; `public` also in this repository's `AGENTS.md` | `cargo xtask sync` in each app; `python3 project/carry.py --write` here | `cargo xtask sync --check` in each app's gate; `carried.yml` here |
+
+A block owned by the core:
+
+1. In open-source-core, edit the block in the file under `template/`. Keep it general: it is read in every app, and `public` in this repository too, so it names no product and nothing only one repository has.
+2. Run `cargo xtask template --write`, which copies the blocks into the core's own `AGENTS.md`, `SECURITY.md` and `CONTRIBUTING.md`, then `cargo xtask ci`.
+3. Land it and release the core ([Route I](#route-i), steps 1 to 4).
+4. Each app moves to that release ([Route I](#route-i), steps 5 to 9). `cargo xtask sync` writes the new block, and the app's gate fails until it has.
+5. In wordsmith, run `python3 project/carry.py --write` and land the changed `AGENTS.md`.
+
+The project block:
+
+1. Edit it in `project/README.md`, between the two marker lines. Keep its links absolute, since it is read in other repositories.
+2. With the apps as sibling folders ([Route M](#route-m)), run `python3 project/carry.py --write`. It writes the block into each app's `AGENTS.md`. It commits nothing.
+3. Land the wordsmith change first. Then, in each app, commit and push the changed `AGENTS.md`, naming the wordsmith commit ([Route L](#route-l)).
+4. The "Check the carried blocks" workflow here goes red at the wordsmith push and green once the last app has landed. Start it by hand with `gh workflow run carried.yml`, or run the same check yourself: `python3 project/carry.py --check --remote`.
+
+`python3 project/carry.py` with no flag checks without writing. It reads the sibling folders where they exist, which can be ahead of or behind what is published; `--remote` reads each app's `main` and the core's newest release from GitHub. A file that is to carry a block needs the two marker lines first; the tool never guesses where a block belongs. To have another repository or file carry a block, add the marker lines there and a row to the table at the top of `project/carry.py`.
+
+**Today:**
+
+- An app's own gate does not check its copy of the project block. A copy edited by hand in an app is found by this repository's workflow, at the next push here or the weekly run, not at the app's push.
+- This repository carries only `public`. It has no `SECURITY.md` or `CONTRIBUTING.md` yet, so `security` and `contributing` are not carried here.
+- open-source-core carries no project block, because it names no product.
 
 ## Where to look, where to write
 
@@ -354,6 +391,7 @@ Paths are inside the repository named. Links go to `main`.
 | Question or record | Where |
 | --- | --- |
 | How the repositories connect, and every route | This file |
+| A rule or instruction that several repositories carry word for word | Its owner's file: the core's `template/` or the block at the top of this file ([Route N](#route-n)). Never a copy |
 | A rule for the whole project, and why | [`project/decisions/`](decisions/README.md) here |
 | What a `jcj-` crate does | The core's [`README.md`](https://github.com/jamescjfoundation/open-source-core/blob/main/README.md) crate table, then the crate's own docs |
 | Why a shared interface, the upstream rule or the tooling is as it is | The core's [`docs/decisions/`](https://github.com/jamescjfoundation/open-source-core/tree/main/docs/decisions). Outside the core, write "core decision NNNN": the apps and this folder number their own decisions from 0001 too |

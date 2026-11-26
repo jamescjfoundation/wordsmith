@@ -8,14 +8,14 @@ A monorepo for the shared, project-wide pieces of Wordsmith. The apps (Script, M
 
 | Folder | Stack | Owns |
 | --- | --- | --- |
-| `project/` | Markdown | The project map: every Wordsmith repository, how they depend on each other, the route for each kind of change, and the project-wide decisions |
+| `project/` | Markdown, one Python 3 script, no dependencies | The project map: every Wordsmith repository, how they depend on each other, the route for each kind of change, and the project-wide decisions; and `carry.py`, which writes and checks the text the repositories carry word for word |
 | `brand/` | SVG, PNG, ICO, JSON tokens, PDFs | The brand kit: logos, icons, palettes, guidelines |
 | `website/` | Plain HTML/CSS/JS, a Python 3 page generator, no dependencies | The public site |
 | `website/wiki/` | Fumadocs (Next.js, MDX), static export | The wiki: user guides for the apps, at `/wiki/` |
 | `launcher/` | Rust (planned) | Wordsmith Launcher desktop app |
 | `.github/workflows/` | GitHub Actions | CI and deploys, one workflow per folder |
 
-**Start with [`project/README.md`](project/README.md)** when a task touches another repository, or when you are not sure where a change belongs. It lists the five repositories and two forks, and gives the steps for each route: a wiki page for an app, a brand change that must reach the apps, website text after an app release, a fix that belongs in `open-source-core`. This repository owns that map and the rules in `project/decisions/`; the other repositories carry a copy of its top block in their `AGENTS.md`. Change the block here first, then the copies. `project/` is not part of the website and is never published with it.
+**Start with [`project/README.md`](project/README.md)** when a task touches another repository, or when you are not sure where a change belongs. It lists the five repositories and two forks, and gives the steps for each route: a wiki page for an app, a brand change that must reach the apps, website text after an app release, a fix that belongs in `open-source-core`. This repository owns that map and the rules in `project/decisions/`; the app repositories carry a copy of its top block in their `AGENTS.md`. Change the block here, never in a copy, and carry it out with `project/carry.py` (see [project/](#project) below). `project/` is not part of the website and is never published with it.
 
 Keep changes inside one folder where you can. A change that spans folders (for example, launcher status on the website) should say so in the commit message.
 
@@ -29,6 +29,35 @@ These come from the project's public promises on the website. Don't break them.
 - **Brand assets:** `brand/` is the brand kit and the source for every logo, icon, color and font choice. Read `brand/suite/BRAND_GUIDE.md` before any visual work. Copies elsewhere (`website/assets/brand/`, `website/wiki/public/brand/`, the app repos) are taken from `brand/` unchanged. Never edit, recolor or redraw a brand file by hand. Logos, icons, palettes and the guideline PDFs change only through `brand/source/` and a rebuild.
 - **The Foundation's name** is always "The James C. J. Foundation", never "The J. C. J. Foundation".
 - **Writing style:** plain, short, friendly sentences for writers, not developers. No marketing superlatives. Don't claim a feature exists before it does; mark planned things as planned.
+
+<!-- BEGIN open-source-core: public -->
+<!-- Owned by open-source-core (template/AGENTS.md). Change it there, never in a copy: `cargo xtask sync` rewrites the copies. -->
+## What is public
+
+This repository is public, history included, forever
+([core decision 0012](https://github.com/jamescjfoundation/open-source-core/blob/main/docs/decisions/0012-working-in-the-open.md)).
+Before you write a commit, branch name, issue, pull request or comment, check it holds none of:
+
+- anyone's name, email, account names, or details of their machine (local paths such as a home
+  folder, user names, host names, IP addresses);
+- what the user told you in conversation, quoted or summarised; write the reason for a change as
+  its own argument;
+- an open security problem (follow `SECURITY.md`: keep it in `.private/` and tell the user);
+- secrets, or files from a real machine (preferences, recovery, auto-save, backups, logs,
+  screenshots of a desktop);
+- anyone's private writing, even as test data. Fixtures are public-domain or written for the test.
+
+Commit with a GitHub no-reply address or a foundation bot identity. Where a repository has
+`cargo xtask`, `cargo xtask privacy` checks its files and every commit. Never push with `--all`
+or `--mirror`.
+<!-- END open-source-core: public -->
+
+## project/
+
+- `project/README.md` is the map and `project/decisions/` holds the project-wide decisions, numbered from 0001. A new route gets the next free letter and an `<a id="route-x">` anchor; a new decision gets a row in `project/decisions/README.md`.
+- Some text is carried word for word in several repositories, between a `BEGIN` and an `END` marker line. The block marked in `project/README.md` is carried in each app's `AGENTS.md`; this file carries the block above from open-source-core. A copy is never edited: change the owner's text, then run `python3 project/carry.py --write` with the repositories side by side. It changes files and commits nothing. Route N in the map has the steps.
+- `.github/workflows/carried.yml` runs `python3 project/carry.py --check --remote`, which compares every published copy with its source. It is red while a copy is behind.
+- Check before committing: `python3 project/test_carry.py` passes; every link and anchor you touched resolves; and after a change to the block, `python3 project/carry.py` passes against the sibling folders.
 
 ## brand/
 

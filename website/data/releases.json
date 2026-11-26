@@ -1,0 +1,8 @@
+{
+  "note": "The last known public release of each app. Written by website/tools/releases.py --write; never edit it. The published site reads GitHub again at every deploy.",
+  "apps": {
+    "script": null,
+    "manuscript": null,
+    "book": null
+  }
+}

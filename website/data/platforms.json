@@ -1,0 +1,20 @@
+[
+  {
+    "id": "macos-arm64",
+    "name": "macOS",
+    "detail": "Apple silicon",
+    "files": "(macos|darwin|osx).*(aarch64|arm64)"
+  },
+  {
+    "id": "windows-x64",
+    "name": "Windows",
+    "detail": "64-bit (x64)",
+    "files": "win(dows)?.*(x64|x86_64|amd64)"
+  },
+  {
+    "id": "linux-x64",
+    "name": "Linux",
+    "detail": "64-bit (x86_64)",
+    "files": "linux.*(x86_64|x64|amd64)"
+  }
+]

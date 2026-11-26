@@ -3,8 +3,37 @@
   "order": 1,
   "name": "Wordsmith Script",
   "repository": "jamescjfoundation/wordsmith-script",
+  "for": "Screenplays, TV and stage plays",
   "description": "A free, open-source app for writing screenplays, TV episodes and stage plays.",
+  "state": {
+    "none": {
+      "chip": "",
+      "line": "Free and open source",
+      "download": "Downloads for each system are published on the app's releases page on GitHub."
+    },
+    "preview": {
+      "chip": "Preview {version}",
+      "line": "Published {date}",
+      "download": "Version {version} is a preview, published on {date}: it is here to try the downloads and the updates before 1.0. Keep your own copy of anything important."
+    },
+    "released": {
+      "chip": "Version {version}",
+      "line": "Released {date}",
+      "download": "Version {version}, published on {date}."
+    }
+  },
+  "platforms": [
+    "macos-arm64",
+    "windows-x64",
+    "linux-x64"
+  ],
   "guide": "docs/guide",
   "images": "docs/images",
-  "screenshots": ["page-view", "index-cards", "story-board", "ribbon-production", "draft-view-dark"]
+  "screenshots": [
+    "page-view",
+    "index-cards",
+    "story-board",
+    "ribbon-production",
+    "draft-view-dark"
+  ]
 }

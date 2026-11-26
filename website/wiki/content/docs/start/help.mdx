@@ -1,6 +1,6 @@
 ---
 title: Getting help and helping out
-description: Report a problem, suggest an idea, or help with the code, translations and this wiki.
+description: Report a problem, suggest an idea, or help with the code, translations and the guides.
 icon: LifeBuoy
 ---
 
@@ -17,13 +17,16 @@ Open an issue in the app's repository:
 
 You'll need a free GitHub account. A good report says:
 
-- which app, and which version (it's on the app's About page);
+- which app, and which version (it's on the File page, under About);
 - your system: macOS, Windows or Linux, and its version;
 - what you did, what you expected, and what happened instead;
 - a small file that shows the problem, if you can share one. Leave out anything private.
 
-Ideas are just as welcome as bug reports. Wordsmith Book in particular is still taking shape, so
-now is the best time to say what would help you.
+Ideas are just as welcome as bug reports. The same pages show what is already planned: each open
+issue is something someone means to do or has asked for.
+
+A security problem is not reported in an issue. Each repository's Security tab has
+**Report a vulnerability**, which only the maintainers see.
 
 ## Help build Wordsmith
 
@@ -31,25 +34,31 @@ You don't need to write code to help.
 
 <Cards>
   <Card title="Try it and tell us">
-    Build an app, write something real in it, and open an issue for anything that gets in your way.
+    Write something real in an app, and open an issue for anything that gets in your way.
   </Card>
   <Card title="Write code">
     The apps are written in Rust. Each repository's CONTRIBUTING.md explains how changes are made
     and checked.
   </Card>
   <Card title="Translate">
-    Manuscript already speaks English and Spanish. Help bring the apps to writers in your language.
+    Manuscript and Book come in English and Spanish. Help bring the apps to writers in your
+    language.
   </Card>
   <Card title="Design">
-    Book designs, templates and documentation all need people with an eye for detail.
+    Book designs, templates and the guides all need people with an eye for detail.
   </Card>
 </Cards>
 
-## Improve this wiki
+## Improve a guide or this wiki
 
-Every page has an **Edit on GitHub** link at the bottom. It opens the page's text, which is
-Markdown, in GitHub's editor, and GitHub walks you through proposing the change. The wiki lives in
-the [wordsmith repository](https://github.com/jamescjfoundation/wordsmith) under `website/wiki`.
-Its [CONTRIBUTING.md](https://github.com/jamescjfoundation/wordsmith/blob/main/CONTRIBUTING.md)
-has the few rules for a page. What you write is published under the Creative Commons Attribution
-4.0 license, as the rest of the wiki's text is.
+Every page has an **Edit on GitHub** link at the bottom. It opens the file the page is made from,
+which is Markdown, in GitHub's editor, and GitHub walks you through proposing the change.
+
+- **A page about one app** is that app's own guide, kept in the app's repository under
+  `docs/guide/`. The link takes you there. When your change lands, this wiki is built from it
+  again.
+- **A page about the project as a whole**, like this one, lives in the
+  [wordsmith repository](https://github.com/jamescjfoundation/wordsmith) under `website/wiki`.
+  Its [CONTRIBUTING.md](https://github.com/jamescjfoundation/wordsmith/blob/main/CONTRIBUTING.md)
+  has the few rules for a page. What you write there is published under the Creative Commons
+  Attribution 4.0 license.

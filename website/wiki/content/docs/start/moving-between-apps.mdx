@@ -1,6 +1,6 @@
 ---
 title: Moving between the apps
-description: How Script, Manuscript and Book share work, and what isn't connected yet.
+description: How Script, Manuscript and Book share work.
 icon: ArrowRightLeft
 ---
 
@@ -9,58 +9,62 @@ between them, so you never end up with two versions of the same chapter.
 
 ## Script files in a Manuscript project
 
-A Manuscript project can hold Wordsmith Script files (`.wss`) in its binder, next to your
-chapters. That's handy for a screenplay adaptation of your novel, or a script you're writing
-alongside it.
+A Manuscript project can hold Wordsmith Script files (`.wss`), next to your chapters. That's handy
+for a screenplay adaptation of your novel, or a book with a script in it.
 
-- Manuscript shows a script read-only, laid out as a script.
-- To edit it, open it in Wordsmith Script. Your changes show up in Manuscript next time it reads
-  the file.
+- Manuscript shows a script read-only, with its word and scene counts. You can give it a synopsis,
+  a label and a status like any other item.
+- To change it, open it in Wordsmith Script from Manuscript. When Script saves, the changes show
+  in Manuscript.
+- Screenplays are not part of the manuscript's exports.
 
-See [Manuscript: The binder](../manuscript/binder.mdx).
+See [Manuscript: The binder](../manuscript/binder.mdx#screenplays).
 
 ## From Manuscript to Book
 
-<Status value="in-progress" />
-
-When your novel is finished, Wordsmith Book turns it into a print book and an ebook. Book is still
-being built; this is how it works so far.
+When your novel is finished, Wordsmith Book turns it into a print book and an ebook.
 
 <Steps>
 <Step>
 
 ### Book links to your manuscript
 
-A book project points at your Manuscript project (the `.wsm` folder, or a packed `.wsmz` file).
-Book **reads** it and **never writes to it**, so your manuscript stays exactly as you left it.
-In Manuscript, **Export › Book package** makes a `.wsmz` file to hand to Book.
+In Book, make a new book **from a Manuscript project**: the project folder, or a packed `.wsmz`
+file. Book reads the manuscript's sections, their roles and the text, and **never writes to it**,
+so your manuscript stays exactly as you left it. In Manuscript, the **Book package** export makes
+the one-file form to hand over.
 
 </Step>
 <Step>
 
-### Book offers fixes back
+### Keep writing, if you need to
 
-If Book finds something to fix in the text, it doesn't change your manuscript. It writes the
-suggestion to a small file next to your project (`My Novel.wsm-offers.json`).
+When the manuscript changes, Book notices the next time you come back to it, reads it again and
+says which sections changed. The design and each section's settings in Book stay as they were.
 
 </Step>
 <Step>
 
-### You decide in Manuscript
+### Fixes are offered back
 
-Manuscript shows the suggestions in its **Offered fixes** list. Accept the ones you want and
-reject the rest. The manuscript stays the one true copy of your words.
+If you fix a typo in Book, Book does not change your manuscript. It offers the fix to the writer.
+In Manuscript, the status bar shows how many fixes wait; **Offered Fixes** lists each one with the
+words before and after, and you accept or reject it. Until then Book's own builds use the fix.
 
 </Step>
 </Steps>
 
-Book can't yet start a new book from your manuscript in its window, or export the finished PDF
-and EPUB. [Book: Bringing your book in](../book/manuscript.mdx) explains what works
-today and [Manuscript: Sending to Book](../manuscript/export.mdx) covers the Manuscript
-side.
+[Book: Working with Wordsmith Manuscript](../book/manuscript.mdx) has Book's side, and
+[Manuscript: Exporting](../manuscript/export.mdx) the Manuscript side.
 
-## Not connected yet
+## Without Manuscript
 
-- **Script and Book** don't work with each other; Book is for prose books.
-- **Sharing a story bible with Script:** using one set of characters and places across a novel and
-  its screenplay is <Status value="planned" />.
+Book does not need Manuscript. It imports a Word, OpenDocument, RTF, Markdown, plain text or EPUB
+file into a source of the book's own, and shows you what it found before anything is made. See
+[Book: Importing a manuscript](../book/import.mdx).
+
+## What is not connected
+
+- **Script and Book** don't work with each other. Book is for prose books.
+- **The story bible** belongs to Manuscript. Books of a series can share one bible; Script does
+  not read it.

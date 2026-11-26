@@ -1,6 +1,6 @@
 ---
 title: Privacy
-description: No account, no tracking. The one request an app makes on its own, and how to turn it off.
+description: No account, no tracking. The one request an app makes on its own, what it sends, and how to turn it off.
 icon: ShieldCheck
 ---
 
@@ -10,27 +10,49 @@ are never sent anywhere.
 
 ## The update check
 
-The only request an app makes on its own is a check for a newer version.
+One request leaves your computer without your asking: the check for a newer version. Script,
+Manuscript and Book all make it, in the same way.
 
-- **Script and Manuscript** ask GitHub (`api.github.com`) whether a newer release exists, when the
-  app starts and when you choose **Check for Updates**. Like any website, GitHub sees your IP
-  address, and the request names the app and its version. Nothing else is sent.
-- Nothing is downloaded unless you choose to install an update.
-- **Book** makes no network requests at all today. When it gets update checks, you'll be able to
-  turn them off the same way.
+- **When:** each time the app starts, and when you choose **Check for Updates**.
+- **Where to:** GitHub's API (`api.github.com`), for the list of that app's own releases. No other
+  server is asked.
+- **What is sent:** the request itself. Like any website, GitHub sees your IP address. The request
+  names the app and its version, as in `WordsmithBook/1.0.0`, and nothing else: nothing about
+  you, your computer or your work.
+- **What comes back:** the list of releases. If there is a newer one, the app tells you.
+- **Downloads:** nothing is downloaded unless you choose to install the update. It then comes
+  from that release on github.com.
+
+If the check at start fails, for example because you are offline, the app says nothing and carries
+on. A check you asked for says why it failed.
 
 ### Turning it off
 
-In Script or Manuscript, open **File › Preferences** and turn off
-**Check for updates when the app starts**. You can still check by hand whenever you like.
+Open **File › Preferences** and clear **Check for updates when the app starts**. The app then
+sends nothing unless you check by hand.
 
-The command-line tools that come with Script and Manuscript never check for updates.
+The command-line tools that come with the apps never check for updates.
 
-## Tools you choose to use
+## Things you start yourself
 
-Some features hand a file to another program, for example a document converter you've installed
-for an import or export. That only happens when you set it up yourself, and the program runs on
-your own computer.
+Some features hand your work to another program or open something outside the app. They happen
+only when you ask, and the program runs on your own computer.
+
+- **Printing** hands the pages to your system's print service or PDF viewer.
+- **A converter you installed** can be named in Manuscript's export, for a format Manuscript does
+  not write.
+- **Validators you installed** can be named in Book's Preferences; preflight then runs them on
+  the ebook or the PDF.
+- **Open in a Reading App** in Book hands the ebook to the reading app on your computer.
+- **A web link** kept in a Manuscript project opens in your browser when you choose
+  Open in Browser. Keeping the link downloads nothing.
+
+Grammar hints in Manuscript are checked on your own computer; no text is sent anywhere.
+
+## Your own history
+
+Script's writing statistics and Manuscript's writing history are kept on your computer, beside
+the app's preferences, never in a script or a project. They do not travel with a file you share.
 
 ## This website and wiki
 

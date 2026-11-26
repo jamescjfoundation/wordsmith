@@ -12,10 +12,10 @@ server, and the files are yours to copy, back up and keep.
 | App | You save | What it is |
 | --- | --- | --- |
 | Wordsmith Script | `My Script.wss` | One plain-text file per script. Script also opens Fountain (`.fountain`) files. |
-| Wordsmith Manuscript | `My Novel.wsm` | A project folder: one Markdown file per scene and per story-bible entry, plus the binder, notes and snapshots. |
+| Wordsmith Manuscript | `My Novel.wsm` | A project folder: one Markdown file per document and per story-bible entry, plus the binder, snapshots and pictures. |
 | | `My Novel.wsmz` | The same project packed into one file, for sending, backups and handing to Book. |
-| Wordsmith Book | `My Book.wsbk` | A book project folder: the book's settings and designs, linked to your manuscript. |
-| | `My Book.wsbkz` | The same book project packed into one file. |
+| Wordsmith Book | `My Book.wsbk` | A book project folder: the design, the editions, front and back matter, fixes and settings. The words come from a linked Manuscript project or from a file you imported. |
+| | `My Book.wsbkz` | The same book project packed into one file, with a packed copy of a linked manuscript inside. |
 
 Because the text is plain text and Markdown, you can open it in any text editor, and nothing you
 write is locked inside an app.
@@ -25,28 +25,34 @@ A Manuscript or Book project is a folder whose name ends in `.wsm` or `.wsbk`. K
 folder together when you copy or move it, and open the folder itself in the app.
 </Callout>
 
-## Backups and recovery
+## Saving, backups and recovery
 
-Each app saves as you work and can recover what you were writing if it closes unexpectedly. Each
-also keeps backups of its own:
+Each app can recover what you were writing if it stops unexpectedly, and each keeps backups of
+its own.
 
-- **Script** keeps backups of every script (up to 1,000 each) in a `Backups` folder in its
-  settings folder. See [Script: Files](../script/files.mdx).
-- **Manuscript** can save snapshots of a scene before you rewrite it, and makes backups as packed
-  `.wsmz` files. See [Manuscript: Files](../manuscript/files.mdx).
-- **Book** keeps a recovery copy inside the book folder. See [Book: Files](../book/getting-started.mdx).
+- **Script** saves when you ask. Auto-save saves a script that has a file every 15 minutes, once
+  you stop typing for 10 seconds. Every save keeps a timestamped backup in the Backups folder of
+  the app's settings folder, and the newest 1,000 of each script are kept. See
+  [Script: Files](../script/files.mdx).
+- **Manuscript** saves as you write. When you close a project, and every 30 minutes while you
+  write, a packed copy goes into a `Backups` folder beside the project, and the newest ten are
+  kept. You can also take a snapshot of a document before you rewrite it. See
+  [Manuscript: Files](../manuscript/files.mdx).
+- **Book** saves when you ask, and on its own while you work, as you set in Preferences. It keeps
+  packed backups in a folder beside the project. See
+  [Book: Getting started](../book/getting-started.mdx).
 
 The apps' own backups are on the same computer as your work. For anything you care about, also
 keep a copy somewhere else: an external drive, or a folder that syncs to the cloud.
 
 <Callout type="warn" title="Synced folders">
-Keeping a project in a synced folder (iCloud Drive, Dropbox, OneDrive and the like) is fine, but
-only have it open on one computer at a time. If two computers change the same project at once, the
-sync service can end up with two versions.
+A Manuscript project can live in a folder a sync service keeps in step between your computers:
+Manuscript looks for changes made elsewhere and never writes over one without keeping a copy
+([Manuscript: Files](../manuscript/files.mdx#synced-folders)). Script files and Book projects can
+be kept in a synced folder too, but open them on one computer at a time.
 </Callout>
 
 ## Newer and older versions
 
-Until the first releases, an app's file format can change. A newer version opens files from older
-versions, but an older version may not open files saved by a newer one. If you share files with
-someone, use the same version.
+A newer version of an app opens files saved by an older one. A file saved by a newer version may
+not open in an older one. If you share files with someone, use the same version.

@@ -1,6 +1,6 @@
 ---
 title: The Wordsmith apps
-description: What each app is for, how far along it is, and how they fit together.
+description: What each app is for, and how they fit together.
 icon: Compass
 ---
 
@@ -19,12 +19,14 @@ same things, and the same promises: free, open source, no account and no trackin
     bible of your characters and places, and export a standard manuscript.
   </Card>
   <Card title="Wordsmith Book" href="../book/index.mdx" icon={<AppIcon app="wordsmith-book" />}>
-    For the last step: turning a finished manuscript into a typeset print book and an ebook.
+    For the last step: turning a finished manuscript into a typeset print book and an ebook,
+    with a design, front and back matter, and checks before you export.
   </Card>
 </Cards>
 
 A screenwriter may only ever need Script. A novelist will usually write in Manuscript and, when the
-book is done, take it into Book.
+book is done, take it into Book. Book also takes a manuscript written anywhere else, as a Word,
+OpenDocument, RTF, Markdown, plain text or EPUB file.
 
 ## Versions
 
@@ -42,9 +44,12 @@ The versions are read from each app's releases page on GitHub each time the site
   for example a screenplay adaptation. Manuscript shows them read-only and opens them in Script
   when you want to edit.
 - **Manuscript to Book:** Book reads your Manuscript project as it is and never changes it. If
-  Book spots something to fix, it offers the fix back, and you accept or reject it in Manuscript.
+  you fix a typo in Book, the fix is offered back, and you accept or reject it in Manuscript.
 
 [Moving between the apps](./moving-between-apps.mdx) has the details.
+
+The Wordsmith Launcher, one small app to install the three, keep them up to date and open your
+recent work, is <Status value="planned" />. It is not started.
 
 ## Who makes Wordsmith
 
@@ -52,10 +57,11 @@ Wordsmith is made by Wordsmith & Ink, a project of The James C. J. Foundation. A
 written in Rust and built on one shared base, open-source-core, which is based on WordCraft by the
 ArtCraft team. Each app credits the open-source work it uses in its README and NOTICE files.
 
-The apps' code is licensed under the MIT license or the Apache License 2.0, at your option. The
-text of this wiki is under the Creative Commons Attribution 4.0 license: copy it, translate it and
-build on it, and give credit to the Wordsmith contributors. The names Wordsmith, Wordsmith & Ink,
-Wordsmith Script, Wordsmith Manuscript, Wordsmith Book and Wordsmith Launcher, and their logos, are
-trademarks of The James C. J. Foundation. You may use them unchanged to refer to the project, but
-not for forks or other products.
+The apps' code is licensed under the MIT license or the Apache License 2.0, at your option, and so
+are the apps' guides, which are the app pages of this wiki. The pages about the project as a
+whole, like this one, are under the Creative Commons Attribution 4.0 license: copy them, translate
+them and build on them, and give credit to the Wordsmith contributors. The names Wordsmith,
+Wordsmith & Ink, Wordsmith Script, Wordsmith Manuscript, Wordsmith Book and Wordsmith Launcher, and
+their logos, are trademarks of The James C. J. Foundation. You may use them unchanged to refer to
+the project, but not for forks or other products.
 [Which license covers what](https://github.com/jamescjfoundation/wordsmith/blob/main/LICENSES.md).

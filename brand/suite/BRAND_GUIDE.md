@@ -105,7 +105,7 @@ Never set long paragraphs in Courier outside a script or manuscript page.
 
 ## Wordsmith Script
 
-![Script wordmark](script/logo/wordsmith-script-wordmark-ink.svg)
+![Script wordmark](../wordsmith-script/logo/wordsmith-script-wordmark-ink.svg)
 
 **Cursor.** A solid brass bar, as tall as the capitals and 0.15 em wide, on the baseline. It may blink in motion pieces (splash screen, video intros): on 530 ms, off 530 ms, no fades. Everywhere else it is solid.
 
@@ -118,7 +118,7 @@ The directions considered before C was chosen (twin nib, bound page) are in `scr
 
 ## Wordsmith Manuscript
 
-![Manuscript wordmark](manuscript/logo/wordsmith-manuscript-wordmark-ink.svg)
+![Manuscript wordmark](../wordsmith-manuscript/logo/wordsmith-manuscript-wordmark-ink.svg)
 
 **Cursor.** A stack of three sheets. The front sheet is the usual bar (as tall as the capitals, 0.15 em wide); two more sheets step back behind it, each 0.095 em to the right and 0.05 em higher. On light grounds the back sheets fade toward the ground (#E8968A, #F4CBC3); on dark grounds, including the icon, they deepen (#9C3A3A, #6B2F3C). In one-color versions they become slivers separated by a small gap. It never blinks.
 
@@ -130,7 +130,7 @@ The directions considered before C was chosen (twin nib, bound page) are in `scr
 
 ## Wordsmith Book
 
-![Book wordmark](book/logo/wordsmith-book-wordmark-ink.svg)
+![Book wordmark](../wordsmith-book/logo/wordsmith-book-wordmark-ink.svg)
 
 **Cursor.** A ribbon bookmark: a bar 0.15 em wide that starts at the height of the capitals and drops 0.30 em below the baseline, ending in a V notch. It never blinks. It may drop into place once (300 ms) when an export finishes.
 

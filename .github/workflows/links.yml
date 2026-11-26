@@ -1,0 +1,41 @@
+name: Check Markdown links
+
+# The map, the rules and the READMEs here point at each other and at files in this repository.
+# This checks that every such link names a file that exists and, where it names an anchor, a
+# heading or id that exists. It makes no network request, so links to other sites and other
+# repositories are not checked, and neither are the wiki's .mdx pages (the wiki build has those).
+#
+# To run the same check yourself: `python3 project/check_links.py`.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**.md"
+      - "project/check_links.py"
+      - "project/test_check_links.py"
+      - ".github/workflows/links.yml"
+  pull_request:
+    paths:
+      - "**.md"
+      - "project/check_links.py"
+      - "project/test_check_links.py"
+      - ".github/workflows/links.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: links-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Test the tool
+        run: python3 project/test_check_links.py
+      - name: Check every tracked Markdown file
+        run: python3 project/check_links.py

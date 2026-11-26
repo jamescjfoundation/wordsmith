@@ -10,7 +10,7 @@ Wordsmith Script is a free, open-source writing app for screenplays, from Wordsm
 
 | File | What it is | Use it for |
 | --- | --- | --- |
-| `favicon.svg` | The app icon, tuned for small sizes: a paper W and the cursor on an ink tile | Website favicon, browser tabs, small UI icons |
+| `favicon.svg` | The app icon, tuned for small sizes: a paper S and the cursor on an ink tile | Website favicon, browser tabs, small UI icons |
 | `icon-1024.png` | The full app icon, 1024 x 1024 px, rounded ink tile | App stores, social avatars, presentations, anywhere a raster icon is needed |
 | `wordsmith-mark-ink.svg` | The mark: the letter S and the cursor, no tile | Avatars, watermarks and tight spaces on light backgrounds |
 | `wordsmith-mark-paper.svg` | The mark, light version | The same on dark backgrounds |

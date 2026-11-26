@@ -17,6 +17,7 @@ Start with **[`suite/BRAND_GUIDE.md`](suite/BRAND_GUIDE.md)** for the ideas and 
 | [`wordsmith-book/`](wordsmith-book/) | Print books and ebooks: same layout as Script |
 | [`suite/`](suite/) | The suite brand guide and the three-app overview image |
 | [`source/`](source/) | The scripts that build all of the above (see [Rebuilding](#rebuilding)) |
+| [`apps.json`](apps.json) | What each app's repository carries from the kit: every file with its checksum, the files that are the app's own, and the seven palette colors. Written by `npm run brand`; never edited |
 | [`LICENSE.md`](LICENSE.md) | How the names and logos may be used |
 
 The original kit kept the same build scripts once per app; here they're kept once, in `source/`.
@@ -26,9 +27,10 @@ The original kit kept the same build scripts once per app; here they're kept onc
 - **Logos** are outlined SVG paths, so no font is needed. Use `-ink` versions on light backgrounds and `-paper` versions on dark backgrounds. `-mono` versions are single-color.
 - **App icons:** each `app-icon/` folder has SVG masters (normal, `-small` for tiny sizes, `-macos` on the 824 px macOS grid), PNGs from 16 to 1024 px, a Windows `.ico` and a `favicon.svg`.
 - **Colors:** each `tokens.json` holds that brand's design tokens. Each `palette/` folder has the palette as CSS, JSON, GIMP (`.gpl`) and Adobe (`.ase`) swatches, plus a reference card.
-- **Ready-made sets:** each app's `production/` folder is a ready-to-use set of that app's key files and the parent brand's, with a README that explains each one. When an app repository needs brand files, copy them from here.
-- **Copy, don't edit.** The website (`website/assets/brand/`), the wiki (`website/wiki/public/brand/`) and the app repositories (`assets/brand/` in each) copy files from here unchanged. To change a logo, icon, palette or PDF, change the script in `source/` and rebuild. Don't edit the output by hand.
-- **After a change, update the copies.** The website's and the wiki's copies are made and checked by one tool: `npm run brand` in `website/wiki` writes them, and `npm run brand:check` fails when one is missing or differs. It runs on every pull request and every push. The apps' copies are made by hand, and nothing reports one that is out of date. The repository's [`AGENTS.md`](../AGENTS.md#brand) lists the copies, and Route F of the [project map](../project/README.md#route-f) has the steps.
+- **Ready-made sets:** each app's `production/` folder is a ready-to-use set of that app's key files and the parent brand's, with a README that explains each one. An app's repository carries this set, and the icons it uses from `app-icon/`.
+- **Copy by the tool, don't edit.** The website (`website/assets/brand/`), the wiki (`website/wiki/public/brand/`) and the app repositories (`assets/brand/` in each) hold files from here unchanged, written by one tool. To change a logo, icon, palette or PDF, change the script in `source/` and rebuild. Don't edit the output by hand, here or in a copy.
+- **After a change, update the copies.** One tool makes and checks every copy, `website/wiki/scripts/brand.mjs`. `npm run brand` in `website/wiki` writes the website's and the wiki's copies and `apps.json`, and `npm run brand:check` fails when one is missing or differs; it runs on every pull request and every push. For an app, `npm run brand -- --app script` (or `manuscript`, `book`) writes the kit's files into the app's checkout beside this repository and says what changed, and `npm run brand:check -- --app script` compares without writing. The repository's [`AGENTS.md`](../AGENTS.md#brand) lists the copies, and Route F of the [project map](../project/README.md#route-f) has the steps.
+- **What is an app's own.** Each app's interface theme file is the app's, in the token format of open-source-core; it is not a copy of the `tokens.json` here, and only its seven palette colors must match. [`apps.json`](apps.json) names it, and the files an app derives from a kit file with its own tool.
 
 ## Rebuilding
 

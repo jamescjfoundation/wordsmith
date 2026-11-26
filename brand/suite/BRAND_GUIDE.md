@@ -114,7 +114,7 @@ Never set long paragraphs in Courier outside a script or manuscript page.
 - The in-app text cursor is brass.
 - Revision colors tint revised pages and margins; story-board beats reuse them.
 
-The directions considered before C was chosen (twin nib, bound page) are in `script/concepts/`, and the twin-nib files in `script/archive/direction-A/`.
+The scripts that drew the directions considered before C was chosen (twin nib, bound page) are kept in [`source/explorations/`](../source/explorations/). They are a record, not part of the build.
 
 ## Wordsmith Manuscript
 
@@ -167,9 +167,14 @@ brand/
   wordsmith-book/          the same layout
   pdfs/                    the guidelines laid out as pages
   source/                  the scripts that build the logos, icons, palettes and PDFs
+  apps.json                what each app's repository carries from the kit, written by a tool
 ```
 
-Each app's repository keeps copies of its logos and icons in `assets/brand/`, taken unchanged from the app's `production/` and `app-icon/` folders here. An app's interface theme is its own `tokens.json`, in the token format of open-source-core's `jcj-theme`. It is not a copy of the kit's `tokens.json`; only its palette colors must match the kit. The logos and icons are rebuilt by `python3 brand/source/build.py` when a name, a color or a shape changes ([`brand/README.md`](../README.md#rebuilding)). Route F of the [project map](../../project/README.md#route-f) has the steps for a change that must reach the copies.
+**Who owns what.** The kit owns the seven palette colors of each app and every logo and icon. An app owns its interface theme: its own `tokens.json`, in the token format of open-source-core's `jcj-theme`. That file is not a copy of the kit's `tokens.json`, and the app decides every interface color in it; only the seven palette colors it names must be the kit's. The kit's `tokens.json` files are the brand's reference, with dark values and contrast notes; no app reads them.
+
+**How the files reach an app.** Each app's repository keeps the kit's files for that app in `assets/brand/`, byte for byte: its `production/` set and the icons it uses from `app-icon/`. [`apps.json`](../apps.json) lists them, each with its checksum, beside the two kinds of file in that folder that are the app's: its own (the theme file, the folder's README) and those it derives from a kit file with its own tool (the mask it paints the mark from). One tool makes and checks the copies: `npm run brand -- --app <app>` in `website/wiki` writes the kit's files into the app's checkout and records the kit commit they came from, and `npm run brand:check -- --app <app>` compares. A copy is never edited, recolored or rescaled in an app, and an app makes no icon size of its own: the kit has every size.
+
+The logos and icons are rebuilt by `python3 brand/source/build.py` when a name, a color or a shape changes ([`brand/README.md`](../README.md#rebuilding)). Route F of the [project map](../../project/README.md#route-f) has the steps for a change that must reach the copies, and [project decision 0007](../../project/decisions/0007-brand-files-reach-the-apps-by-one-route.md) the reasons.
 
 **Licensing.** The apps' code is open source; the names and logos are the Foundation's trademarks, and the brand files are not open source. [`brand/LICENSE.md`](../LICENSE.md) says how they may be used: unchanged, to refer to the project, but not for forks or other products. Each app ships its copies with a README that says the same. Because the logos are set in an open font, their distinctiveness comes from the names plus the cursors, so use them consistently.
 

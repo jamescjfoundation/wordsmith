@@ -252,20 +252,14 @@ export function plain(text) {
 }
 
 /**
- * Reads the guide's README: the order of its pages, each page's one-line description (the text
- * after its link, when there is some), and the README's own first paragraph.
+ * Reads the guide's README: the order of its pages, and each page's one-line description (the
+ * text after its link, when there is some).
  *
- * Returns { order: [repository paths], descriptions: Map(path → text), intro }.
+ * Returns { order: [repository paths], descriptions: Map(path → text) }.
  */
 export function readIndex(text, source, pages) {
   const order = [];
   const descriptions = new Map();
-  const blocks = text.replace(/\r\n?/g, '\n').split(/\n[ \t]*\n/);
-  let intro = '';
-  for (const block of blocks) {
-    const first = block.trimStart();
-    if (!intro && first && !/^(#|[-*+] |\d+[.)] |```|~~~|\||>)/.test(first)) intro = plain(block);
-  }
   // one list item is its first line and the indented lines after it
   const items = text.replace(/\r\n?/g, '\n').split(/\n(?=[ \t]*(?:[-*+]|\d+[.)])[ \t])/);
   for (const item of items) {
@@ -283,7 +277,7 @@ export function readIndex(text, source, pages) {
       descriptions.set(path, rest);
     }
   }
-  return { order, descriptions, intro };
+  return { order, descriptions };
 }
 
 /** The section's meta.json: the README first, then its pages in the README's order, then the rest by name. */

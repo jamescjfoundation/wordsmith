@@ -206,3 +206,8 @@ html > body[data-scroll-locked] {
 }
 .ws-guide-source a { color: inherit; text-decoration: underline; }
 .ws-guide-source code { font-size: 0.85em; }
+
+/* An app's downloads (components/apps.tsx) */
+a.ws-status { text-decoration: none; }
+.ws-downloads { border: 1px solid var(--color-fd-border); border-radius: 0.75rem; padding: 0.25rem 1.25rem; background: var(--color-fd-card); }
+.ws-downloads li { overflow-wrap: anywhere; }

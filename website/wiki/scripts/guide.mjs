@@ -170,8 +170,10 @@ export function buildApp(app, commit, repo) {
   const warnings = [];
   const shown = new Map(); // picture in the repository → the files it becomes here
   for (const source of sources) {
-    const description = source === readme ? index.intro || app.description : (index.descriptions.get(source) ?? '');
-    const lead = source === readme ? (app.guideLead ?? '') : '';
+    // the first page takes the app's one line from its data file; its own first paragraph stays in its text
+    const description = source === readme ? app.description : (index.descriptions.get(source) ?? '');
+    // the section's first page starts with the app's downloads, which the wiki draws from website/data/
+    const lead = source === readme ? `<Downloads app="${app.slug}" />` : '';
     const page = convertPage({ text: texts.get(source).toString('utf8'), source, guideDir, pages, files, repository: app.repository, commit, description, lead });
     warnings.push(...page.warnings);
     built.push({ source, blob: repo.files.get(source), file: `${section}/${pagePath(source, guideDir)}`, text: page.mdx });

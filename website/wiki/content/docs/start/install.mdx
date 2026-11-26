@@ -1,106 +1,82 @@
 ---
 title: Installing
-description: Build and run Wordsmith Script, Manuscript or Book on macOS, Windows or Linux.
+description: Download Wordsmith Script, Manuscript or Book, open it the first time, and keep it up to date.
 icon: Download
 ---
 
-<Callout type="info" title="No installers yet">
-Installers for macOS, Windows and Linux come with each app's first release. Until then you build
-the app from its source code. You don't need to know how to program: it's a few commands in a
-terminal, and the first build takes a few minutes.
-</Callout>
+Each app is one free download. There is no account to make. All three run on:
 
-## What you need
+- **macOS**, on a Mac with Apple silicon;
+- **Windows**, 64-bit (x64);
+- **Linux**, 64-bit (x86_64).
 
-- A computer running **macOS 11 or later**, **Windows** or **Linux**.
-- An internet connection for the first build, which downloads the parts the app is made from.
-- **Git**, to download the code. Many computers already have it. If not, get it from
-  [git-scm.com](https://git-scm.com).
-- **Rust**, the language the apps are written in. You install it once with rustup (below). Each
-  app asks for the exact Rust version it was made with, and rustup fetches it automatically.
+## Download
 
-## Build and run an app
-
-<Steps>
-<Step>
-
-### Install Rust
-
-Go to [rustup.rs](https://rustup.rs) and follow the instructions for your system.
-
-<Tabs items={['macOS', 'Windows', 'Linux']}>
-  <Tab value="macOS">
-    Open **Terminal** and run the command shown on rustup.rs. If macOS asks to install the
-    command line developer tools, say yes: Rust needs them.
-  </Tab>
-  <Tab value="Windows">
-    Download and run **rustup-init.exe** from rustup.rs. If it offers to install the Visual Studio
-    build tools, accept: Rust needs them on Windows.
-  </Tab>
-  <Tab value="Linux">
-    Run the command shown on rustup.rs in a terminal. You also need a C compiler and linker; on
-    Debian or Ubuntu that's `sudo apt install build-essential`. If a build stops because a system
-    library is missing, the error names it; install it with your package manager and run the
-    command again.
-  </Tab>
-</Tabs>
-
-Close and reopen the terminal afterwards, so it finds the new `cargo` command.
-
-</Step>
-<Step>
-
-### Download and run the app
-
-Pick the app, then run its two commands in a terminal. The first downloads the code into a new
-folder; the second builds the app and opens it.
+Downloads are published on each app's own releases page on GitHub, and nowhere else. This list is
+read from those pages each time the site is built.
 
 <Tabs items={['Script', 'Manuscript', 'Book']}>
   <Tab value="Script">
-    ```sh
-    git clone https://github.com/jamescjfoundation/wordsmith-script
-    cd wordsmith-script
-    cargo run --release -p wordsmith
-    ```
+    <Downloads app="script" />
   </Tab>
   <Tab value="Manuscript">
-    ```sh
-    git clone https://github.com/jamescjfoundation/wordsmith-manuscript
-    cd wordsmith-manuscript
-    cargo run --release -p wordsmith-manuscript
-    ```
+    <Downloads app="manuscript" />
   </Tab>
   <Tab value="Book">
-    ```sh
-    git clone https://github.com/jamescjfoundation/wordsmith-book
-    cd wordsmith-book
-    cargo run --release -p wordsmith-book
-    ```
-    Book is in development and can't make a new book from its window yet.
-    [Book's Getting started](../book/getting-started.mdx) shows how to try it with a book of your own.
+    <Downloads app="book" />
   </Tab>
 </Tabs>
 
-The first build takes a few minutes. After that, the same `cargo run` command opens the app in
-seconds.
+## Open it the first time
 
-</Step>
-<Step>
+The apps are not signed with a paid developer certificate, so macOS and Windows stop to ask before
+they open one for the first time. That is expected. You do this once per app.
 
-### Next time
+<Tabs items={['macOS', 'Windows', 'Linux']}>
+  <Tab value="macOS">
+    1. Open the file you downloaded and move the app to your **Applications** folder.
+    2. Open the app. macOS says it cannot check the app. Close the notice.
+    3. Open **System Settings**, choose **Privacy & Security**, and scroll down to **Security**.
+    4. Beside the app's name, click **Open Anyway**, and confirm.
 
-To open the app again, go to its folder in a terminal and run the same `cargo run` command.
+    On macOS 14 and earlier you can also hold Control, click the app, choose **Open**, and then
+    **Open** again.
+  </Tab>
+  <Tab value="Windows">
+    1. Unpack the file you downloaded, or run it if it is an installer.
+    2. Start the app. Windows may show **Windows protected your PC**.
+    3. Click **More info**, then **Run anyway**.
+  </Tab>
+  <Tab value="Linux">
+    Unpack the file you downloaded and start the program inside it. Linux does not ask.
+  </Tab>
+</Tabs>
 
-To get the latest version, run `git pull` in the app's folder first, then `cargo run` as before.
-
-</Step>
-</Steps>
-
-<Callout type="warn" title="Keep a copy of your work">
-These are pre-release versions. They save and back up your work, but until the first release,
-keep your own copy of anything important too. A newer version can save files that an older
-version can't open. See [Your files](./files.mdx).
+<Callout type="info" title="Only from the releases page">
+Download the apps only from the releases pages linked above. Each app's code is public, and you
+can build the app yourself from it, as described below.
 </Callout>
+
+## Updates
+
+When an app starts, it asks GitHub whether a newer version has been published. When there is one,
+it tells you. Where the app can replace itself it offers to install the update; otherwise it opens
+the release's page for you to download it. Nothing is downloaded unless you choose to.
+
+To turn the check off, open **File › Preferences** and clear
+**Check for updates when the app starts**. You can still check by hand. [Privacy](./privacy.mdx)
+says exactly what the check sends.
+
+## Build an app yourself
+
+Every app is open source, and you can build it from its code. You need
+[Git](https://git-scm.com) and [Rust](https://rustup.rs); each app asks for the Rust version it
+was made with, and rustup fetches it. The first build takes a few minutes and needs an internet
+connection. Each repository's README has the commands:
+
+- [Wordsmith Script](https://github.com/jamescjfoundation/wordsmith-script#readme)
+- [Wordsmith Manuscript](https://github.com/jamescjfoundation/wordsmith-manuscript#readme)
+- [Wordsmith Book](https://github.com/jamescjfoundation/wordsmith-book#readme)
 
 ## Next
 

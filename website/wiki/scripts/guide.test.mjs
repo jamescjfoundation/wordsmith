@@ -111,12 +111,11 @@ test('plain text of a line', () => {
   assert.equal(plain('**The** `x` and [a link](y.md)\nwrapped'), 'The x and a link wrapped');
 });
 
-test('the README gives the order, the descriptions and the first paragraph', () => {
+test('the README gives the order and the descriptions', () => {
   const pages = new Set(['docs/guide/README.md', 'docs/guide/views.md', 'docs/guide/files.md', 'docs/guide/keys.md']);
   const readme = '# Guide\n\nAn app for *long* work,\nin one place.\n\n1. [Files](files.md): the format,\n   and backups\n2. [Views](views.md).\n3. [Elsewhere](https://example.org)\n4. [Files again](files.md)\n\nA closing note.\n';
   const index = readIndex(readme, 'docs/guide/README.md', pages);
   assert.deepEqual(index.order, ['docs/guide/files.md', 'docs/guide/views.md']);
-  assert.equal(index.intro, 'An app for long work, in one place.');
   assert.equal(index.descriptions.get('docs/guide/files.md'), 'The format, and backups.');
   assert.equal(index.descriptions.has('docs/guide/views.md'), false);
   const meta = JSON.parse(sectionMeta(app, pages, 'docs/guide', index.order));
@@ -174,7 +173,7 @@ test('writing a section gives pages, a meta file, pictures and a lock entry', as
       ['docs/images/window.png', ['website/wiki/content/docs/script/images/window.webp', 'website/assets/img/script-window.webp']],
     ]);
     const index = readFileSync(join(root, 'website/wiki/content/docs/script/index.mdx'), 'utf8');
-    assert.match(index, /description: "An app for the test\."/);
+    assert.match(index, /description: "An app for the test\."\n---\n\n<Downloads app="script" \/>\n\n1\. \[Views\]/);
     const views = readFileSync(join(root, 'website/wiki/content/docs/script/views.mdx'), 'utf8');
     assert.match(views, /description: "How to look at a script\."/);
     assert.match(views, /!\[The window\]\(\.\/images\/window\.webp\)/);

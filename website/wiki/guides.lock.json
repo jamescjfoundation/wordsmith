@@ -3,14 +3,14 @@
   "apps": {
     "script": {
       "repository": "jamescjfoundation/wordsmith-script",
-      "commit": "9f024e651a0328e3c72317defe9c8884b81bfcf9",
+      "commit": "f2ba123c68b97c8e89869120bf4c8c2b97f71cb0",
       "date": "2026-11-26",
       "pages": [
         {
           "source": "docs/guide/README.md",
           "blob": "fef5cc2961ba3ecffb6e43bb44c7dcc61c493d0c",
           "file": "website/wiki/content/docs/script/index.mdx",
-          "sha256": "e3d05d600ae17aae3351a848db685f91dd10d9771209fa63bea9be4c06572d25"
+          "sha256": "f4061ab85cc1523b9017dadf1af92b7ef75386a303a20b55d025db02104a5767"
         },
         {
           "source": "docs/guide/characters-and-reports.md",
@@ -32,9 +32,9 @@
         },
         {
           "source": "docs/guide/files.md",
-          "blob": "7358f74c0b2cb048bcdb6dc1d9d783ca5bce643a",
+          "blob": "cd73e80f7d7110a633dbc4ff0afb7d65693aa904",
           "file": "website/wiki/content/docs/script/files.mdx",
-          "sha256": "d7001004b0e70349dace6535027c87cf2cf7b57042368d6b90d2b8adc9e59eb6"
+          "sha256": "3ccef9e8fc9cf08dfecf0f8ccd2015aac00ffe59805209a652d104ed536d3151"
         },
         {
           "source": "docs/guide/getting-started.md",
@@ -86,9 +86,9 @@
         },
         {
           "source": "docs/guide/the-window.md",
-          "blob": "2e37e93dd1598716417a9dae001f84eeff28d5ae",
+          "blob": "17d906c61d3fac78a9941bd166ea632fca43ebe1",
           "file": "website/wiki/content/docs/script/the-window.mdx",
-          "sha256": "fb70820cbba04e185618b2ae80d7c71b50d1492412a5927df9a05a7160fdc8c9"
+          "sha256": "ba77fa03714da79200b0f326e66d53938f38cc98e1ed0e31a141f3362f87d49e"
         },
         {
           "source": "docs/guide/views.md",
@@ -184,14 +184,14 @@
     },
     "manuscript": {
       "repository": "jamescjfoundation/wordsmith-manuscript",
-      "commit": "5cf65bb2d811e00031d0359f7c35fe0d8755c845",
+      "commit": "28409ebac836ac1b02e367c6dbe2fbf8790bc5bb",
       "date": "2026-11-26",
       "pages": [
         {
           "source": "docs/guide/README.md",
           "blob": "3da688838a0b05840cbbb864840d4b0f34fd9d7b",
           "file": "website/wiki/content/docs/manuscript/index.mdx",
-          "sha256": "7da9c5a8ddce3e701226194f288550b3d9184dfad054f80a54845fce745d0030"
+          "sha256": "5c8ffdcfa9a81f8e461f99f43505e5e54be384db4ee621f0049a2d46e8b3af8c"
         },
         {
           "source": "docs/guide/bible.md",
@@ -207,9 +207,9 @@
         },
         {
           "source": "docs/guide/command-line.md",
-          "blob": "370b6885eaa3030de6499006ea49faf70f1e2e06",
+          "blob": "a543f7d26dcd5083780fb179fc5140869815c8ec",
           "file": "website/wiki/content/docs/manuscript/command-line.mdx",
-          "sha256": "b2365b7eb62c04d2b480cdbf46a5c1ed8bea5b972c4a64a6aa0bd991c8f55f97"
+          "sha256": "575529bec34bedf2761f94e0c417a9753256085f0dd1a76b2fb82bafc48868ec"
         },
         {
           "source": "docs/guide/export.md",
@@ -269,7 +269,7 @@
           "source": "docs/guide/README.md",
           "blob": "1557812d255e94abafa21764c0af8bf3b95b2dc8",
           "file": "website/wiki/content/docs/book/index.mdx",
-          "sha256": "94807a90001b0e6b435268b1508212a6aa4c0d904a30966301587d846dcb24d6"
+          "sha256": "bb8363c766b3ac081741f9393f1ba5913c9324ae862ab571e54baeee44272ea6"
         },
         {
           "source": "docs/guide/command-line-and-agents.md",

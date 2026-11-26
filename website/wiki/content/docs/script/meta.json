@@ -4,16 +4,21 @@
   "root": true,
   "pages": [
     "index",
-    "getting-started",
     "the-window",
+    "getting-started",
     "writing",
     "views",
-    "planning",
-    "pages-and-printing",
-    "production",
-    "characters-and-reports",
+    "pages",
     "files",
-    "keyboard-shortcuts",
-    "whats-next"
+    "production",
+    "outlining",
+    "cli-and-mcp",
+    "keyboard",
+    "editing",
+    "macros-and-styles",
+    "characters-and-reports",
+    "planning",
+    "production-more",
+    "workspace"
   ]
 }

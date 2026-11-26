@@ -1,73 +1,41 @@
 ---
-title: Planning
-description: Story boards of beats, the outline in lanes, and outline elements inside the script.
-icon: Map
+# Made by website/wiki/scripts/guide.mjs from docs/guide/planning.md in jamescjfoundation/wordsmith-script.
+# Never edit this page: change the guide in the app's repository, then run `npm run guide`.
+title: "Boards, cards and the structure strip"
 ---
 
-Wordsmith Script has two places to plan a story before (or while) you write it:
-the **story board** and the **outline**. They show the same beats, so a change
-in one is a change in the other. Beats are saved with the script.
+## Story boards
 
-## Story board
+A script can have several boards: the tabs above the board pick one, + adds
+one, and Rename and Delete Board change the one showing. Beats you add go on
+the board showing.
 
-![A story board of beats with links between them](./images/story-board.webp)
+Shift-click beats to select several, then use **Arrange** to put them on the
+grid, in a column, in a row, or in a cascade. With a beat selected, **Links**
+lists its flow lines: draw each as a plain line, an arrow either way or both
+ways, pick its color, or remove it.
 
-Open it from the **Plan** tab or with <Kbd>Mod</Kbd>+<Kbd>Alt</Kbd>+<Kbd>6</Kbd>.
-A story board is a canvas of colored cards called **beats**.
+In the beat window, "• List" and "1. List" start a new list line in the body.
 
-- **Add a beat:** double-click the canvas where you want it, or use **Add Beat**
-  on the **Story Board** tab.
-- **Move beats** by dragging them. They snap to the grid unless you turn off
-  **Snap to Grid**.
-- **Link beats:** drag from the dot on a beat's right edge to another beat. Links
-  stay attached as beats move. With a beat selected, **Links** lists its links:
-  draw each as a plain line or an arrow (either way or both), pick its color, or
-  remove it.
-- **Edit a beat:** select it to color it, edit it or delete it. In the beat
-  window, <Kbd>Tab</Kbd> moves between the title and the body, and "• List" or
-  "1. List" starts a list line in the body.
-- **Arrange:** Shift-click several beats, then put them on the grid, in a
-  column, in a row or in a cascade.
-- **Send to Script:** the beat's title goes into the script at the caret as an
-  Outline 1 paragraph, and its body as a Summary.
+**Export PDF…** prints the board showing on one landscape page.
 
-A script can have **several boards**. The tabs above the board pick one, **+**
-adds one, and **Rename** and **Delete Board** change the one showing. New beats
-go on the board showing. **Export PDF** prints the board showing on one
-landscape page.
+## Index cards
 
-## Outline
+Choose how many cards to a row (or Fit), and whether cards show the summary or
+the start of the scene's text. A card shows the scene's title and color, and
+its Properties button opens Scene Properties.
 
-Open it from the **Plan** tab or with <Kbd>Mod</Kbd>+<Kbd>Alt</Kbd>+<Kbd>7</Kbd>.
-The outline shows **lanes**, one per row: acts, sequences or anything you like.
+**Print Cards…** saves the cards as a PDF: one per 3 × 5 in card, or a grid on
+Letter pages with your choice of columns and rows, frames and a grey
+background.
 
-- Add lanes yourself, or from a structure: three acts, five acts, three acts in
-  eight sequences, or a television episode (teaser, four acts, tag).
-- Rename lanes in place, move them and indent them.
-- Drag beats between lanes and along them.
-- Below the lanes are the beats in no lane, and the **Script** lane: your scenes
-  with the page each starts on. A beat you have sent to the script shows the
-  pages it covers.
+## Structure strip
 
-## Outline elements in the script
+View › Structure Strip (Mod+Alt+S) shows a band above the script: a lane for
+Outline 1, acts and sequences, and one for scenes, each block as long as the
+pages it covers, with page numbers along the top. Click a block to go there.
+The slider zooms the strip from 25 % to 400 %. Agents and the command palette
+can choose which elements feed the lanes (`strip.configure`).
 
-Five elements are for you, not the reader: **Outline 1**, **Outline 2**,
-**Outline 3**, **Summary** and **Note** (<Kbd>Mod</Kbd>+<Kbd>Shift</Kbd>+<Kbd>1</Kbd>
-to <Kbd>Mod</Kbd>+<Kbd>Shift</Kbd>+<Kbd>5</Kbd>, or the **Structure** group on
-the **Plan** tab). Use them to sketch acts and beats right in the script. They
-have colored bars in the left margin, one color per level, and show up in the
-Script panel's **Outline**.
-
-**Show Outline** on the **Plan** tab switches them off in the page view, the PDF
-and printing. They stay in the script and come back when you switch it on.
-
-<Callout type="info">
-Hidden outline elements still show in the normal and draft views.
-</Callout>
-
-## Scenes as cards and blocks
-
-The [index cards and scene view](./views.mdx#views-for-structure) are planning
-tools too: drag a card or a block and the scene moves in the script. The
-[structure strip](./views.mdx#structure-strip) shows acts, sequences and scenes
-along the pages.
+Outline paragraphs shown in the script have colored bars in the left margin,
+one per level.

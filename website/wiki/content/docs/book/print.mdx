@@ -1,106 +1,58 @@
 ---
-title: Print books
-description: How Book typesets a print book, from trim sizes and margins to page numbers and the print PDF.
-icon: BookCopy
+# Made by website/wiki/scripts/guide.mjs from docs/guide/print.md in jamescjfoundation/wordsmith-book.
+# Never edit this page: change the guide in the app's repository, then run `npm run guide`.
+title: "Print"
 ---
 
-For a print book, Wordsmith Book lays out every page and writes a PDF that a print-on-demand
-service or a printer can use as the book's interior. The cover is a separate file you make
-elsewhere.
+**Trims (PRT-1):** eighteen sizes from the print profile: the common paperback sizes from
+4.25 × 6.87 in (mass market) to 8.5 × 11 in, and the metric A5, Demy, Royal, B5 and A4.
 
-<Callout type="warn" title="Built, not in the window yet">
-  Typesetting the whole book and writing the print PDF work inside Book today and are tested on
-  full-length novels. You can't export the PDF from the window yet: that comes with the print
-  preview and export steps. <Status value="in-progress" />
-</Callout>
+**Margins (PRT-2):** mirrored, with an inside margin (gutter) that grows with the page count, as
+a print-on-demand service's file guide asks: up to 150 pages 0.375 in, then 0.5, 0.625, 0.75
+and 0.875 in over 700 pages. Book lays the book out, reads the page count, sets the gutter and
+lays it out again until it settles.
 
-## What Book does on every page
+**Page rules (PRT-3):** chapters start on a right-hand page or the next page, as the design says;
+front matter folios are lower-case roman and the body arabic from 1; blank pages carry no folio
+or running head; runs of blank pages stay within the profile.
 
-- **Justified text with hyphenation** for the book's language, with no more than two hyphens in a
-  row.
-- **No widows or orphans.** A page never starts or ends with a single line of a paragraph.
-- **Mirrored margins** with a wider inside margin (the gutter) so text doesn't disappear into the
-  binding.
-- **Chapters start on a right-hand page** when the design says so, with a blank page before them
-  if needed.
-- **Page numbers** in lower-case roman numerals (i, ii, iii) in the front matter, then 1, 2, 3 from
-  the first chapter or part. Chapter openings get their page number at the foot, and blank pages
-  have none.
-- **Running heads** at the top of the page, as the design sets them: author and title, or title and
-  chapter. Never on chapter openings, part pages or blank pages.
-- **Chapter openings** from the design: set a little way down the page, with drop caps going down
-  two to four lines, or the first words in small capitals.
-- **Scene breaks** as an ornament, asterisks or a blank line, and never an indent on the first line
-  after one.
-- **Part pages** alone on a right-hand page, with the part's number and title.
-- **A contents page** with dot leaders and the right page numbers.
-- **Real small capitals**, verse that keeps its line breaks, block quotes and pictures.
-- **Notes** numbered in each chapter and printed at the chapter's end.
+**Type (PRT-4):** sizes and leading come from the design; nothing prints under 7 pt.
 
-Text that only looks like markup, such as `<b>` or `*stars*`, prints exactly as you typed it.
+**Paper (PRT-5):** white, cream or colour, each with its thickness per page for the spine width.
 
-## Trim sizes
+**The print PDF (PRT-6):** single pages at trim size, every font embedded, no crop marks,
+annotations, links or bookmarks. The same project gives the same PDF every time.
 
-The trim is the size of the finished page. Book has four common trade paperback sizes today:
+**Bleed (PRT-7) and full-page pictures (TXT-4):** turn on bleed for an edition and its pages
+are 0.125 in larger outside, top and bottom, with trim and bleed boxes for the printer;
+full-page pictures then fill their page to the edge. Without bleed they fill the text block.
 
-- 5 × 8 in
-- 5.25 × 8 in
-- 5.5 × 8.5 in
-- 6 × 9 in
+**Notes (TXT-3):** footnotes at the foot of the page that calls them (a long one continues on
+the next page), or, per edition, a list at each chapter's end or a Notes section at the book's end.
 
-More sizes, including metric ones and hardcover sizes, are planned. <Status value="planned" />
+**Line breaks (TXT-5):** in Details, under *Line breaks*, list the words and phrases that must
+never be split across two lines (a name with its title, a number with its unit), one a line, and
+the words you want hyphenated only at certain places, with a hyphen at each (`man-u-script`); a
+word listed without a hyphen is never hyphenated. Book applies them when it builds the book, in
+print and in the ebook, without changing your manuscript.
 
-## Margins that grow with the book
+**Hardcover (PRT-8):** a hardcover edition uses the `pod-hardcover` profile: case-laminate sizes,
+wider margins and gutter for the hinge, and 75 to 550 pages.
 
-A thicker book needs a wider gutter. Book sets the inside margin from the page count, following
-the common print-on-demand table:
+**Print profiles (PRE-4):** `pod-paperback` (a print-on-demand paperback: trims, gutter table,
+margins, page counts, paper) and `generic-pdf` (any trim, fonts embedded, no annotations), as
+data files that say when they were last checked.
 
-| Pages | Inside margin |
-| --- | --- |
-| Up to 150 | 0.375 in |
-| 151 to 300 | 0.5 in |
-| 301 to 500 | 0.625 in |
-| 501 to 700 | 0.75 in |
-| Over 700 | 0.875 in |
+**Cover (PRT-9, PRT-10):** Book makes the paperback's or hardcover's full-wrap cover template (PDF and
+PNG) from the page count and paper: the back, spine and front with bleed, safe areas, whether the
+spine is wide enough for text, and the barcode area. Check a finished cover (PDF, PNG or JPEG)
+against it before sending it to the printer.
 
-Because the margin changes the page count, and the page count changes the margin, Book lays the
-book out, counts the pages, sets the gutter and lays it out again until everything settles. Outside
-margins never go below 0.25 in.
+**Large print (PRT-11):** in Details, choose Add Large Print. That edition is set in the
+large-print variant of your book's design: 16-point type and up, ragged right, no hyphenation,
+headings grown to match. Preflight checks that nothing in it is smaller. A long novel in large
+print can run past the printer's page limit; preflight says so.
 
-## Paper
-
-Each print edition has white, cream or color paper. Book knows the thickness of each per page, to
-work out the spine width for the cover template when that arrives.
-
-## The print PDF
-
-The PDF Book writes is what print services ask for:
-
-- single pages, not spreads, at the exact trim size
-- every font embedded in the file
-- no crop marks, links, bookmarks, comments or form fields
-
-Building the same book twice gives exactly the same file, byte for byte. In testing, every
-letter of the printed text is read back out of the PDF and checked against the source.
-
-## Print profiles
-
-A **print profile** is the set of rules for where the book will be printed. Book has two:
-
-- **Print-on-demand paperback**: the trims and margins above, 24 to 828 pages on white paper
-  (776 on cream), an even page count, no more than two blank pages in a row inside the book, and
-  nothing printed smaller than 7 pt.
-- **Generic PDF**: any trim, no page limits, fonts embedded and nothing extra in the file. Good for
-  a local printer or a PDF to read.
-
-## Coming later
-
-- **Print preview**: two-page spreads with trim and margin guides, updated as you change
-  settings. Click a page to go to its chapter. <Status value="planned" />
-- **Preflight** checks on the finished PDF before you upload it. See
-  [Preview, preflight and export](./preflight-and-export.mdx). <Status value="planned" />
-- **Footnotes** at the foot of the page. <Status value="planned" />
-- **Hardcover** settings and **bleed** for pictures that run off the page. <Status value="planned" />
-- **A cover template**: the exact full-wrap cover size for your page count and paper, with spine,
-  bleed, safe areas and barcode area, and a check of the cover you supply. <Status value="planned" />
-- A proof PDF with line numbers, and tagged and archival PDFs. <Status value="planned" />
+**PDF/A and PDF/UA (PRT-12):** tick *PDF/A and PDF/UA* on a print edition in Details and its PDF
+declares PDF/A-2b (for archives) and PDF/UA-1 (accessible). If you have installed a PDF
+validator, set its path in Preferences and preflight checks the file against both.

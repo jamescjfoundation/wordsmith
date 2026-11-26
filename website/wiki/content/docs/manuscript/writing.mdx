@@ -1,111 +1,104 @@
 ---
-title: Writing
-description: Styles, smart typing, reading several scenes as one, split panes, focus mode, find and spelling.
-icon: PenLine
+# Made by website/wiki/scripts/guide.mjs from docs/guide/writing.md in jamescjfoundation/wordsmith-manuscript.
+# Never edit this page: change the guide in the app's repository, then run `npm run guide`.
+title: "Writing"
 ---
 
 ## Styles
 
-The Write tab offers only the styles a manuscript needs.
+The Write tab offers only styles a manuscript needs; the file format keeps every one of them.
 
 | Paragraphs | Characters |
 | --- | --- |
-| Body, Block quote, Verse, Aside (a letter, note or message), Heading 1 to 3 (for front matter pages), Scene break | Italic, Bold, Small caps, Strikethrough, Language, Plain |
+| Body, Block quote, Verse, Aside (letter, note, message...), Heading 1 to 3 (for front matter pages), Scene break | Italic (Mod+I), Bold (Mod+B), Small caps, Strikethrough, Language, Plain |
 
 The first paragraph after a heading or a scene break is shown without its indent, as books set it.
+Pasted text comes in as plain text, one paragraph per line, so no stray fonts or colors get in.
 
-**Scene breaks** (<Kbd>Mod</Kbd>+<Kbd>Shift</Kbd>+<Kbd>Enter</Kbd>) are paragraphs of their own.
-Exports print them with the symbol you choose.
-
-**Pasted text** comes in as plain text, one paragraph per line, so no stray fonts or colors get in.
+**Scene breaks** (Mod+Shift+Enter) are paragraphs of their own; exports print them with the
+symbol you choose.
 
 ## Smart typing
 
-As you type:
-
-- straight quotes become curly quotes for the project's language (English “ ”, German „ “,
-  French « » and others);
-- two hyphens become an em dash, and a hyphen with spaces around it an en dash;
-- three periods become an ellipsis.
-
-Press <Kbd>Backspace</Kbd> right after a change to get back what you typed.
+As you type, straight quotes become curly quotes for the project's language (English “ ”,
+German „ “, French « » and others), two hyphens become an em dash, a spaced hyphen an en dash,
+three periods an ellipsis. Backspace right after a change puts back what you typed. Switch each
+rule off, or set the project's language, with the `settings.typing` command (or ask an agent).
 
 ## Reading several documents as one
 
-**Read as One Text** (<Kbd>Mod</Kbd>+<Kbd>Alt</Kbd>+<Kbd>R</Kbd>) opens the selected chapter or
-part, with everything under it, as one continuous text. **Read the Whole Manuscript**
-(<Kbd>Mod</Kbd>+<Kbd>Alt</Kbd>+<Kbd>Shift</Kbd>+<Kbd>R</Kbd>) does the same for the whole book.
-
-A line with each document's title separates them. Edit freely: when the project is saved, each
-document gets its own words back. A paragraph you type at the end of a document belongs to that
-document. Documents are never merged or lost, even if you select across a divider and type.
-
-![The whole manuscript read as one text, in the dark theme](./images/stitched-dark.webp)
+Read as One Text (Mod+Alt+R) opens the selected chapter or part, with everything under it, as one
+continuous text; Read the Whole Manuscript does the same for the whole book. A line with each
+document's title separates them. Edit freely: each document gets its own words back when the
+project is saved. A paragraph you type at the end of a document belongs to it; documents are never
+merged or lost, even when you select across a divider and type.
 
 ## Two panes
 
-View › Split (<Kbd>Mod</Kbd>+<Kbd>Alt</Kbd>+<Kbd>\\</Kbd>) shows two editors side by side; Split
-Top and Bottom stacks them. Each pane holds a document or a text read as one.
-
-Click a pane or its tab, or press <Kbd>Mod</Kbd>+<Kbd>Alt</Kbd>+<Kbd>O</Kbd>, to make it the
-active one: the binder opens documents there. A document can be edited in only one pane at a
-time. If the other pane already has it open, it opens read-only and catches up when you come back.
-One Pane, or a tab's close button, goes back to one.
+View › Split (Mod+Alt+\\) shows two editors side by side; Split Top and Bottom stacks them. Each pane
+holds a document or a text read as one. Click a pane, its tab or press Mod+Alt+O to make it the
+active one: the binder opens documents there. A document is editable in one pane at a time; if the
+other pane already holds it (alone, or inside a text read as one), it opens read-only and shows the
+other pane's changes when you come back to it. One Pane, or a tab's close button, goes back to one.
 
 ## Pages
 
-View › Pages (<Kbd>Mod</Kbd>+<Kbd>5</Kbd>) shows the selected chapter or scene as standard
-manuscript pages, laid out exactly as the PDF export will be, with the page count above. Tick
-Whole manuscript to see the whole book with its title page. The pages follow your writing: write
-in the editor and come back to see them.
+View › Pages (Mod+5) shows the selected chapter or scene, or with Whole manuscript ticked the whole
+book with its title page, as standard manuscript pages: laid out exactly as the PDF export lays
+them out, with the page count above. The pages follow your writing (they are laid out again in the
+background after each change); write in the editor and come back to see them.
 
-![The page view: the text as standard manuscript pages](./images/pages.webp)
+## Revision passes
+
+When you start a round of revision, run Start Revision Pass (command palette, or ask an agent): the
+pass gets the next color, and from then on what you type or paste shows in that color. Revision
+Mode (Mod+Shift+E) turns marking off and on; text you type next to marked text while it is off is
+not marked. `revision.list` shows the passes and how many documents carry each; Clear Revision
+Marks takes one pass's marks (or all) off the text and leaves every word. The marks are saved with
+the text and never exported. Projects with passes need Wordsmith Manuscript 0.2 or later.
 
 ## Comments
 
-Select some words and choose **Add Comment** (<Kbd>Mod</Kbd>+<Kbd>Alt</Kbd>+<Kbd>M</Kbd>). The
-words get a soft highlight and the comment opens in the inspector for you to write. The inspector
-lists the document's comments in order. Remove takes a comment away and leaves the words as they
-were.
-
-Exports leave comments out, unless you tick "Comments as review comments". Then they become real
-comments in DOCX, ODT and RTF files, for an editor to answer.
+Select some words and choose Add Comment (Mod+Alt+M): the words get a soft highlight and the
+comment opens in the inspector to write. The inspector lists the document's comments in text
+order; Remove takes a comment away and leaves the words exactly as they were. Exports leave
+comments out unless you tick "Comments as review comments", which makes them real comments in
+DOCX, ODT and RTF files for an editor to answer.
 
 ## Find and replace
 
-<Kbd>Mod</Kbd>+<Kbd>F</Kbd> opens the find bar. Search the document, the selection or the whole
-project, with match case and whole word. Patterns (regular expressions) work too, with `$1`
-groups in the replacement.
+Mod+F opens the find bar. Find in the document, the selection or the whole project, with match
+case, whole word, and patterns (regular expressions with `$1` groups in the replacement). Replace
+All in the project first takes a snapshot of every document it changes.
 
-Replace All across the project first takes a snapshot of every document it changes, so you can
-always go back.
+## Spelling
 
-**Search the Project** (<Kbd>Mod</Kbd>+<Kbd>Alt</Kbd>+<Kbd>F</Kbd>) looks through the text,
-notes, synopses and bible entries, and lists the results in the binder area.
+Misspelled words get a wavy line; right-click one for suggestions, Add to Project Words, or Ignore
+All. Every bible entry's name and aliases count as words.
 
-## Spelling and grammar
-
-Misspelled words get a wavy line. Right-click one for suggestions, Add to Project Words, or
-Ignore All. Every bible entry's name and aliases count as words, so your characters' names are
-never marked.
-
-**Grammar hints** are off until you turn them on (Grammar Hints, in the command palette). Then
-words a grammar or style rule questions get a dotted blue line; right-click for what the rule says,
-a replacement, or Ignore. The check runs on your computer and nothing is sent anywhere. Nothing
-changes unless you pick a replacement.
+**Grammar hints** are off until you turn them on (View › Grammar Hints, in the command palette).
+Then words a grammar or style rule questions get a dotted blue line; right-click for what the
+rule says, a replacement, or Ignore. The check runs on this computer; nothing is sent anywhere.
+Hints are suggestions only: nothing changes unless you pick a replacement.
 
 ## Links
 
-Select some words and use Write › Link to… (<Kbd>Mod</Kbd>+<Kbd>K</Kbd>) to link them to a bible
-entry or another document. Hover over a link to see where it goes, and <Kbd>Mod</Kbd>-click to go
-there. <Kbd>Mod</Kbd>+<Kbd>Shift</Kbd>+<Kbd>K</Kbd> removes a link.
+Select words and use Write › Link to… (Mod+K) to link them to a bible entry or a document. Hover
+over a link to see what it points at; command-click to go there.
 
-## Focus and comfort
+## Focus
 
-- **Focus mode** (<Kbd>F11</Kbd>) shows the text alone, full screen. <Kbd>Esc</Kbd> leaves.
-- **Typewriter Scrolling** keeps the line you type at the same height.
-- **Dim Around the Caret** fades the paragraphs other than the one you are in.
-- **Light and dark themes, and a sepia page.**
-- **Text size and column width.** These change only what you see, never your exports.
+Focus mode (F11) shows the text alone, full screen, keeping the line you type at the same height.
+Escape leaves. The View tab also has typewriter scrolling, a sepia page, light and dark themes, and
+the text size and column width (which never change exports).
 
-All of these are on the View tab.
+## Drafts
+
+View › Drafts lists the draft you are writing and the drafts you have kept. **New Draft** keeps the
+manuscript exactly as it is now under its current name ("First Draft") and you carry on writing
+the new one ("Second Draft") in the binder; notes, research and the story bible are shared by all
+drafts. **Compare** shows a kept draft beside the one you are writing, chapter by chapter and
+scene by scene: what was added, cut or changed, with the words. **Write This** makes a kept draft
+the one you write again (the other is kept in its place). **Export This** chooses the draft File ›
+Export writes and Wordsmith Book typesets. Importing a set of documents with several drafts makes
+the latest the one you write and keeps the earlier ones as drafts.

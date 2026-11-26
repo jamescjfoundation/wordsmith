@@ -5,13 +5,17 @@
   "pages": [
     "index",
     "getting-started",
-    "bringing-your-book-in",
-    "front-and-back-matter",
+    "import",
+    "structure",
     "designs",
     "print",
-    "ebooks",
-    "preflight-and-export",
-    "files",
-    "whats-next"
+    "ebook",
+    "preview-and-preflight",
+    "export",
+    "editions-and-metadata",
+    "manuscript",
+    "command-line-and-agents",
+    "keys",
+    "house"
   ]
 }

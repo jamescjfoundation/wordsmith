@@ -1,0 +1,360 @@
+{
+  "note": "Written by website/wiki/scripts/guide.mjs. Never edit it: run `npm run guide`.",
+  "apps": {
+    "script": {
+      "repository": "jamescjfoundation/wordsmith-script",
+      "commit": "9f024e651a0328e3c72317defe9c8884b81bfcf9",
+      "date": "2026-11-26",
+      "pages": [
+        {
+          "source": "docs/guide/README.md",
+          "blob": "fef5cc2961ba3ecffb6e43bb44c7dcc61c493d0c",
+          "file": "website/wiki/content/docs/script/index.mdx",
+          "sha256": "e3d05d600ae17aae3351a848db685f91dd10d9771209fa63bea9be4c06572d25"
+        },
+        {
+          "source": "docs/guide/characters-and-reports.md",
+          "blob": "aefcd6deddb8b5900e34db833adfef5d6981dba9",
+          "file": "website/wiki/content/docs/script/characters-and-reports.mdx",
+          "sha256": "ccba3777f99bfc2c26d829e05574a8d2b54373aefd10aee2098f4661f540ddf5"
+        },
+        {
+          "source": "docs/guide/cli-and-mcp.md",
+          "blob": "59702ff4e013b82572b0c844623e6bd5627cb29f",
+          "file": "website/wiki/content/docs/script/cli-and-mcp.mdx",
+          "sha256": "1f36890f50539666f2a391b58db9d689f1834f0190287f419311d424a9f4a395"
+        },
+        {
+          "source": "docs/guide/editing.md",
+          "blob": "982dd201402a0b1cc20c00fc93ce76706d48201a",
+          "file": "website/wiki/content/docs/script/editing.mdx",
+          "sha256": "a9ba95d63c5c5bb311bf18daffd1f59795306108aca3df5ea53b7dfc54ccd31a"
+        },
+        {
+          "source": "docs/guide/files.md",
+          "blob": "7358f74c0b2cb048bcdb6dc1d9d783ca5bce643a",
+          "file": "website/wiki/content/docs/script/files.mdx",
+          "sha256": "d7001004b0e70349dace6535027c87cf2cf7b57042368d6b90d2b8adc9e59eb6"
+        },
+        {
+          "source": "docs/guide/getting-started.md",
+          "blob": "7a8f70abc8ec16cc30815be339198107029c6e32",
+          "file": "website/wiki/content/docs/script/getting-started.mdx",
+          "sha256": "ba40776791f4b5f5c0134ff5f38d9cc4c6b76f6721528d9e6bb0e68f576e5e27"
+        },
+        {
+          "source": "docs/guide/keyboard.md",
+          "blob": "0077b3030f8cbeed11449b355dba114581fc395e",
+          "file": "website/wiki/content/docs/script/keyboard.mdx",
+          "sha256": "361cd2ca7c630765eff032c1138e824322289057345a69d90a39327f1b33b615"
+        },
+        {
+          "source": "docs/guide/macros-and-styles.md",
+          "blob": "4dcd681f64845e76da176ffe4e8d11a4b48c84bb",
+          "file": "website/wiki/content/docs/script/macros-and-styles.mdx",
+          "sha256": "ac3d50b5297d98b1cea08b85770a939376e3d800645aeb63c967b8cff7bc1cb2"
+        },
+        {
+          "source": "docs/guide/outlining.md",
+          "blob": "20485b426f6f3d742f281d462bce501c59dae9ce",
+          "file": "website/wiki/content/docs/script/outlining.mdx",
+          "sha256": "61ad94d348961778d517963f00afb739d2bb85b1ae7c10da82531bf87915e52a"
+        },
+        {
+          "source": "docs/guide/pages.md",
+          "blob": "9512367d34c354633d44f453466984f1b09dbc24",
+          "file": "website/wiki/content/docs/script/pages.mdx",
+          "sha256": "fbfb8195090fca590d0a86234b9beca46fe0e227437322ca409fb2a4c3deedf8"
+        },
+        {
+          "source": "docs/guide/planning.md",
+          "blob": "0744c3b44cc60415ad3567532f39302961a71040",
+          "file": "website/wiki/content/docs/script/planning.mdx",
+          "sha256": "b2839cc3b471012cedf4303bce40f80af7cae41f7fbe3355f623cfc020017255"
+        },
+        {
+          "source": "docs/guide/production-more.md",
+          "blob": "5ce8e8c7f6fa0525f22c7df24a1d7b066b9ff3f7",
+          "file": "website/wiki/content/docs/script/production-more.mdx",
+          "sha256": "a728de5635779ee3e7c53283ec841ec73841a5965fe8728d8c476c61a3e4c8a8"
+        },
+        {
+          "source": "docs/guide/production.md",
+          "blob": "1a6a065cd319ec198725c9f68c8c4a17d93cb938",
+          "file": "website/wiki/content/docs/script/production.mdx",
+          "sha256": "50212a94908f9cdd5aec93c3a959f298809706ce2e74dfc2e2a584757c118b94"
+        },
+        {
+          "source": "docs/guide/the-window.md",
+          "blob": "2e37e93dd1598716417a9dae001f84eeff28d5ae",
+          "file": "website/wiki/content/docs/script/the-window.mdx",
+          "sha256": "fb70820cbba04e185618b2ae80d7c71b50d1492412a5927df9a05a7160fdc8c9"
+        },
+        {
+          "source": "docs/guide/views.md",
+          "blob": "9bf403cdfe0acad644d5548b24f77f929f8ab081",
+          "file": "website/wiki/content/docs/script/views.mdx",
+          "sha256": "64ea7901a4ed61771b08b1a55cf43a80e17c496edb6d5d3529ce49351f21db80"
+        },
+        {
+          "source": "docs/guide/workspace.md",
+          "blob": "4ba1d4627047fdf3404fe98685492418eccc7aba",
+          "file": "website/wiki/content/docs/script/workspace.mdx",
+          "sha256": "6e068e2414472d8bdb1635b839ab6785d3c01ccbe5c893afae8f3ebdc36dd004"
+        },
+        {
+          "source": "docs/guide/writing.md",
+          "blob": "8b489cecd86ac3f3e5a2f4b3584c25b961d6736b",
+          "file": "website/wiki/content/docs/script/writing.mdx",
+          "sha256": "4491fab4f3f77454a5cf60e1ae3c9b1aff67aeb7176725e8ea273ae8c9e40c1a"
+        }
+      ],
+      "meta": {
+        "file": "website/wiki/content/docs/script/meta.json",
+        "sha256": "ce48a9d1d302098710653c0d0fbff057fd788b41eb1a4a8da6dd7ebf4360974a"
+      },
+      "images": [
+        {
+          "source": "docs/images/draft-view-dark.png",
+          "blob": "16ebe502e9287d36d5dc26a2626e91bdba60727a",
+          "copies": [
+            {
+              "file": "website/assets/img/script-draft-view-dark.webp",
+              "sha256": "10b5876a1cee3710ba8bd70707f793540599f172c631a312511cd6c33695c7e8",
+              "width": 1600,
+              "height": 1025
+            }
+          ]
+        },
+        {
+          "source": "docs/images/index-cards.png",
+          "blob": "d1d875aa9627cc8dff45de4fb77419a3166c3b6b",
+          "copies": [
+            {
+              "file": "website/assets/img/script-index-cards.webp",
+              "sha256": "2bd4c3c212b8391301ec22d1b7caca4dd76e5e5130e474ea78b5ed69b7bbc808",
+              "width": 1600,
+              "height": 1025
+            }
+          ]
+        },
+        {
+          "source": "docs/images/page-view.png",
+          "blob": "cd1133872579ec0f62657035221af2197ca40787",
+          "copies": [
+            {
+              "file": "website/wiki/content/docs/script/images/page-view.webp",
+              "sha256": "518965c9ac556fae591fd939637246a176bbba2bd60f4f3b331321f15ca2be62",
+              "width": 1600,
+              "height": 1025
+            },
+            {
+              "file": "website/assets/img/script-page-view.webp",
+              "sha256": "518965c9ac556fae591fd939637246a176bbba2bd60f4f3b331321f15ca2be62",
+              "width": 1600,
+              "height": 1025
+            }
+          ]
+        },
+        {
+          "source": "docs/images/ribbon-production.png",
+          "blob": "94d0bb926b51a6216256b342f39d13f263193de5",
+          "copies": [
+            {
+              "file": "website/assets/img/script-ribbon-production.webp",
+              "sha256": "7f2e5b3da7ea208e6df1dff37502e2569e6d8fb0dbfa9c5b3c76debd98c506ee",
+              "width": 1600,
+              "height": 1025
+            }
+          ]
+        },
+        {
+          "source": "docs/images/story-board.png",
+          "blob": "276223678271337cb47ca5fd404a5285d7da7726",
+          "copies": [
+            {
+              "file": "website/assets/img/script-story-board.webp",
+              "sha256": "96ae991852f8499f12ab4a1b9ddc63842b627d6e8fc5654c4682ccef574c7833",
+              "width": 1600,
+              "height": 1025
+            }
+          ]
+        }
+      ]
+    },
+    "manuscript": {
+      "repository": "jamescjfoundation/wordsmith-manuscript",
+      "commit": "5cf65bb2d811e00031d0359f7c35fe0d8755c845",
+      "date": "2026-11-26",
+      "pages": [
+        {
+          "source": "docs/guide/README.md",
+          "blob": "3da688838a0b05840cbbb864840d4b0f34fd9d7b",
+          "file": "website/wiki/content/docs/manuscript/index.mdx",
+          "sha256": "7da9c5a8ddce3e701226194f288550b3d9184dfad054f80a54845fce745d0030"
+        },
+        {
+          "source": "docs/guide/bible.md",
+          "blob": "02d052056ce3f8f4e2224693962464f195d8d97b",
+          "file": "website/wiki/content/docs/manuscript/bible.mdx",
+          "sha256": "3d34fc959ac0e45e240a0c67185913360ba0b11107516995a97f804c8332767a"
+        },
+        {
+          "source": "docs/guide/binder.md",
+          "blob": "2074e00fa4ec7f8e1efad366014ef7a8b996c529",
+          "file": "website/wiki/content/docs/manuscript/binder.mdx",
+          "sha256": "89b802f5f91111bf87eb63fdb48dae666781b69abbb86f49785e4135175bc8b5"
+        },
+        {
+          "source": "docs/guide/command-line.md",
+          "blob": "370b6885eaa3030de6499006ea49faf70f1e2e06",
+          "file": "website/wiki/content/docs/manuscript/command-line.mdx",
+          "sha256": "b2365b7eb62c04d2b480cdbf46a5c1ed8bea5b972c4a64a6aa0bd991c8f55f97"
+        },
+        {
+          "source": "docs/guide/export.md",
+          "blob": "db5ea6f77df71bffdeed58f288806524a81b5451",
+          "file": "website/wiki/content/docs/manuscript/export.mdx",
+          "sha256": "019b20c6a1c8e562abda5c68ec8bbbe8d031777ea7dd69672710d58278e93f54"
+        },
+        {
+          "source": "docs/guide/files.md",
+          "blob": "ba1fbaea7499a70b54465ecfca95c23c650b3beb",
+          "file": "website/wiki/content/docs/manuscript/files.mdx",
+          "sha256": "e52279cf65356dcd2c93f90a35900b840b5cacb7f9f48864e1d88b797b591300"
+        },
+        {
+          "source": "docs/guide/getting-started.md",
+          "blob": "224e750d399bfab0fca77f04d382efb15e5d9963",
+          "file": "website/wiki/content/docs/manuscript/getting-started.mdx",
+          "sha256": "8df110683a058c78a840fa567135409a04d1a4d94a507fa721c46df283d863e4"
+        },
+        {
+          "source": "docs/guide/import.md",
+          "blob": "20f9f50d07a33328554cb0604f859986709c7405",
+          "file": "website/wiki/content/docs/manuscript/import.mdx",
+          "sha256": "ee7e2da613716ce2b03a315499c2982840ab02328b6139a605a37bfdb2b90727"
+        },
+        {
+          "source": "docs/guide/keys.md",
+          "blob": "dec2ecebe12db0c8549d77b25a1a4bf96710ec76",
+          "file": "website/wiki/content/docs/manuscript/keys.mdx",
+          "sha256": "658cf04a0d590fc6b7f6a1ede7dd88134d28d9b5ea12467cef5365b82f96bcaf"
+        },
+        {
+          "source": "docs/guide/planning.md",
+          "blob": "105e8b732476061389b808adaea76936f20ef786",
+          "file": "website/wiki/content/docs/manuscript/planning.mdx",
+          "sha256": "6f15eba19fbf08e6f84821b8b3aedea15cb12e8a278ec29788d02cf5ba3287ad"
+        },
+        {
+          "source": "docs/guide/writing.md",
+          "blob": "5b180ca7db67cb501e915d881907fec8beefa401",
+          "file": "website/wiki/content/docs/manuscript/writing.mdx",
+          "sha256": "02ca2ea8d806c063ec3176d7da9fe8a3f003dc091be004a4aa5ddbc37903080c"
+        }
+      ],
+      "meta": {
+        "file": "website/wiki/content/docs/manuscript/meta.json",
+        "sha256": "19fceb55784a8e6357877f0561d1301b4bdf9a3a261746478a4c8a5690fbe780"
+      },
+      "images": []
+    },
+    "book": {
+      "repository": "jamescjfoundation/wordsmith-book",
+      "commit": "e0532609257b9204ffc5bd37b003d84c20894e47",
+      "date": "2026-11-26",
+      "pages": [
+        {
+          "source": "docs/guide/README.md",
+          "blob": "1557812d255e94abafa21764c0af8bf3b95b2dc8",
+          "file": "website/wiki/content/docs/book/index.mdx",
+          "sha256": "94807a90001b0e6b435268b1508212a6aa4c0d904a30966301587d846dcb24d6"
+        },
+        {
+          "source": "docs/guide/command-line-and-agents.md",
+          "blob": "3df8bc0a1995748f3de40eac94d22cd239c07e86",
+          "file": "website/wiki/content/docs/book/command-line-and-agents.mdx",
+          "sha256": "69a8d1c42f084b9823fe90e5dc38fff97df17dd0f020c53de253a448d68c7919"
+        },
+        {
+          "source": "docs/guide/designs.md",
+          "blob": "0f59826254f79e08c6cc557684dd91de420f93f7",
+          "file": "website/wiki/content/docs/book/designs.mdx",
+          "sha256": "719f9ed2781da287ff2401a39a7b7b6b39880915ace0d3be6a2d964f7e3ce7b7"
+        },
+        {
+          "source": "docs/guide/ebook.md",
+          "blob": "07fdf72f9c4461f4bdb8b3633e6e31349ccbf525",
+          "file": "website/wiki/content/docs/book/ebook.mdx",
+          "sha256": "c07c98812a701df4390e2c91541a20c566c67a5b58a1e9adf317c3025f33a778"
+        },
+        {
+          "source": "docs/guide/editions-and-metadata.md",
+          "blob": "545176a70561d2fc6375650e7a238b401a2b35e9",
+          "file": "website/wiki/content/docs/book/editions-and-metadata.mdx",
+          "sha256": "b632b721969b375e6161943c97155c44e32db9c3fef7eb09684042f95d174a06"
+        },
+        {
+          "source": "docs/guide/export.md",
+          "blob": "1a1dcf260e31a6d4b683199446ecf2637d9145ce",
+          "file": "website/wiki/content/docs/book/export.mdx",
+          "sha256": "bcfd4b92777d9481f86c305eae6190e30d185c44692a7297349c6a8a7ba75c5d"
+        },
+        {
+          "source": "docs/guide/getting-started.md",
+          "blob": "ffdd24b90ff17947a534242c1d5cb6c1f94ee1dc",
+          "file": "website/wiki/content/docs/book/getting-started.mdx",
+          "sha256": "2dea413a3d1840a1fb4fb5da865d27c8e7ad19d6230a43918c6bbc7fc82f5c8a"
+        },
+        {
+          "source": "docs/guide/house.md",
+          "blob": "f9134c4cbcc5e28e8a4de79fbe07526e8706be5c",
+          "file": "website/wiki/content/docs/book/house.mdx",
+          "sha256": "450412c152e1f5d8e37377cf1f545773a257b527eb74c6206a38c31649f9def0"
+        },
+        {
+          "source": "docs/guide/import.md",
+          "blob": "39f92086487c4d53c66121921359d70cbf6396f2",
+          "file": "website/wiki/content/docs/book/import.mdx",
+          "sha256": "b5fbdd3d5b34fb55f16735af0769b9ed8c5fdf25b3cc35b50dc947fba6fbf5bf"
+        },
+        {
+          "source": "docs/guide/keys.md",
+          "blob": "13495c3e7928741ba60848c9f93cf42239d1c4d4",
+          "file": "website/wiki/content/docs/book/keys.mdx",
+          "sha256": "5be53d017516c406e941192f6e6335841ca83037bc662aadc6e47faf6c5e859c"
+        },
+        {
+          "source": "docs/guide/manuscript.md",
+          "blob": "0de9ec764b65d7b82f9cb3df7ed0edf4001de775",
+          "file": "website/wiki/content/docs/book/manuscript.mdx",
+          "sha256": "d13ea6e76a3dd407030d1393f913acd5cc087c2ca5f041294511e738b753dfb2"
+        },
+        {
+          "source": "docs/guide/preview-and-preflight.md",
+          "blob": "2db16075561b98b7463a4c97ad14a8efa1a0136f",
+          "file": "website/wiki/content/docs/book/preview-and-preflight.mdx",
+          "sha256": "e6f466ca6bb093a36c6f0c79d01e67bba7fbe5a35bceb957000b28b9bf948b69"
+        },
+        {
+          "source": "docs/guide/print.md",
+          "blob": "af76bd7d1a37b2a3756fdfdbe1e61a25f7a53fbf",
+          "file": "website/wiki/content/docs/book/print.mdx",
+          "sha256": "52bf9ee77c2585809a2e06abc30a6fc21bfbc1d003a0acb65e8da834f8844f3b"
+        },
+        {
+          "source": "docs/guide/structure.md",
+          "blob": "4415fe92ab3145bb2930bdb45be3109816a6b7bd",
+          "file": "website/wiki/content/docs/book/structure.mdx",
+          "sha256": "3f283fadf81acdf46f48a1162c91f24b987621663f22d7afb28245c27b801305"
+        }
+      ],
+      "meta": {
+        "file": "website/wiki/content/docs/book/meta.json",
+        "sha256": "6e197a7a83288ce3ee69ee216d6ed8d289d288841094813b26e44f243078a801"
+      },
+      "images": []
+    }
+  }
+}

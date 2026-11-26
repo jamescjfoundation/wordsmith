@@ -8,12 +8,11 @@
     "binder",
     "writing",
     "planning",
-    "story-bible",
-    "drafts-and-progress",
-    "import-and-export",
-    "sending-to-book",
+    "bible",
+    "import",
+    "export",
     "files",
-    "keyboard-shortcuts",
-    "whats-next"
+    "keys",
+    "command-line"
   ]
 }

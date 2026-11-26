@@ -1,140 +1,30 @@
 ---
-title: Getting started
-description: Build Wordsmith Script on your computer and write your first scene.
-icon: Rocket
+# Made by website/wiki/scripts/guide.mjs from docs/guide/getting-started.md in jamescjfoundation/wordsmith-script.
+# Never edit this page: change the guide in the app's repository, then run `npm run guide`.
+title: "Getting started"
+description: "Your first scene."
 ---
 
-## Get the app
+Open Wordsmith Script and you have a blank script with the caret in a scene
+heading.
 
-Wordsmith Script has no installers yet, so for now you build it from its source
-code. It works the same way on macOS, Windows and Linux. You need
-[Git](https://git-scm.com) and Rust, installed with [rustup](https://rustup.rs).
+1. Type `int`, press **Tab**: the heading becomes `INT. `, ready for the
+   place. Type `kitchen`, press **Tab** again for ` - `, and type `night`.
+2. Press **Return**. You are in Action. Describe what we see.
+3. Press **Return** and then **Tab**: the new paragraph becomes a Character.
+   Type a name; it is set in capitals.
+4. Press **Return**: Dialogue. Type the line. Return again goes back to
+   Action; Tab instead gives you a Parenthetical.
 
-<Steps>
-<Step>
+That is most of it: Return picks the element that usually comes next, Tab
+picks the other likely one, and you never set indents by hand. If the
+element is wrong, choose another from the toolbar, the Format menu, the
+right-click menu, or with **Mod+0** to **Mod+9** (Mod is Command on macOS,
+Control elsewhere).
 
-### Download the source
+Save with **Mod+S**. Scripts are `.wss` files; the first save asks where.
+Export a PDF with **Mod+Shift+E**, or print with **Mod+P**.
 
-Open a terminal and run:
-
-```sh
-git clone https://github.com/jamescjfoundation/wordsmith-script
-cd wordsmith-script
-```
-
-</Step>
-<Step>
-
-### Build and start the app
-
-```sh
-cargo run --release -p wordsmith
-```
-
-The first build takes a while and needs an internet connection, because it
-downloads the libraries the app is made from. The project names the exact
-version of Rust it uses, and rustup fetches that version for you the first time.
-Later starts are quick.
-
-</Step>
-<Step>
-
-### Open a script directly (optional)
-
-You can name a script after the command to open it straight away:
-
-```sh
-cargo run --release -p wordsmith -- my-script.wss
-```
-
-</Step>
-</Steps>
-
-<Callout type="info">
-The source you download is the newest work in progress, so it can change from
-day to day. Run `git pull` in the same folder to get the latest changes, then
-start the app again.
-</Callout>
-
-## Your first scene
-
-When the app opens you have a blank script with the caret in a scene heading.
-In these steps, **Mod** means <Kbd>Cmd</Kbd> on macOS and <Kbd>Ctrl</Kbd> on
-Windows and Linux.
-
-<Steps>
-<Step>
-
-### Write the scene heading
-
-Type `int` and press <Kbd>Tab</Kbd>: the heading becomes `INT. `, ready for the
-place. Type `kitchen`, press <Kbd>Tab</Kbd> again for ` - `, and type `night`.
-
-</Step>
-<Step>
-
-### Describe what we see
-
-Press <Kbd>Return</Kbd>. You are now in Action. Describe the scene.
-
-</Step>
-<Step>
-
-### Add a character
-
-Press <Kbd>Return</Kbd> and then <Kbd>Tab</Kbd>: the new paragraph becomes a
-Character. Type a name. It is set in capitals for you.
-
-</Step>
-<Step>
-
-### Write the line
-
-Press <Kbd>Return</Kbd> for Dialogue and type the line. <Kbd>Return</Kbd> again
-goes back to Action; <Kbd>Tab</Kbd> instead gives you a Parenthetical.
-
-</Step>
-<Step>
-
-### Save
-
-Press <Kbd>Mod</Kbd>+<Kbd>S</Kbd>. The first save asks where to keep the
-script. Scripts are `.wss` files (see [Files](./files.mdx)).
-
-</Step>
-</Steps>
-
-That is most of it: **Return picks the element that usually comes next, and Tab
-picks the other likely one.** The status bar at the bottom of the window always
-says what Return and Tab will make from where you are.
-
-If an element is wrong, pick another from the element tiles on the **Write**
-tab, from the right-click menu, or with <Kbd>Mod</Kbd>+<Kbd>0</Kbd> to
-<Kbd>Mod</Kbd>+<Kbd>9</Kbd>. [Writing](./writing.mdx) has the full list.
-
-When you're ready to see it on paper, export a PDF with
-<Kbd>Mod</Kbd>+<Kbd>Shift</Kbd>+<Kbd>E</Kbd> or print with
-<Kbd>Mod</Kbd>+<Kbd>P</Kbd>.
-
-## Starting from a template
-
-**New from Template** (<Kbd>Mod</Kbd>+<Kbd>Shift</Kbd>+<Kbd>O</Kbd>, or **New**
-on the File page) starts a script from one of twelve templates:
-
-| Category | Templates |
-| --- | --- |
-| Screenplays | Screenplay (a feature or short film); Screenplay, with notes (a first scene that explains each element) |
-| Television | Single-camera episode (in acts, with a teaser); Multi-camera sitcom (double-spaced dialogue, action in capitals, lettered scenes) |
-| Stage | Stage play (names centred, stage directions set in) |
-| Audio and prose | Audio drama (sound and music cues); Treatment and Series bible (text documents for prose) |
-| Outlines and structure | Three acts, Four acts, Five acts, Acts and sequences |
-
-**Save as Template** on the File page keeps any script as a template of your
-own. Opening it starts a new script.
-
-## The first-run tour
-
-The first time the app starts, a short tour points out the parts of the window.
-Skip it whenever you like. The **New** page on the File page also has a few
-first steps to remind you how typing works. Next, read
-[The window](./the-window.mdx) for a tour of the ribbon and panels.
+When you want to look at the script differently, the View menu has the
+index cards, the scene view, the story board, the outline and the tables
+panel. See [Views](./views.mdx).

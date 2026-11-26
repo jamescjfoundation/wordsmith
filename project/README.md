@@ -65,7 +65,7 @@ All are public, under [github.com/jamescjfoundation](https://github.com/jamescjf
 
 - **Owns:** everything that belongs to the project as a whole. `project/` (this map and the project's decisions), `brand/` (the brand kit, the source of every logo, icon and brand color), `website/` (the public site), `website/wiki/` (the wiki), `launcher/` (planned, not started).
 - **Stack:** Python 3 scripts for the brand kit and the website pages; Fumadocs on Next.js for the wiki, with Node.js scripts that build its app sections. No Rust yet.
-- **Publishes:** [wordsmithand.ink](https://wordsmithand.ink/) and [wordsmithand.ink/wiki/](https://wordsmithand.ink/wiki/), by `.github/workflows/pages.yml` on every push to `main` that touches `website/`, after every check in `.github/workflows/checks.yml` has passed.
+- **Publishes:** [wordsmithand.ink](https://wordsmithand.ink/) and [wordsmithand.ink/wiki/](https://wordsmithand.ink/wiki/), by `.github/workflows/pages.yml` on every push to `main` that touches `website/`, and each day an app has published a release, after every check in `.github/workflows/checks.yml` has passed.
 - **Licenses:** by folder, in [`LICENSES.md`](../LICENSES.md): code is MIT OR Apache-2.0, the words of the website and the wiki are CC BY 4.0, and the brand files are not open source.
 - **Rules:** [`AGENTS.md`](../AGENTS.md).
 
@@ -142,7 +142,8 @@ All are public, under [github.com/jamescjfoundation](https://github.com/jamescjf
 | Manuscript → Script (files) | `.wss` files kept inside a Manuscript project, shown read-only | Manuscript's own reader, `crates/manuscript-io/src/screenplay.rs`. The format is Script's, in its [`docs/format.md`](https://github.com/jamescjfoundation/wordsmith-script/blob/main/docs/format.md) |
 | Each app → wordsmith (brand) | Logos, icons, the palette card | Copies in the app's `assets/brand/`, taken from `brand/wordsmith-<app>/production/` here |
 | wordsmith → each app (the guide) | Each app's section of the wiki, and the screenshots the wiki and the website show | Built by `npm run guide` in `website/wiki` from the app's `docs/guide/` and `docs/images/` at a commit recorded in `website/wiki/guides.lock.json`. `npm run guide:check` (in `checks.yml`) fails when a page here is not what that commit gives; `guides.yml` fails while the app's guide on `main` has moved on ([Route C](#route-c)) |
-| wordsmith → each app (facts) | What the website and the wiki's project pages say about an app | Written by hand from the app's `docs/guide/`, `CHANGELOG.md`, code and releases |
+| wordsmith → each app (releases) | The version, the date and the download links the website and the wiki show | Read from each app's public releases on GitHub by `website/tools/releases.py`, at every deploy and once a day ([Route J](#route-j)). The words around them are in `website/data/apps/<app>.json` |
+| wordsmith → each app (facts) | What the website and the wiki's project pages say an app does | Written by hand from the app's `docs/guide/`, `CHANGELOG.md` and code |
 | Each app → its GitHub releases | The in-app update check | The only network request an app makes on its own; it reads the app's own published releases and can be turned off |
 
 Book and Manuscript move to a new core together, Manuscript first: Book's graph holds one core release, so the book-view tag Book pins must be cut on the core release Book pins ([Route I](#route-i)).
@@ -234,14 +235,15 @@ Each app has one user guide, `docs/guide/` in its own repository. The wiki's sec
 ### Route E: website text
 
 1. Work in the wordsmith repository. All page text, the header and the footer are in `website/tools/build.py`. Never edit the `.html` pages by hand.
-2. Run `python3 website/tools/build.py` from the repository root and commit the regenerated pages with the script.
-3. Preview with `python3 website/tools/serve.py`. Check phone width, dark mode and every link you touched.
-4. Say only what is true of the apps today. Check the app's repository and its releases page before you change a status word.
-5. Land it on `main`; the push deploys it.
+2. What a page says about an app's state is not page text ([decision 0006](decisions/0006-the-site-reads-the-apps-releases.md)). The version, the date and the download links come from the app's releases on GitHub. The words around them ("Preview 0.9.0", the line above the downloads) are in `website/data/apps/<app>.json`, one set for each state: no release, a preview before 1.0.0, released. Change them there. In `build.py`, use `chip`, `state`, `systems` and `download`; never write a version or a download link.
+3. Run `python3 website/tools/build.py` from the repository root and commit the regenerated pages with the script and the data files.
+4. Preview with `python3 website/tools/serve.py`. Check phone width, dark mode and every link you touched. To see a page as it will look after a release, write a releases file by hand in a folder outside the repository and build into another: `python3 website/tools/build.py <folder> --releases <file>`.
+5. Say only what is true of the apps today. Check the app's guide and code before you change what a page says an app does.
+6. Land it on `main`; the push deploys it.
 
-**Held by:** `checks.yml` runs `python3 website/tools/build.py --check` on every pull request and every push to `main`: it fails when a page in `website/` is not what `build.py` writes, so a page edited by hand or left stale after a change to the script is found before it is published. `pages.yml` runs the same check before the deploy. The published site leaves out `website/tools/` and `website/README.md`. Nothing checks that a status word is true (step 4), how a page looks (step 3), or a link to another site.
+**Held by:** `checks.yml` runs `python3 website/tools/build.py --check` on every pull request and every push to `main`: it fails when a page in `website/` is not what `build.py` writes from the data files in the repository, so a page edited by hand or left stale after a change to the script or the data is found before it is published. `pages.yml` runs the same check before the deploy. The tests in `website/tools/test_releases.py` hold the rules for which release is shown and which file belongs to which system, and the wiki's `scripts/releases.test.mjs` holds the same cases for the wiki. The published site leaves out `website/tools/`, `website/data/` and `website/README.md`. Nothing checks that a sentence about what an app does is true (step 5), how a page looks (step 4), or a link to another site.
 
-**Today:** each app's status ("no downloads yet", "in development") is written out in `build.py` and across the wiki pages, not read from one place. When an app's status changes, search both for the old words.
+**Today:** the three apps' data files hold the same words for each state; they are separate so one app's wording can differ.
 
 <a id="route-f"></a>
 ### Route F: a logo, icon or brand color
@@ -326,18 +328,20 @@ When to move: before starting new work on an app and before releasing it. `cargo
    - Script: push to the `release` branch. The workflow builds a draft release; it is published by hand on GitHub, or by starting the workflow on that branch with "publish" ticked.
    - Manuscript and Book: push a tag `vX.Y.Z`. The workflow publishes the release.
 4. Check the published release: the files for each platform are there, and the app's update check finds them.
-5. In wordsmith, the same day: the app's status and download words on the website ([Route E](#route-e)), the status marks and `start/install.mdx` in the wiki's project pages ([Route D](#route-d)), and `npm run guide`, so the wiki shows the guide of the released app ([Route C](#route-c)).
+5. The website and the wiki pick the release up by themselves: every deploy reads each app's latest public release from GitHub, and `pages.yml` runs every day and deploys when an app has published one ([decision 0006](decisions/0006-the-site-reads-the-apps-releases.md)). To show it at once, start the deploy by hand in wordsmith: `gh workflow run pages.yml`. Then open the app's page on the site and its "Installing" entry in the wiki: the version, the date and a download for each system should be there.
+6. In wordsmith, when the guide changed with the release: `npm run guide`, so the wiki shows the released app's guide ([Route C](#route-c)).
 
 A person or an agent may release an app once its gate passes ([decision 0002](decisions/0002-how-changes-land-and-who-releases.md)).
 
-**Held by:** each app's release workflow runs the whole gate before it builds the release files. On GitHub, a `v*` tag cannot be moved or deleted, and Book's `release` environment accepts only a run on a `v*` tag. Nothing tells this repository about a release, and nothing checks step 5.
+**Held by:** each app's release workflow runs the whole gate before it builds the release files. On GitHub, a `v*` tag cannot be moved or deleted, and Book's `release` environment accepts only a run on a `v*` tag. In wordsmith, the daily run of `pages.yml` compares GitHub's releases with the release data the live site was built from and deploys when they differ, through every check of `checks.yml`; a release with no file for one of the app's systems shows that on the page instead of a wrong link. Nothing checks that a published release has a file for every system, and nothing tells this repository at the moment of a release: the site follows within a day.
 
 **Today:**
 
-- No app has published a release, so none of the three workflows has run. Treat the first release of each app as a test of its workflow, and read the workflow before starting it.
+- No app has published a release, so none of the three release workflows has run, and the site's download areas have only been seen with made-up release data. Treat the first release of each app as a test of its workflow and of the site: read the workflow before starting it, and look at the live page after step 5.
+- The first public release of each app is to be 0.9.0, a preview, then 1.0.0. The site calls a release before 1.0.0 a preview.
+- A download is matched to its system by the file's name (`website/data/platforms.json`). The three apps' release files are not named the same way yet; the patterns accept the spellings their workflows use today.
 - Book's workflow says publishing waits for an approval. Its `release` environment has no reviewers, so it does not wait.
 - The three workflows differ in trigger, platforms, file names and checksum files. There is no shared release contract yet.
-- Nothing in an app's release tells this repository. Step 5 is done by hand.
 
 <a id="route-k"></a>
 ### Route K: a change in WordCraft or craft-libs
@@ -457,6 +461,7 @@ Paths are inside the repository named. Links go to `main`.
 | How users do something in an app | The app's `docs/guide/`. The app's section of the wiki, `website/wiki/content/docs/<app>/` here, is built from it and never edited ([Route C](#route-c)) |
 | Which commit of an app the wiki shows | `website/wiki/guides.lock.json` here, and the line under each wiki page |
 | What the public is told about the apps | `website/tools/build.py` and `website/wiki/content/docs/start/` here |
+| An app's name, platforms and the words for its state on the site | `website/data/apps/<app>.json` here. Its version and downloads: its releases page on GitHub, read by `website/tools/releases.py` ([Route J](#route-j)) |
 | Brand rules, logos, icons, colors | `brand/suite/BRAND_GUIDE.md` and `brand/README.md` here. An app's interface theme: its own `tokens.json`, in the format of the core's [`crates/jcj-theme/TOKENS.md`](https://github.com/jamescjfoundation/open-source-core/blob/main/crates/jcj-theme/TOKENS.md) |
 | Test data and reference outputs | Each app's `docs/golden.md`; Manuscript's and Book's `docs/fixtures.md` |
 | Credits for assets and dependencies | Each Rust repository's `ATTRIBUTION.md` and `NOTICE` |

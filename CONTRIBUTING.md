@@ -20,6 +20,7 @@ There is no Cargo here. The tools need Python 3 and nothing else. The wiki needs
 
 ```sh
 python3 -m unittest discover -s project   # the tools' own tests
+python3 -m unittest discover -s website/tools
 python3 project/privacy.py                # nothing personal, no secret, no-reply commit addresses
 python3 project/check_links.py            # the links between the Markdown files
 python3 project/carry.py                  # the text carried from and to the other repositories
@@ -27,6 +28,7 @@ python3 project/carry.py                  # the text carried from and to the oth
 python3 website/tools/build.py            # rewrite the website's pages from the generator
 python3 website/tools/build.py --check    # the pages in website/ are what the generator writes
 python3 website/tools/serve.py            # preview the website at http://localhost:8000
+python3 website/tools/releases.py         # what each app has published, read from GitHub
 
 cd website/wiki
 npm ci                                    # once
@@ -54,10 +56,10 @@ The "Checks" workflow runs every check above on each pull request and each push 
 | `website/*.html` | The generated pages. Never edited by hand |
 | `website/assets/` | Styles, the menu script, fonts, pictures, and copies of brand files |
 | `website/wiki/content/docs/` | The wiki's pages: `start/` and `index.mdx`, written here, and one folder per app, built from the app's own guide by `website/wiki/scripts/guide.mjs` |
-| `website/data/apps/` | One small file per app: its name, repository and what the tools carry from it |
+| `website/data/` | What the pages are built from: one small file per app (its name, repository, platforms and the words for its state), the platforms, and the last known release of each app. `website/tools/releases.py` reads the releases from GitHub |
 | `website/wiki/` (the rest) | The wiki's own code: Fumadocs on Next.js, exported as static files |
 | `launcher/` | Wordsmith Launcher. Planned, not started |
-| `.github/workflows/` | `checks.yml` (every check), `pages.yml` (the deploy), `carried.yml` (the carried text, against what is published), `guides.yml` (the apps' guides, against what the wiki was built from) |
+| `.github/workflows/` | `checks.yml` (every check), `pages.yml` (the deploy, on a push and each day an app has published a release), `carried.yml` (the carried text, against what is published), `guides.yml` (the apps' guides, against what the wiki was built from) |
 | `LICENSES.md` | Which license covers which folder |
 
 <!-- BEGIN open-source-core: contributing -->

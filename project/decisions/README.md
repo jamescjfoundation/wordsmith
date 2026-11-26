@@ -17,3 +17,4 @@ Every repository numbers its decisions from 0001. Outside a repository, say whos
 | [0003](0003-naming-other-companies-programs-and-formats.md) | Naming other companies, programs and file formats |
 | [0004](0004-apps-that-depend-on-apps.md) | Apps that depend on apps |
 | [0005](0005-one-guide-per-app.md) | One user guide per app, kept in the app |
+| [0006](0006-the-site-reads-the-apps-releases.md) | The site reads each app's releases itself |

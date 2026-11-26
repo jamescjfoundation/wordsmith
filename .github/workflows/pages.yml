@@ -4,16 +4,28 @@ name: Deploy website and wiki to GitHub Pages
 # pull request gets) and publishes the site that run put together, so a failed check means the
 # site is not updated.
 #
+# Three things start it:
+# - a push to main that touches website/ or one of the two workflows;
+# - every day, on a schedule: it asks GitHub for each app's latest release and deploys only when
+#   that differs from the release data the live site was built from (wordsmithand.ink/releases.json).
+#   This is how the site shows a new version and its downloads without anyone editing a page;
+# - by hand, from the Actions tab or with `gh workflow run pages.yml`: it always deploys.
+#
+# Every deploy builds the pages with the releases GitHub has at that moment, so a deploy for
+# another reason never puts older release data back. Nothing is committed by a run.
+#
 # A change under brand/ alone does not start a deploy: the site publishes the copies under
 # website/, never brand/ itself. checks.yml fails on a copy that is behind the kit, and the
 # change that updates the copy touches website/ and deploys.
 #
-# Only GitHub's own actions, pinned to full commit SHAs.
+# No secret is used. Only GitHub's own actions, pinned to full commit SHAs.
 
 on:
   push:
     branches: [main]
     paths: ["website/**", ".github/workflows/pages.yml", ".github/workflows/checks.yml"]
+  schedule:
+    - cron: "23 4 * * *" # every day, 04:23 UTC
   workflow_dispatch:
 
 permissions:
@@ -24,7 +36,38 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # On the schedule: is there anything new to publish? A push or a run by hand always deploys.
+  releases:
+    name: is the live site behind the apps' releases?
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      deploy: ${{ steps.decide.outputs.deploy }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - id: look
+        name: Compare GitHub's releases with the data the live site was built from
+        if: ${{ github.event_name == 'schedule' }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 website/tools/releases.py --out "$RUNNER_TEMP/releases.json" --changed-from https://wordsmithand.ink/releases.json
+      - id: decide
+        env:
+          EVENT: ${{ github.event_name }}
+          CHANGED: ${{ steps.look.outputs.changed }}
+        run: |
+          if [ "$EVENT" != "schedule" ] || [ "$CHANGED" = "true" ]; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "deploy=false" >> "$GITHUB_OUTPUT"
+            echo "Nothing new: the live site already shows each app's latest release. No deploy."
+          fi
+
   checks:
+    needs: releases
+    if: ${{ needs.releases.outputs.deploy == 'true' }}
     uses: ./.github/workflows/checks.yml
     permissions:
       contents: read

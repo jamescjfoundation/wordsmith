@@ -18,3 +18,4 @@ Every repository numbers its decisions from 0001. Outside a repository, say whos
 | [0004](0004-apps-that-depend-on-apps.md) | Apps that depend on apps |
 | [0005](0005-one-guide-per-app.md) | One user guide per app, kept in the app |
 | [0006](0006-the-site-reads-the-apps-releases.md) | The site reads each app's releases itself |
+| [0007](0007-brand-files-reach-the-apps-by-one-route.md) | Brand files reach the apps by one route |

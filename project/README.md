@@ -140,7 +140,7 @@ All are public, under [github.com/jamescjfoundation](https://github.com/jamescjf
 | Book → Manuscript (code) | The crates `wordsmith-manuscript-model` and `wordsmith-manuscript-format` | Git dependencies in Book's `Cargo.toml` at a Manuscript tag `book-view-1.N`, cut on the same core release Book pins (Book's `Cargo.toml` names the current one). The contract is Manuscript's [`docs/book-handoff.md`](https://github.com/jamescjfoundation/wordsmith-manuscript/blob/main/docs/book-handoff.md) |
 | Book → Manuscript (files) | `.wsm` project folders and `.wsmz` packed projects, read; an offers file written beside the project | Book never writes a Manuscript project. It reads Manuscript's project schema, so a schema change in Manuscript reaches Book |
 | Manuscript → Script (files) | `.wss` files kept inside a Manuscript project, shown read-only | Manuscript's own reader, `crates/manuscript-io/src/screenplay.rs`. The format is Script's, in its [`docs/format.md`](https://github.com/jamescjfoundation/wordsmith-script/blob/main/docs/format.md) |
-| Each app → wordsmith (brand) | Logos, icons, the palette card | Copies in the app's `assets/brand/`, taken from `brand/wordsmith-<app>/production/` here |
+| Each app → wordsmith (brand) | Logos, icons, the palette card, and the seven palette colors of the app's theme file | Copies in the app's `assets/brand/`, written by `npm run brand -- --app <app>` here from the kit, with `kit.json`, the record of the kit commit they came from. `brand/apps.json` here lists every carried file with its checksum ([Route F](#route-f)) |
 | wordsmith → each app (the guide) | Each app's section of the wiki, and the screenshots the wiki and the website show | Built by `npm run guide` in `website/wiki` from the app's `docs/guide/` and `docs/images/` at a commit recorded in `website/wiki/guides.lock.json`. `npm run guide:check` (in `checks.yml`) fails when a page here is not what that commit gives; `guides.yml` fails while the app's guide on `main` has moved on ([Route C](#route-c)) |
 | wordsmith → each app (releases) | The version, the date and the download links the website and the wiki show | Read from each app's public releases on GitHub by `website/tools/releases.py`, at every deploy and once a day ([Route J](#route-j)). The words around them are in `website/data/apps/<app>.json` |
 | wordsmith → each app (facts) | What the website and the wiki's project pages say an app does | Written by hand from the app's `docs/guide/`, `CHANGELOG.md` and code |
@@ -248,19 +248,38 @@ Each app has one user guide, `docs/guide/` in its own repository. The wiki's sec
 <a id="route-f"></a>
 ### Route F: a logo, icon or brand color
 
-The brand kit in `brand/` here is the source. A logo, icon or palette file is never edited, recolored or redrawn anywhere else.
+The brand kit in `brand/` here is the source. It owns the seven palette colors of each app and every logo and icon; a logo, icon or palette file is never edited, recolored, rescaled or redrawn anywhere else ([decision 0007](decisions/0007-brand-files-reach-the-apps-by-one-route.md)).
+
+In wordsmith:
 
 1. Read `brand/suite/BRAND_GUIDE.md`. Change the script in `brand/source/`, run `python3 brand/source/build.py` to see what changes, then again with `--write` (add `--pdf` for the guideline PDFs). `brand/README.md` has the setup.
 2. Update by hand the files the build does not write: the kit's READMEs, `BRAND_GUIDE.md` and each `tokens.json`.
-3. Copies in this repository: run `npm run brand` in `website/wiki`. It writes the wiki's copies (`website/wiki/public/brand/`) and the website's (`website/assets/brand/` and `website/favicon.svg`); `npm run brand:check` verifies both. The repository's `AGENTS.md` lists the copies.
-4. Copies in each app: copy the changed files from `brand/wordsmith-<app>/production/` and `app-icon/` into the app's `assets/brand/`, unchanged, as a change in that app's repository that names the wordsmith commit.
-5. In each app, remake the files the app derives from the kit, and run `cargo xtask ci` (its `assets` check wants every file under `assets/` listed in `ATTRIBUTION.md`).
+3. In `website/wiki`, run `npm run brand`. It writes the wiki's copies (`website/wiki/public/brand/`), the website's (`website/assets/brand/` and `website/favicon.svg`) and `brand/apps.json`, the list of what each app carries with each file's checksum; `npm run brand:check` verifies all three. Land the change on `main`.
 
-What an app owns and may edit: its interface theme file (`assets/brand/tokens.json` in Manuscript and Book, `assets/brand/script/tokens.json` in Script), which is in the core's token format and is not a copy of the kit's `tokens.json`; and the files it derives from the kit with its own tool (Manuscript's `tools/brand-icons.py`, Book's `tools/brand-mask.py`). The seven palette colors in a theme file must match the kit.
+In each app, as a change in that app's repository that names the wordsmith commit ([Route L](#route-l)):
 
-**Held by:** `npm run brand:check` for the copies in this repository, the wiki's and the website's: `checks.yml` runs it on every pull request and every push to `main`, a change under `brand/` alone included, and `pages.yml` runs it again before the deploy. It fails when a copy is missing or differs from the kit, and when a folder of copies holds a file the tool does not make. In each app, the gate's `assets` task wants every file under `assets/` listed in `ATTRIBUTION.md`; it does not compare a file with the kit. This repository's pull request template, and the apps' from core v0.1.18, ask about brand files. Nothing compares the copies in an app with the kit, and nothing on GitHub runs the kit's own build (`python3 brand/source/build.py`), so a kit file edited by hand is not found.
+4. With the app's checkout beside wordsmith ([Route M](#route-m)), run `npm run brand -- --app script` (or `manuscript`, `book`) in wordsmith's `website/wiki`. It writes the kit's files for that app into the app's `assets/brand/`, with `kit.json` (the kit commit they were taken at, and the app's part of the list), and prints what changed. It commits nothing, removes nothing, and never touches the files that are the app's own. `npm run brand:check -- --app script` compares without writing.
+5. Make again the files the app derives from a kit file, when the tool says their source changed, and run `cargo xtask ci` (its `assets` check wants every file under `assets/` listed in `ATTRIBUTION.md`).
 
-**Today:** the copies in the apps are made by hand, and nothing reports one that is out of date, so step 4 is easy to miss. Script's `mark-mask.png` and `wordmark-mask.png` have no tool that makes them.
+What an app's `assets/brand/` holds, and nothing else. `brand/apps.json` names every file:
+
+| Kind | Which files | Who changes it |
+| --- | --- | --- |
+| Carried | The app's `production/` set (the wordmark, stacked logo and mark, the parent brand's logos, the favicon, the 1024 px icon, the palette card) and the icons it uses from `app-icon/` (the smaller sizes, the Windows `.ico`) | The kit, by the tool. Never the app |
+| Own | The interface theme file (`assets/brand/tokens.json` in Manuscript and Book, `assets/brand/script/tokens.json` in Script), which is in the core's token format and is not a copy of the kit's `tokens.json`; and the folder's `README.md` | The app. The seven palette colors in the theme file must be the kit's |
+| Derived | The masks the window paints the mark from: `mark-mask.png` in Book (made by its `tools/brand-mask.py`), `mark-mask.png` and `wordmark-mask.png` in Script | The app, with its own tool, when the kit file it is made from changes |
+| The record | `kit.json` | The tool |
+
+To have an app carry another kit file, change the app's entry in the table `APPS` of `website/wiki/scripts/brand.mjs` here and run `npm run brand`.
+
+**Held by:** `npm run brand:check` for the copies in this repository, the wiki's and the website's, and for `brand/apps.json`: `checks.yml` runs it on every pull request and every push to `main`, a change under `brand/` alone included, and `pages.yml` runs it again before the deploy. It fails when a copy is missing or differs from the kit, when a folder of copies holds a file the tool does not make, and when the list is not what the kit gives. `npm run brand:check -- --app <app>` fails on a carried file that is missing or differs, a file in the app's folder the list does not name, a theme file whose seven palette colors are not the kit's, and a `kit.json` that records another list than the kit has now; it runs by hand. In each app, the gate's `assets` task wants every file under `assets/` listed in `ATTRIBUTION.md`. This repository's pull request template, and the apps' from core v0.1.18, ask about brand files. Nothing on GitHub runs the kit's own build (`python3 brand/source/build.py`), so a kit file edited by hand is not found.
+
+**Today:**
+
+- No app has a check of its own yet, so nothing in an app's gate fails when its copies are behind the kit. Each app has an issue for it: check the folder against `kit.json` in the gate, with no network, and compare `kit.json` with `brand/apps.json` on this repository's `main` on a schedule, so a kit change shows as a failing check until the app takes its copies.
+- No app has taken its copies by the tool yet, so none has a `kit.json`. Script's palette card and two icons, and sixteen of Manuscript's files, differ from the kit; Book's are the kit's.
+- Manuscript makes its smaller icons and its `.ico` with its own `tools/brand-icons.py`. The kit has every size, and the list names the kit's as the ones Manuscript carries.
+- Script's `mark-mask.png` and `wordmark-mask.png` have no tool that makes them.
 
 <a id="route-g"></a>
 ### Route G: screenshots
@@ -462,7 +481,7 @@ Paths are inside the repository named. Links go to `main`.
 | Which commit of an app the wiki shows | `website/wiki/guides.lock.json` here, and the line under each wiki page |
 | What the public is told about the apps | `website/tools/build.py` and `website/wiki/content/docs/start/` here |
 | An app's name, platforms and the words for its state on the site | `website/data/apps/<app>.json` here. Its version and downloads: its releases page on GitHub, read by `website/tools/releases.py` ([Route J](#route-j)) |
-| Brand rules, logos, icons, colors | `brand/suite/BRAND_GUIDE.md` and `brand/README.md` here. An app's interface theme: its own `tokens.json`, in the format of the core's [`crates/jcj-theme/TOKENS.md`](https://github.com/jamescjfoundation/open-source-core/blob/main/crates/jcj-theme/TOKENS.md) |
+| Brand rules, logos, icons, colors | `brand/suite/BRAND_GUIDE.md` and `brand/README.md` here. What each app carries from the kit: `brand/apps.json` here, and `assets/brand/kit.json` in the app. An app's interface theme: its own `tokens.json`, in the format of the core's [`crates/jcj-theme/TOKENS.md`](https://github.com/jamescjfoundation/open-source-core/blob/main/crates/jcj-theme/TOKENS.md) |
 | Test data and reference outputs | Each app's `docs/golden.md`; Manuscript's and Book's `docs/fixtures.md` |
 | Credits for assets and dependencies | Each Rust repository's `ATTRIBUTION.md` and `NOTICE` |
 | How to report or handle a security problem | Each repository's `SECURITY.md`; [Route H](#route-h) |

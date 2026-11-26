@@ -1,0 +1,10 @@
+{
+  "slug": "script",
+  "order": 1,
+  "name": "Wordsmith Script",
+  "repository": "jamescjfoundation/wordsmith-script",
+  "description": "A free, open-source app for writing screenplays, TV episodes and stage plays.",
+  "guide": "docs/guide",
+  "images": "docs/images",
+  "screenshots": ["page-view", "index-cards", "story-board", "ribbon-production", "draft-view-dark"]
+}

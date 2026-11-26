@@ -1,0 +1,10 @@
+{
+  "slug": "manuscript",
+  "order": 2,
+  "name": "Wordsmith Manuscript",
+  "repository": "jamescjfoundation/wordsmith-manuscript",
+  "description": "A free, open-source app for writing novels and other long work.",
+  "guide": "docs/guide",
+  "images": "docs/images",
+  "screenshots": []
+}

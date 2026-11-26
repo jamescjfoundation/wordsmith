@@ -1,0 +1,10 @@
+{
+  "slug": "book",
+  "order": 3,
+  "name": "Wordsmith Book",
+  "repository": "jamescjfoundation/wordsmith-book",
+  "description": "A free, open-source app for designing and typesetting print books and ebooks.",
+  "guide": "docs/guide",
+  "images": "docs/images",
+  "screenshots": []
+}

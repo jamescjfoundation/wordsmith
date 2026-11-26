@@ -41,6 +41,8 @@ Each folder has its own README with how to build, preview and publish it.
 
 Every pull request and every push to `main` runs the "Checks" workflow: the tools' tests, the privacy and link checks, the website's pages, the brand copies, and the wiki's lint, type check and build.
 
+What is planned is in [`ROADMAP.md`](ROADMAP.md): open work is an issue in the [v1 milestone](https://github.com/jamescjfoundation/wordsmith/milestone/1).
+
 To help, start with [`CONTRIBUTING.md`](CONTRIBUTING.md). Coding agents, and anyone changing more than a page, read [`AGENTS.md`](AGENTS.md) first. To report a security problem, follow [`SECURITY.md`](SECURITY.md). Everyone taking part follows the [code of conduct](CODE_OF_CONDUCT.md).
 
 ## Licenses and names

@@ -60,6 +60,7 @@ The "Checks" workflow runs every check above on each pull request and each push 
 | `website/wiki/` (the rest) | The wiki's own code: Fumadocs on Next.js, exported as static files |
 | `launcher/` | Wordsmith Launcher. Planned, not started |
 | `.github/workflows/` | `checks.yml` (every check), `pages.yml` (the deploy, on a push and each day an app has published a release), `carried.yml` (the carried text, against what is published), `guides.yml` (the apps' guides, against what the wiki was built from) |
+| `ROADMAP.md` | Where the plan is: the issues of the `v1` milestone. It holds no list |
 | `LICENSES.md` | Which license covers which folder |
 
 <!-- BEGIN open-source-core: contributing -->

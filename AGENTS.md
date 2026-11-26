@@ -15,7 +15,7 @@ The pieces of Wordsmith that belong to the project as a whole. The apps (Wordsmi
 | `launcher/` | Rust (planned) | Wordsmith Launcher, a desktop app. Not started |
 | `.github/` | GitHub Actions, Markdown | `workflows/checks.yml` (every check, on each pull request and each push to `main`), `workflows/pages.yml` (runs the same checks, then deploys the website and the wiki: on a push, and every day when an app has published a release), `workflows/carried.yml` (compares the carried text with what the other repositories have published), `workflows/guides.yml` (compares each app's guide on `main` with the commit the wiki was built from), and the pull request template |
 
-At the root: `LICENSES.md` says which license covers which folder, with the license texts beside it (`LICENSE-MIT`, `LICENSE-APACHE`, `LICENSE-CC-BY-4.0`; the brand terms are `brand/LICENSE.md`). `SECURITY.md`, `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md` are for people arriving from outside; each carries text from `open-source-core` ([`project/`](#project) says how).
+At the root: `ROADMAP.md` says where the plan is: open work in this repository is an issue with the milestone `v1`, and the file links to it and holds no list of its own. When you find work you will not do now, open an issue there; do not add a list to a file. `LICENSES.md` says which license covers which folder, with the license texts beside it (`LICENSE-MIT`, `LICENSE-APACHE`, `LICENSE-CC-BY-4.0`; the brand terms are `brand/LICENSE.md`). `SECURITY.md`, `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md` are for people arriving from outside; each carries text from `open-source-core` ([`project/`](#project) says how).
 
 Keep a change inside one folder where you can. A change that spans folders (for example, launcher status on the website) says so in its commit message.
 
@@ -137,6 +137,7 @@ Not started. When it is:
 - Targets macOS, Windows and Linux.
 - Add a `launcher.yml` workflow scoped to `paths: ["launcher/**"]` when there is code to check.
 - Keep the website's launcher page (`website/launcher.html`, written by `build.py`) in step with what the launcher actually does.
+- Its plan is [issue 10](https://github.com/jamescjfoundation/wordsmith/issues/10), in the `v1` milestone.
 
 ## Before you push
 

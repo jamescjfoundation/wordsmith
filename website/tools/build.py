@@ -881,7 +881,7 @@ launcher = f"""
         <div class="callout">
           <img src="{B}wordsmith-and-ink-icon.svg" alt="" width="64" height="64">
           <div><h3>Have ideas for the launcher?</h3><p>It hasn't been built yet, so now is the best time to shape it. Its plan is an open issue: tell us there what would help you.</p></div>
-          <a class="btn btn-ghost" href="{ORG}/wordsmith/milestone/1">{GH} The plan on GitHub</a>
+          <a class="btn btn-ghost" href="{ORG}/wordsmith/issues/10">{GH} The plan on GitHub</a>
         </div>
       </div>
     </section>

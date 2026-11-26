@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 """Write and check the blocks of text that Wordsmith repositories carry word for word.
 
-Two kinds of block are handled here (Route N of the project map, project/README.md):
+Three kinds of carried text are handled here (Route N of the project map, project/README.md):
 
 1. The Wordsmith project block. Its source is project/README.md in this repository; every
    repository in PROJECT_COPIES carries a copy.
 2. Blocks owned by open-source-core. Their source is a file under the core's template/ folder;
    this repository carries the ones in CORE_BLOCKS. (The apps take theirs with `cargo xtask sync`.)
+3. Whole files owned by open-source-core, the same way: the ones in CORE_FILES.
 
 A block is everything from its BEGIN marker line to its END marker line, both included. A copy is
 never edited: change the source, then run this tool.
 
-    python3 project/carry.py            check every copy (the same as --check)
-    python3 project/carry.py --write    write every stale copy that can be reached
-    python3 project/carry.py --remote   read the other repositories from GitHub
+    python3 project/carry.py                    check every copy (the same as --check)
+    python3 project/carry.py --write            write every stale copy that can be reached
+    python3 project/carry.py --remote           read the other repositories from GitHub
+    python3 project/carry.py --write --remote   write this repository's copies from the core's
+                                                newest release
 
 Where the other repositories are read from: the sibling folders beside this checkout
 (../wordsmith-script, ../open-source-core and so on) when they exist, and GitHub otherwise. With
@@ -23,6 +26,9 @@ against sibling folders says nothing about what is published. --remote does.
 
 --write changes files in sibling folders and in this repository only. It never commits: commit and
 push each changed repository yourself. A file without the two marker lines is never guessed at.
+With --remote it can write only this repository's copies of the core's text, taken from the
+core's newest release: use that when the core's sibling folder is ahead of its last release. A
+stale copy in an app is then reported, not written.
 
 Exit status: 0 every copy matches; 1 a copy is stale or missing; 2 a source could not be read.
 
@@ -54,6 +60,14 @@ CORE = "open-source-core"
 CORE_BLOCKS = [
     # (file in the core, block name, file here)
     ("template/AGENTS.md", "public", "AGENTS.md"),
+    ("template/SECURITY.md", "security", "SECURITY.md"),
+    ("template/CONTRIBUTING.md", "contributing", "CONTRIBUTING.md"),
+]
+
+# 3. Core files this repository carries whole.
+CORE_FILES = [
+    # (file in the core, file here)
+    ("template/CODE_OF_CONDUCT.md", "CODE_OF_CONDUCT.md"),
 ]
 
 HERE = Path(__file__).resolve().parent.parent  # this checkout
@@ -314,6 +328,36 @@ def core_blocks(report, write, remote):
         )
 
 
+def core_files(report, write, remote):
+    """Core-owned whole files, from the core into this repository."""
+    core = Repository(CORE, remote)
+    print(f"Core files, from {CORE} ({core.where()}):")
+    for core_file, file in CORE_FILES:
+        what = f"wordsmith, {file}, the whole file"
+        try:
+            source = core.read(core_file).replace("\r\n", "\n")
+        except CannotRead as error:
+            if error.missing:
+                report.bad(what, f"the core at {core.at()} has no {core_file}")
+            else:
+                report.cannot(what, str(error))
+            continue
+        try:
+            have = read_file(HERE / file).replace("\r\n", "\n")
+        except CannotRead as error:
+            if not error.missing:
+                report.cannot(what, str(error))
+                continue
+            have = None
+        if have == source:
+            report.ok(what)
+        elif write:
+            write_file(HERE / file, source)
+            report.wrote(what)
+        else:
+            report.bad(what, "there is no such file here yet" if have is None else "the copy differs from its source")
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter, usage="carry.py [--check | --write] [--remote]"
@@ -321,15 +365,18 @@ def main(argv=None):
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--check", action="store_true", help="compare every copy with its source (the default)")
     mode.add_argument("--write", action="store_true", help="write every stale copy in a sibling folder or in this repository")
-    parser.add_argument("--remote", action="store_true", help="read the other repositories from GitHub, never from sibling folders")
+    parser.add_argument(
+        "--remote",
+        action="store_true",
+        help="read the other repositories from GitHub, never from sibling folders; with --write, only this repository's copies are written",
+    )
     args = parser.parse_args(argv)
-    if args.write and args.remote:
-        parser.error("--write changes sibling folders, so it cannot be used with --remote")
 
     report = Report()
     try:
         project_block(report, args.write, args.remote)
         core_blocks(report, args.write, args.remote)
+        core_files(report, args.write, args.remote)
     except CannotRead as error:
         print(f"carry: {error}", file=sys.stderr)
         return 2
@@ -343,7 +390,7 @@ def main(argv=None):
         fix = "see the lines above" if args.write else "run `python3 project/carry.py --write`, or see the lines above"
         print(f"{report.stale} stale or missing: {fix}.")
         return 1
-    print("Every carried block matches its source.")
+    print("Every carried block and file matches its source.")
     return 0
 
 

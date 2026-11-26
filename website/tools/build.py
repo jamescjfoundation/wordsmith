@@ -1,8 +1,19 @@
 #!/usr/bin/env python3
-"""Writes the Wordsmith website's HTML pages (python3 website/tools/build.py). Header and footer are shared here."""
-import pathlib, re, sys
+"""Writes the Wordsmith website's HTML pages. The header, the footer and all page text are here.
 
-OUT = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else pathlib.Path(__file__).resolve().parent.parent
+    python3 website/tools/build.py            rewrite the pages in website/
+    python3 website/tools/build.py FOLDER     write them into FOLDER instead
+    python3 website/tools/build.py --check    write them into a temporary folder, and fail when a
+                                              page in website/ is not what this script writes
+"""
+import difflib, pathlib, re, shutil, sys, tempfile
+
+WEBSITE = pathlib.Path(__file__).resolve().parent.parent
+CHECK = sys.argv[1:] == ["--check"]
+if CHECK:
+    OUT = pathlib.Path(tempfile.mkdtemp(prefix="wordsmith-pages-"))
+else:
+    OUT = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else WEBSITE
 ORG = "https://github.com/jamescjfoundation"
 FOUNDATION = "https://jamescj.org"
 B = "assets/brand/"
@@ -177,7 +188,7 @@ def page(file, title, desc, body, cls=""):
         </div>
       </div>
       <div class="foot-legal">
-        <span>The apps' code is open source under MIT or Apache-2.0. Wordsmith, Wordsmith &amp; Ink and the app names and logos are trademarks of The James C. J. Foundation.</span>
+        <span>The apps' code is open source under MIT or Apache-2.0. The words of this site are under <a href="{ORG}/wordsmith/blob/main/LICENSES.md">CC BY 4.0</a>. Wordsmith, Wordsmith &amp; Ink and the app names and logos are trademarks of The James C. J. Foundation.</span>
         <span>Set in Courier Prime and Inter.</span>
       </div>
     </div>
@@ -936,9 +947,13 @@ opensource = f"""
         <div class="prose">
           <p>The apps' code is licensed under the MIT license or the Apache License 2.0, at your option. The fonts are
             under the SIL Open Font License.</p>
-          <p class="muted">The names Wordsmith, Wordsmith &amp; Ink, Wordsmith Script, Wordsmith Manuscript and Wordsmith
-            Book, and their logos, are trademarks of The James C. J. Foundation. You may use them unchanged to refer to the
-            project, but not for forks or other products.</p>
+          <p>The words of this website and of the wiki are under the Creative Commons Attribution 4.0 license. Copy
+            them, translate them and build on them, and give credit to the Wordsmith contributors.
+            <a href="{ORG}/wordsmith/blob/main/LICENSES.md">Which license covers what</a>.</p>
+          <p class="muted">The names Wordsmith, Wordsmith &amp; Ink, Wordsmith Script, Wordsmith Manuscript, Wordsmith
+            Book and Wordsmith Launcher, and their logos, are trademarks of The James C. J. Foundation, and the logo
+            and icon files are not open source. You may use them unchanged to refer to the project, but not for forks
+            or other products. <a href="{ORG}/wordsmith/blob/main/brand/LICENSE.md">Using the names and logos</a>.</p>
         </div>
       </div>
     </section>
@@ -965,4 +980,27 @@ page("launcher.html", "Wordsmith Launcher", "One download to install, update and
 page("about.html", "About", "Wordsmith is made by Wordsmith & Ink, a project of The James C. J. Foundation, to give writers free, open tools.", about)
 page("open-source.html", "Open source", "Wordsmith is an open-source project of The James C. J. Foundation. Read about the project, the road to 1.0 and how to help.", opensource)
 page("404.html", "Page not found", "This page could not be found.", notfound)
-print("ok")
+
+if CHECK:
+    stale = 0
+    names = sorted({p.name for p in OUT.glob("*.html")} | {p.name for p in WEBSITE.glob("*.html")})
+    for name in names:
+        built, kept = OUT / name, WEBSITE / name
+        if not built.exists():
+            print(f"website/{name}: build.py does not write this page. Delete it, or add it to build.py.")
+        elif not kept.exists():
+            print(f"website/{name}: build.py writes this page, and it is not in website/.")
+        elif built.read_text(encoding="utf-8") != kept.read_text(encoding="utf-8"):
+            sys.stdout.writelines(difflib.unified_diff(
+                kept.read_text(encoding="utf-8").splitlines(keepends=True), built.read_text(encoding="utf-8").splitlines(keepends=True),
+                f"website/{name}", f"website/{name} as build.py writes it", n=1))
+        else:
+            continue
+        stale += 1
+    shutil.rmtree(OUT)
+    if stale:
+        sys.exit(f"{stale} of {len(names)} pages in website/ differ from what build.py writes. "
+                 "Run `python3 website/tools/build.py` and commit the pages; never edit a page by hand.")
+    print(f"ok: the {len(names)} pages in website/ are what build.py writes")
+else:
+    print("ok")

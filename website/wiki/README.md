@@ -27,7 +27,7 @@ Pages are MDX (Markdown with a few components) in `content/docs/`:
 
 The wiki follows `brand/suite/BRAND_GUIDE.md`:
 
-- **Logos and icons** are the kit's own files, copied unchanged into `public/brand/` (same folder names as `brand/`) by `npm run brand`. Never edit the copies. If the kit changes, run `npm run brand` again and commit the result. `npm run brand:check` fails if a copy is missing or out of date, and the deploy runs it. To use another kit file, add it to `scripts/brand.mjs`.
+- **Logos and icons** are the kit's own files, copied unchanged into `public/brand/` (same folder names as `brand/`) by `npm run brand`. Never edit the copies. If the kit changes, run `npm run brand` again and commit the result. `npm run brand:check` fails if a copy is missing or out of date, and it runs on every pull request and push. To use another kit file, add it to `scripts/brand.mjs`. The same script makes and checks the main site's copies in `website/assets/brand/`.
 - **Colors** are the kit's tokens, set in `app/global.css`: ink, paper and Margin Blue everywhere, and each app's own color (Brad Brass, Card Red, Ribbon Green) in its own section only, used sparingly: the sidebar's current page and the section switcher.
 - **Each app's home page** is titled with its wordmark, and each section uses the app's favicon.
 - **Fonts** (Courier Prime for headings, Inter for text) are the main site's self-hosted files in `/assets/fonts/`.
@@ -38,15 +38,15 @@ Needs Node.js 22 or later.
 
 ```sh
 cd website/wiki
-npm install
+npm ci
 npm run dev          # http://localhost:3000/wiki/ (without the fonts: they come from the main site)
-npm run brand:check  # the copies in public/brand/ match brand/
+npm run brand:check  # the wiki's and the main site's brand copies match brand/
 npm run lint
 npm run types:check
 npm run build        # static export into out/, the same as the deploy
 ```
 
-The deploy (`.github/workflows/pages.yml`) runs `npm ci`, `npm run brand:check` and `npm run build`, and publishes `out/` at `/wiki/` next to the main site. `npm run lint` and `npm run types:check` run nowhere but on your machine, so run them before you push.
+The checks workflow (`.github/workflows/checks.yml`) runs `npm ci`, `npm run brand:check`, `npm run lint`, `npm run types:check` and `npm run build` on every pull request and every push to `main`. The deploy (`.github/workflows/pages.yml`) runs the same checks and publishes `out/` at `/wiki/` next to the main site. Run them before you push all the same: a failed check after a push to `main` means the site was not updated.
 
 ### Preview with the main site
 
@@ -54,11 +54,13 @@ The wiki takes its fonts from the main site, so it only looks as deployed when b
 
 ```sh
 site="$(mktemp -d)"
-rsync -a --exclude /wiki website/ "$site"/
+rsync -a --exclude /wiki --exclude /tools --exclude /README.md website/ "$site"/
 cp -R website/wiki/out "$site"/wiki
-python3 "$site"/tools/serve.py       # http://localhost:8000/wiki/
+python3 website/tools/serve.py 8000 "$site"   # http://localhost:8000/wiki/
 ```
 
 This is a built copy: build and copy again to see a change. Use `npm run dev` while writing.
 
-`npm run dev` writes an `AGENTS.md` into this folder: Next.js generates it, with a note for coding agents about its own documentation. It is not tracked; leave it out of your commit.
+`npm run dev` writes an `AGENTS.md` into this folder: Next.js generates it, with a note for coding agents about its own documentation. Git ignores it. The rules for this folder are in the repository's `AGENTS.md`.
+
+`npm run dev` answers `http://localhost:3000` as it is. If you reach the dev server under another host name (a proxy on your own machine), Next.js wants that name allowed. Put it in an untracked `.env.local` in this folder, as `WIKI_DEV_ORIGINS=<host>` (several: comma-separated), never in `next.config.mjs`: a host name of one machine does not belong in a public repository.

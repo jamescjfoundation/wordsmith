@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-"""Local preview of the website (python3 website/tools/serve.py [port], then http://localhost:8000).
+"""Local preview of the website (python3 website/tools/serve.py [port [folder]], then http://localhost:8000).
 
 Like `python3 -m http.server -d website`, but it serves /about from about.html and shows 404.html for
 missing pages, the way GitHub Pages does. The site's links leave off ".html", so plain http.server
-can't follow them. The wiki at /wiki/ isn't served here; it's a separate project (see wiki/README.md).
+can't follow them. The wiki at /wiki/ isn't served from website/; it's a separate project. To see
+both together, put the site together in another folder and name that folder after the port
+(wiki/README.md has the steps).
 """
 import http.server, pathlib, sys
 
-ROOT = pathlib.Path(__file__).resolve().parent.parent
+ROOT = pathlib.Path(sys.argv[2]).resolve() if len(sys.argv) > 2 else pathlib.Path(__file__).resolve().parent.parent
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):

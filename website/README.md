@@ -2,7 +2,7 @@
 
 The marketing site for the Wordsmith apps (Script, Manuscript, Book and the planned Launcher), from Wordsmith & Ink, a project of The James C. J. Foundation.
 
-Plain HTML and CSS, so GitHub Pages can serve this folder as it is. To preview it locally, run `python3 website/tools/serve.py` from the repository root and visit http://localhost:8000. It works like `python3 -m http.server`, but serves `/about` from `about.html` the way Pages does.
+Plain HTML and CSS, so GitHub Pages can serve the pages as they are. To preview it locally, run `python3 website/tools/serve.py` from the repository root and visit http://localhost:8000. It works like `python3 -m http.server`, but serves `/about` from `about.html` the way Pages does.
 
 ## Files
 
@@ -14,11 +14,11 @@ Plain HTML and CSS, so GitHub Pages can serve this folder as it is. To preview i
 | `about.html` | The Foundation, James, principles, Wordsmith & Ink |
 | `open-source.html` | The road to 1.0, status, how to help, privacy, licenses |
 | `404.html` | Page not found |
-| `tools/build.py` | Writes every page: the shared header and footer and all the page text |
-| `tools/serve.py` | Local preview server that serves `/about` from `about.html`, like Pages |
+| `tools/build.py` | Writes every page: the shared header and footer and all the page text. Not published |
+| `tools/serve.py` | Local preview server that serves `/about` from `about.html`, like Pages. Not published |
 | `assets/css/site.css` | All styles. Colors are the brand kit's tokens, with a dark theme that follows the system |
 | `assets/js/site.js` | The menu button on small screens (the site works without it) |
-| `assets/brand/` | Logos and icons copied by hand, unchanged, from the brand kit in `brand/` (nothing checks the copies), and `og-image.png` for link previews, which is not a kit file |
+| `assets/brand/` | Logos and icons copied unchanged from the brand kit in `brand/` by `npm run brand` in `wiki/` (`npm run brand:check` fails when one differs), and `og-image.png` for link previews, which is not a kit file. `favicon.svg`, beside the pages, is a kit copy too |
 | `assets/img/` | Wordsmith Script screenshots from the app's repository (`docs/images`), with the title bar cropped off |
 | `assets/fonts/` | Courier Prime and Inter (SIL Open Font License 1.1, license files included), served from here so no visitor data goes to a font service |
 | `.nojekyll` | Tells GitHub Pages to serve the files as they are |
@@ -28,10 +28,12 @@ The Manuscript, Book and Launcher pictures are HTML illustrations, not screensho
 
 ## Editing
 
-The shared header, footer and page text live in `tools/build.py`. Edit it and run `python3 website/tools/build.py` from the repository root to rewrite the HTML pages. Styles are in `assets/css/site.css`.
+The shared header, footer and page text live in `tools/build.py`. Edit it and run `python3 website/tools/build.py` from the repository root to rewrite the HTML pages, then commit the script and the pages together. Never edit a page by hand: `python3 website/tools/build.py --check` fails when a page is not what the script writes, and it runs on every pull request and push. Styles are in `assets/css/site.css`.
+
+The words of the site are under CC BY 4.0, the code that builds it under MIT OR Apache-2.0, and the logos and icons in `assets/brand/` are not open source: [`LICENSES.md`](../LICENSES.md) has the list.
 
 ## Publishing on GitHub Pages
 
-The workflow in `.github/workflows/pages.yml` publishes this folder whenever a push to `main` changes it (or run it by hand from the Actions tab). It builds the wiki first and publishes its static export at `/wiki/` in place of the wiki's source. Everything else in this folder is published as it is, `tools/` and this README included. Pages is enabled with Source set to "GitHub Actions", and the site is live at https://wordsmithand.ink, a custom domain set in the repository's Pages settings (DNS is on Cloudflare). The deploy doesn't need a `CNAME` file.
+The workflow in `.github/workflows/pages.yml` publishes this folder whenever a push to `main` changes it (or run it by hand from the Actions tab). It first runs every check a pull request gets (`.github/workflows/checks.yml`): the pages against `build.py`, the brand copies against the kit, and the wiki's lint, type check and build. If one fails, nothing is published. The wiki's static export is published at `/wiki/` in place of the wiki's source, and `tools/` and this README are left out. Everything else in this folder is published as it is. Pages is enabled with Source set to "GitHub Actions", and the site is live at https://wordsmithand.ink, a custom domain set in the repository's Pages settings (DNS is on Cloudflare). The deploy doesn't need a `CNAME` file.
 
 All links between pages are relative and leave off `.html` (`about`, not `about.html`). GitHub Pages serves `/about` from `about.html`, and old `.html` addresses still work.

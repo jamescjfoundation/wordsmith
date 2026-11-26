@@ -1,58 +1,49 @@
 name: Deploy website and wiki to GitHub Pages
 
+# Publishes the website and the wiki. It runs every check first (checks.yml, the same workflow a
+# pull request gets) and publishes the site that run put together, so a failed check means the
+# site is not updated.
+#
+# A change under brand/ alone does not start a deploy: the site publishes the copies under
+# website/, never brand/ itself. checks.yml fails on a copy that is behind the kit, and the
+# change that updates the copy touches website/ and deploys.
+#
+# Only GitHub's own actions, pinned to full commit SHAs.
+
 on:
   push:
     branches: [main]
-    paths: ["website/**", ".github/workflows/pages.yml"]
+    paths: ["website/**", ".github/workflows/pages.yml", ".github/workflows/checks.yml"]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
-  # Upload and deploy run as separate jobs. In one job, deploy-pages can look for the
-  # artifact before it is visible and fail with "No artifacts named github-pages"
-  # (https://github.com/actions/deploy-pages/issues/451).
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 24
-          cache: npm
-          cache-dependency-path: website/wiki/package-lock.json
-      - name: Build the wiki
-        working-directory: website/wiki
-        env:
-          NEXT_TELEMETRY_DISABLED: "1"
-        run: |
-          npm ci
-          npm run brand:check
-          npm run build
-      # The site is website/ as it is, with the wiki's static export in place of its source.
-      - name: Put the site together
-        run: |
-          mkdir _site
-          rsync -a --exclude /wiki website/ _site/
-          cp -R website/wiki/out _site/wiki
-      - uses: actions/configure-pages@v6
-      - uses: actions/upload-pages-artifact@v5
-        with:
-          path: _site
+  checks:
+    uses: ./.github/workflows/checks.yml
+    permissions:
+      contents: read
+    with:
+      publish: true
 
+  # Upload (in checks.yml) and deploy run as separate jobs. In one job, deploy-pages can look for
+  # the artifact before it is visible and fail with "No artifacts named github-pages"
+  # (https://github.com/actions/deploy-pages/issues/451).
   deploy:
-    needs: build
+    needs: checks
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

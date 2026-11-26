@@ -24,3 +24,7 @@ yarn-error.log*
 .env*.local
 .vercel
 next-env.d.ts
+
+# `next dev` writes this note about its own documentation. The rules for this folder are in the
+# repository's AGENTS.md.
+/AGENTS.md

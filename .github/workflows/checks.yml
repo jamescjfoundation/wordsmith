@@ -1,0 +1,116 @@
+name: Checks
+
+# Everything "Before you push" in AGENTS.md lists, on every pull request and every push to main,
+# so a broken page, a stale generated page or a drifted brand copy fails before it is merged or
+# published.
+#
+# - repository: the tools' own tests, then nothing personal and no secret in files or commit
+#   addresses, the links between the Markdown files, and the website's pages against their
+#   generator. Python 3 only.
+# - wiki: the brand copies against the kit, the wiki's lint, type check and build, and the site
+#   put together the way it is published.
+#
+# The deploy (pages.yml) calls this workflow and publishes the site this run put together, so
+# what is published is what was checked. Nothing here has a path filter: a check that always
+# reports can be required on main.
+#
+# Not here: `project/carry.py --check --remote`. It compares the carried text with what the other
+# repositories have published and is red while one of them is behind, so it has its own workflow
+# (carried.yml).
+#
+# Only GitHub's own actions, pinned to full commit SHAs.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      publish:
+        description: "Upload the site as the artifact the Pages deploy publishes"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+# Called from pages.yml, `github.workflow` is the deploy's name, so a deploy and a plain run of
+# these checks on the same commit never cancel each other.
+concurrency:
+  group: ${{ github.workflow }}-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repository:
+    name: repository (tools, privacy, links, website pages)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0 # privacy reads every commit address
+      - name: Test the tools
+        run: python3 -m unittest discover -s project -p "test_*.py"
+      - name: Nothing personal, no secret, no-reply commit addresses
+        env:
+          # On a pull request HEAD is GitHub's merge commit; the commits to read are the branch's own.
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: python3 project/privacy.py --head "${PR_HEAD:-HEAD}"
+      - name: Links between the Markdown files
+        run: python3 project/check_links.py
+      - name: The website's pages are what build.py writes
+        run: python3 website/tools/build.py --check
+
+  wiki:
+    name: wiki and site (brand copies, lint, types, build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: website/wiki/package-lock.json
+      - name: Install
+        working-directory: website/wiki
+        run: npm ci
+      - name: The brand copies match the kit
+        working-directory: website/wiki
+        run: npm run brand:check
+      - name: Lint
+        working-directory: website/wiki
+        run: npm run lint
+      - name: Type check
+        working-directory: website/wiki
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+        run: npm run types:check
+      - name: Build the wiki
+        working-directory: website/wiki
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+        run: npm run build
+      # The site is website/ with the wiki's static export in place of its source. The generator,
+      # the preview server and the folder's README are for people working on the site: they are
+      # not published.
+      - name: Put the site together
+        run: |
+          mkdir _site
+          rsync -a --exclude /wiki --exclude /tools --exclude /README.md website/ _site/
+          cp -R website/wiki/out _site/wiki
+          test -f _site/index.html
+          test -f _site/404.html
+          test -f _site/wiki/index.html
+          test ! -e _site/tools
+          test ! -e _site/README.md
+          test ! -e _site/wiki/package.json
+      - name: Upload the site for the deploy
+        if: ${{ inputs.publish }}
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: _site

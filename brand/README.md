@@ -17,6 +17,7 @@ Start with **[`suite/BRAND_GUIDE.md`](suite/BRAND_GUIDE.md)** for the ideas and 
 | [`wordsmith-book/`](wordsmith-book/) | Print books and ebooks: same layout as Script |
 | [`suite/`](suite/) | The suite brand guide and the three-app overview image |
 | [`source/`](source/) | The scripts that build all of the above (see [Rebuilding](#rebuilding)) |
+| [`LICENSE.md`](LICENSE.md) | How the names and logos may be used |
 
 The original kit kept the same build scripts once per app; here they're kept once, in `source/`.
 
@@ -27,7 +28,7 @@ The original kit kept the same build scripts once per app; here they're kept onc
 - **Colors:** each `tokens.json` holds that brand's design tokens. Each `palette/` folder has the palette as CSS, JSON, GIMP (`.gpl`) and Adobe (`.ase`) swatches, plus a reference card.
 - **Ready-made sets:** each app's `production/` folder is a ready-to-use set of that app's key files and the parent brand's, with a README that explains each one. When an app repository needs brand files, copy them from here.
 - **Copy, don't edit.** The website (`website/assets/brand/`), the wiki (`website/wiki/public/brand/`) and the app repositories (`assets/brand/` in each) copy files from here unchanged. To change a logo, icon, palette or PDF, change the script in `source/` and rebuild. Don't edit the output by hand.
-- **After a change, update the copies.** Only the wiki's copies are made and checked by a tool (`npm run brand` and `npm run brand:check` in `website/wiki`). The website's and the apps' are copied by hand, and nothing reports one that is out of date. The repository's [`AGENTS.md`](../AGENTS.md#brand) lists the copies, and Route F of the [project map](../project/README.md#route-f) has the steps.
+- **After a change, update the copies.** The website's and the wiki's copies are made and checked by one tool: `npm run brand` in `website/wiki` writes them, and `npm run brand:check` fails when one is missing or differs. It runs on every pull request and every push. The apps' copies are made by hand, and nothing reports one that is out of date. The repository's [`AGENTS.md`](../AGENTS.md#brand) lists the copies, and Route F of the [project map](../project/README.md#route-f) has the steps.
 
 ## Rebuilding
 
@@ -57,4 +58,4 @@ What the build does and doesn't cover:
 
 ## Names and licenses
 
-The apps' code is open source. The names Wordsmith, Wordsmith & Ink, Wordsmith Script, Wordsmith Manuscript and Wordsmith Book, and their logos, are trademarks of The James C. J. Foundation. You may use them unchanged to refer to the project, but not for forks or other products. All names are working names until the trademark check is done. Courier Prime and Inter are under the SIL Open Font License 1.1, which allows using their letters in a logo.
+The apps' code is open source. The brand files are not: all rights in them are reserved. The names Wordsmith, Wordsmith & Ink, Wordsmith Script, Wordsmith Manuscript, Wordsmith Book and Wordsmith Launcher, and their logos, are trademarks of The James C. J. Foundation. You may use them unchanged to refer to the project, but not for forks or other products. **[`LICENSE.md`](LICENSE.md)** says what is fine without asking and what is not. All names are working names until the trademark check is done. Courier Prime and Inter are under the SIL Open Font License 1.1, which allows using their letters in a logo.

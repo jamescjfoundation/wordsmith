@@ -8,12 +8,14 @@ The pieces of Wordsmith that belong to the project as a whole. The apps (Wordsmi
 
 | Folder | Stack | Owns |
 | --- | --- | --- |
-| `project/` | Markdown, two Python 3 scripts, no dependencies | The project map: every Wordsmith repository, how they depend on each other, the route for each kind of change, and the project-wide decisions; `carry.py`, which writes and checks the text the repositories carry word for word; and `check_links.py`, which checks the links between this repository's Markdown files |
+| `project/` | Markdown, three Python 3 scripts, no dependencies | The project map: every Wordsmith repository, how they depend on each other, the route for each kind of change, and the project-wide decisions; `carry.py`, which writes and checks the text the repositories carry word for word; `check_links.py`, which checks the links between this repository's Markdown files; and `privacy.py`, which looks for personal details and secrets in the files and the commits |
 | `brand/` | SVG, PNG, ICO, JSON tokens, PDFs, Python 3 build scripts | The brand kit: the source of every logo, icon and brand color |
 | `website/` | Plain HTML/CSS/JS, a Python 3 page generator, no dependencies | The public site, [wordsmithand.ink](https://wordsmithand.ink/) |
 | `website/wiki/` | Fumadocs (Next.js, MDX), static export | The wiki: user guides for the apps, at `/wiki/` |
 | `launcher/` | Rust (planned) | Wordsmith Launcher, a desktop app. Not started |
-| `.github/` | GitHub Actions, Markdown | `workflows/pages.yml` (deploys the website and the wiki), `workflows/carried.yml` (checks the carried text), `workflows/links.yml` (checks Markdown links), and the pull request template |
+| `.github/` | GitHub Actions, Markdown | `workflows/checks.yml` (every check, on each pull request and each push to `main`), `workflows/pages.yml` (runs the same checks, then deploys the website and the wiki), `workflows/carried.yml` (compares the carried text with what the other repositories have published), and the pull request template |
+
+At the root: `LICENSES.md` says which license covers which folder, with the license texts beside it (`LICENSE-MIT`, `LICENSE-APACHE`, `LICENSE-CC-BY-4.0`; the brand terms are `brand/LICENSE.md`). `SECURITY.md`, `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md` are for people arriving from outside; each carries text from `open-source-core` ([`project/`](#project) says how).
 
 Keep a change inside one folder where you can. A change that spans folders (for example, launcher status on the website) says so in its commit message.
 
@@ -50,18 +52,22 @@ Commit with a GitHub no-reply address or a foundation bot identity. Where a repo
 or `--mirror`.
 <!-- END open-source-core: public -->
 
-Where the block and this repository differ **today**:
+Where the block and this repository differ:
 
-- There is no `SECURITY.md` here yet. For a security problem, follow [Route H](project/README.md#route-h) in the map: keep it in `.private/` and tell the user.
-- There is no `cargo xtask` here, so no tool checks files or commits for personal details. Read your own diff and commit message before you push, and check the author address: `git log -1 --format=%ae` must be a GitHub no-reply address. In a fresh clone, set one with `git config user.email` before the first commit.
+- There is no `cargo xtask` here. `python3 project/privacy.py` does the job of `cargo xtask privacy`: it reads every tracked text file for email addresses, home folders, private network addresses and host names, and things shaped like secrets, and it reads the author and committer address of every commit. The checks workflow runs it on every pull request and push. No hook runs it for you: run it before you push.
+- A pattern cannot find a person's name, something said in a conversation or an open security problem. Read your own diff and commit message for those.
+- In a fresh clone, set a GitHub no-reply address with `git config user.email` before the first commit.
+- A line that must keep something the check finds (an example in a test) ends with the marker `privacy:allow`. Use it for made-up examples only, never to keep a real detail.
 
 ## project/
 
 - `project/README.md` is the map and `project/decisions/` holds the project-wide decisions, numbered from 0001. A new route gets the next free letter and an `<a id="route-x">` anchor; a new decision gets a row in `project/decisions/README.md`. `project/` is not part of the website and is never published with it.
-- Some text is carried word for word in several repositories, between a `BEGIN` and an `END` marker line. The block marked in `project/README.md` is carried in each app's `AGENTS.md`; this file carries the `public` block above from open-source-core. A copy is never edited: change the owner's text, then run `python3 project/carry.py --write` with the repositories side by side. It changes files and commits nothing. [Route N](project/README.md#route-n) has the steps.
-- `python3 project/carry.py` with no flag checks without writing. It reads the sibling folders where they exist; `--remote` reads what is published on GitHub.
+- Some text is carried word for word in several repositories, between a `BEGIN` and an `END` marker line. The block marked in `project/README.md` is carried in each app's `AGENTS.md`. This repository carries four pieces from open-source-core: the `public` block above, the `security` block in `SECURITY.md`, the `contributing` block in `CONTRIBUTING.md`, and the whole of `CODE_OF_CONDUCT.md`. A copy is never edited: change the owner's text, then run `python3 project/carry.py --write` with the repositories side by side. It changes files and commits nothing. [Route N](project/README.md#route-n) has the steps.
+- The carried text is written for a repository with Cargo and releases. Where a sentence of it does not fit here, the file says so in its own part, outside the marker lines (`SECURITY.md`: "Where this repository differs"; `CONTRIBUTING.md`: "This repository's own rules"). Keep those parts true when the carried text changes.
+- `python3 project/carry.py` with no flag checks without writing. It reads the sibling folders where they exist; `--remote` reads what is published on GitHub: each app's `main` and the core's newest release. `--write --remote` writes this repository's copies from that release, for when the core's sibling folder is ahead of it.
 - `python3 project/check_links.py` checks every tracked Markdown file here: each link to a file in this repository names one that exists, and each `#anchor` names a heading or an `id` that exists. It makes no network request, so it does not check links to other sites or repositories, and it does not read the wiki's `.mdx` pages. In the apps, `cargo xtask docs` does this job from core v0.1.18.
-- Check before pushing: `python3 project/check_links.py` passes; `python3 project/test_carry.py` and `python3 project/test_check_links.py` pass when a tool changed; and after a change to a carried block, `python3 project/carry.py` passes against the sibling folders. Each route in the map ends with a "Held by:" line; keep it true when a check is added or a step changes.
+- `python3 project/privacy.py` is described under [What is public](#what-is-public). Its rules follow the core's `template/xtask/src/privacy.rs`; keep the two in step when one gains a rule.
+- Check before pushing: `python3 project/privacy.py` and `python3 project/check_links.py` pass; `python3 -m unittest discover -s project` passes when a tool changed (it runs `test_carry.py`, `test_check_links.py` and `test_privacy.py`); and after a change to a carried block, `python3 project/carry.py` passes against the sibling folders. Each route in the map ends with a "Held by:" line; keep it true when a check is added or a step changes.
 
 ## brand/
 
@@ -76,23 +82,25 @@ The copies of kit files, and what keeps each in step:
 
 | Copy | Made by | Checked by |
 | --- | --- | --- |
-| `website/wiki/public/brand/` | `npm run brand` in `website/wiki` | `npm run brand:check`, which the deploy also runs |
-| `website/assets/brand/` and `website/favicon.svg` | Hand: copied from the kit's `logo/`, `lockups/` and `app-icon/` folders, some renamed (`app-icon/icon-512.png` is `wordsmith-and-ink-icon-512.png` there) | Nothing |
+| `website/wiki/public/brand/` | `npm run brand` in `website/wiki` | `npm run brand:check`, which the checks workflow runs on every pull request and push |
+| `website/assets/brand/` and `website/favicon.svg` | The same `npm run brand`: from the kit's `logo/`, `lockups/` and `app-icon/` folders into one flat folder, some renamed (`app-icon/icon-512.png` is `wordsmith-and-ink-icon-512.png` there) | The same `npm run brand:check` |
 | Each app's `assets/brand/`, in the app's repository | Hand: copied from `brand/wordsmith-<app>/production/` and `app-icon/`, unchanged | Nothing |
 
-- `website/assets/brand/og-image.png` (the picture in link previews) is not a kit file, and no script here makes it.
+- One script makes and checks both sets of copies: `website/wiki/scripts/brand.mjs`. It needs Node.js and nothing installed. To use another kit file on the website or in the wiki, add it to the script's list and run `npm run brand`; never copy one by hand. `brand:check` also fails on a file in either folder of copies that the script does not make.
+- `website/assets/brand/og-image.png` (the picture in link previews) is not a kit file, and no script here makes it. It is the one file the check lets stay.
+- The brand files are not open source, and their copies are under the same terms: [`brand/LICENSE.md`](brand/LICENSE.md). Keep it, `brand/README.md`, `brand/suite/BRAND_GUIDE.md` and the website's "Open source" page saying the same thing.
 - An app owns two kinds of file in its own `assets/brand/`: its interface theme `tokens.json`, which is in the core's token format and is not a copy of the kit's `tokens.json`, and the files it derives from the kit with its own tool. [Route F](project/README.md#route-f) names them and has the steps for a change that must reach the copies.
-- Nothing in `brand/` runs on GitHub, and a change under `brand/` alone starts no workflow. After a rebuild, update the copies in the same piece of work, or the next website deploy fails on `brand:check`.
+- A change under `brand/` runs the checks workflow like any other change, and `brand:check` fails there while a copy is behind the kit. It starts no deploy, because the site publishes the copies, not `brand/`. After a rebuild, run `npm run brand` in the same piece of work; that change touches `website/` and deploys. The kit's own build (`python3 brand/source/build.py`) runs nowhere on GitHub.
 
 ## website/
 
-- Pages are generated. The shared header, footer and all page text are in `website/tools/build.py`. Edit that, run `python3 website/tools/build.py` from the repository root, and commit the regenerated `.html` files with it. Never hand-edit the `.html` pages; the next build overwrites them.
+- Pages are generated. The shared header, footer and all page text are in `website/tools/build.py`. Edit that, run `python3 website/tools/build.py` from the repository root, and commit the regenerated `.html` files with it. Never hand-edit the `.html` pages; the next build overwrites them, and `python3 website/tools/build.py --check` (run by the checks workflow) fails on a page that is not what the script writes.
 - Styles: `website/assets/css/site.css` (brand color tokens; the dark theme follows the system). JS: `website/assets/js/site.js`; the site must work with JS off.
 - **No third-party requests.** No CDN, font service, analytics or embed: the site promises this to its visitors. The fonts are served from `website/assets/fonts/`, with their license files beside them.
 - Links between pages stay relative and leave off `.html` (`about`, not `about.html`): GitHub Pages serves `/about` from `about.html`, and old `.html` links still work. `build.py` writes them that way; keep new links in the same form, in this repository's other files too. The home page link is `./`. The site is served at `https://wordsmithand.ink/`; the only absolute URLs are the canonical, `og:url` and `og:image` tags, built from `SITE` in `build.py`. The 404 page is the exception: `build.py` makes its local links start at `/`, because Pages shows it at any missing address, including ones inside folders.
-- Preview: `python3 website/tools/serve.py`, then http://localhost:8000 (a port number as its argument changes the port). Plain `python3 -m http.server` cannot follow links without `.html`.
-- Deploy: `.github/workflows/pages.yml` runs on every push to `main` that touches `website/`. It builds the wiki, then publishes `website/` with the wiki's static export in place of `website/wiki/`, so the wiki's source is never published. Everything else under `website/` is published as it is, `tools/` and `README.md` included: put nothing there that should not be public. Pages uses the "GitHub Actions" source, with the custom domain `wordsmithand.ink` set in the repository's Pages settings.
-- Check before pushing: `python3 website/tools/build.py` leaves `git status` showing only the pages you meant to change; no broken relative links or missing assets; images have `alt` text; the page reads well at phone width and in dark mode.
+- Preview: `python3 website/tools/serve.py`, then http://localhost:8000 (a port number as its argument changes the port, and a folder after the port serves that folder instead of `website/`). Plain `python3 -m http.server` cannot follow links without `.html`.
+- Deploy: `.github/workflows/pages.yml` runs on every push to `main` that touches `website/`. It runs every check first (it calls `checks.yml`), then publishes the site that run put together: `website/` with the wiki's static export in place of `website/wiki/`, and without `website/tools/` and `website/README.md`, which are for people working on the site. Everything else under `website/` is published as it is: put nothing there that should not be public. A new file or folder that should stay out of the site is added to the "Put the site together" step of `checks.yml`. Pages uses the "GitHub Actions" source, with the custom domain `wordsmithand.ink` set in the repository's Pages settings.
+- Check before pushing: `python3 website/tools/build.py --check` passes, and `git status` shows only the pages you meant to change; no broken relative links or missing assets; images have `alt` text; the page reads well at phone width and in dark mode.
 
 ## website/wiki/
 
@@ -101,7 +109,9 @@ The copies of kit files, and what keeps each in step:
 - Its logos, app icons and favicons are the copies in `website/wiki/public/brand/` (see [brand/](#brand)). Never edit them. Each app's section uses that app's color only for small marks; links stay Margin Blue.
 - The fonts come from the main site's `/assets/fonts/`, so `npm run dev` shows the wiki without them. To see it as deployed, build it and serve it with the main site; `website/wiki/README.md` has the steps.
 - Content rules: write for writers, document only what the app does today, and check claims against the app's repository (code, `CHANGELOG.md`, `docs/guide/`). Mark anything not built with `<Status value="planned" />` or `"in-progress"`. Never use an app repository's `.private/` notes or reviews as content.
-- Check before pushing: `npm run brand:check`, `npm run lint` and `npm run build` in `website/wiki` all pass, and every page and internal link you touched loads.
+- `npm run dev` writes an `AGENTS.md` into `website/wiki`: Next.js makes it, with a note about its own documentation. Git ignores it. This file has the rules for the wiki.
+- A host name of your own machine never goes into `next.config.mjs`. If you reach the dev server under another name than `localhost`, name it in `WIKI_DEV_ORIGINS` in an untracked `website/wiki/.env.local`.
+- Check before pushing: `npm run brand:check`, `npm run lint`, `npm run types:check` and `npm run build` in `website/wiki` all pass, and every page and internal link you touched loads.
 
 ## launcher/
 
@@ -116,18 +126,30 @@ Not started. When it is:
 
 ## Before you push
 
-Run the checks for each folder you changed; they are the "Check before pushing" line of its section above. What runs on GitHub, and what does not:
+Run the checks for each folder you changed; they are the "Check before pushing" line of its section above. All of them at once, from the repository root:
+
+```sh
+python3 -m unittest discover -s project
+python3 project/privacy.py
+python3 project/check_links.py
+python3 website/tools/build.py --check
+(cd website/wiki && npm ci && npm run brand:check && npm run lint && npm run types:check && npm run build)
+```
+
+What runs on GitHub, and what does not:
 
 | Check | Where it runs |
 | --- | --- |
-| `python3 project/test_carry.py` and `python3 project/carry.py --check --remote` | `carried.yml`: on a push to `main` or a pull request that touches `project/README.md`, `project/carry.py`, `project/test_carry.py`, `AGENTS.md` or the workflow; weekly; and by hand. It is red while a published copy is behind its source |
-| `python3 project/test_check_links.py` and `python3 project/check_links.py` | `links.yml`: on a push to `main` or a pull request that touches a `.md` file, the tool, its tests or the workflow; and by hand |
-| `npm run brand:check` and `npm run build` in `website/wiki` | `pages.yml`: on a push to `main` that touches `website/`, as part of the deploy. A failure there means the site was not updated |
-| `npm run lint` and `npm run types:check` in `website/wiki` | Locally only |
-| `python3 website/tools/build.py` matches the committed pages | Locally only |
+| The tools' tests (`python3 -m unittest discover -s project`), `python3 project/privacy.py`, `python3 project/check_links.py`, `python3 website/tools/build.py --check` | `checks.yml`, job "repository": on every pull request and every push to `main`, whatever changed; and by hand |
+| `npm run brand:check`, `npm run lint`, `npm run types:check` and `npm run build` in `website/wiki`, then the site put together as it is published | `checks.yml`, job "wiki and site": the same |
+| All of the above again, before the deploy | `pages.yml`: on a push to `main` that touches `website/` or either workflow. It calls `checks.yml` and publishes only when every job passed. A failure there means the site was not updated |
+| `python3 project/carry.py --check --remote` | `carried.yml`: on a push to `main` or a pull request that touches `project/README.md`, `project/carry.py`, `AGENTS.md`, `SECURITY.md`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md` or the workflow; weekly; and by hand. It is red while a published copy is behind its source |
 | `python3 brand/source/build.py` matches the committed kit | Locally only |
+| A claim on the website or the wiki is true of the app; a link in a wiki page or a website page leads somewhere (the wiki build passes with a broken link); a link to another site works | Nowhere: check it yourself |
 
-A pull request gets no check from `pages.yml`, so it does not build the wiki, and nothing checks a change under `brand/` alone. `.github/pull_request_template.md` lists what to confirm; a change pushed straight to `main` follows the same list. After a push that touches `website/`, watch the "Deploy website and wiki to GitHub Pages" run and open the live page.
+Every workflow uses GitHub's own actions only, each pinned to a full commit hash with its version in a comment (the organisation allows no others). To move one to a newer version, look the tag's commit up (`gh api repos/actions/<name>/git/ref/tags/<tag>`; for an annotated tag, follow it to the commit) and change the hash and the comment together, in every workflow that uses the action.
+
+`.github/pull_request_template.md` lists what to confirm; a change pushed straight to `main` follows the same list. After a push, watch the "Checks" run; after one that touches `website/`, watch the "Deploy website and wiki to GitHub Pages" run too and open the live page.
 
 ## Git
 
@@ -136,3 +158,4 @@ A pull request gets no check from `pages.yml`, so it does not build the wiki, an
 - Working notes, reviews and anything private go in `.private/`, which Git ignores. Never commit them.
 - Keep commits focused, with a short imperative subject.
 - Commit the generated website pages with the change that regenerates them. Commit no other build output: not `out/`, `.next/`, `node_modules/`, `target/` or editor files.
+- A new folder, or a new kind of file, gets a row in [`LICENSES.md`](LICENSES.md) when none of its rows fits.

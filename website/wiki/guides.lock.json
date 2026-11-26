@@ -258,7 +258,68 @@
         "file": "website/wiki/content/docs/manuscript/meta.json",
         "sha256": "19fceb55784a8e6357877f0561d1301b4bdf9a3a261746478a4c8a5690fbe780"
       },
-      "images": []
+      "images": [
+        {
+          "source": "docs/images/bible.png",
+          "blob": "d925adacfa3ff9f7d19d401bbbc44741af1c4290",
+          "copies": [
+            {
+              "file": "website/assets/img/manuscript-bible.webp",
+              "sha256": "e21205b029d602e03f0848c80f50f491ab9f1f3d58063faf8c4a4a8bcddfe26d",
+              "width": 1600,
+              "height": 1025
+            }
+          ]
+        },
+        {
+          "source": "docs/images/corkboard.png",
+          "blob": "1f3b5f4d95f760fd6116c8dc29e4572287f40bdf",
+          "copies": [
+            {
+              "file": "website/assets/img/manuscript-corkboard.webp",
+              "sha256": "ce4618095fd9b12ada2b36b9d2cf4d11b7e5d983fb086666581490fb7e790b0b",
+              "width": 1600,
+              "height": 1025
+            }
+          ]
+        },
+        {
+          "source": "docs/images/editor.png",
+          "blob": "e0eb93eb8b4ccb7da0b906117c30d167d3bfc3a8",
+          "copies": [
+            {
+              "file": "website/assets/img/manuscript-editor.webp",
+              "sha256": "16f797d7f485ae593e466e6235873928ea71ac660df248e3714d15803e474694",
+              "width": 1600,
+              "height": 1025
+            }
+          ]
+        },
+        {
+          "source": "docs/images/outline.png",
+          "blob": "af2073239e1d269195c8ebd3787b20547a74ea1f",
+          "copies": [
+            {
+              "file": "website/assets/img/manuscript-outline.webp",
+              "sha256": "7bb860cb1ad9222e6aa24b077b509f9f4b9dddc26b86ffa30eecf3485b0582c5",
+              "width": 1600,
+              "height": 1025
+            }
+          ]
+        },
+        {
+          "source": "docs/images/stitched-dark.png",
+          "blob": "4c680da3064df807178a5829ce4cb74d910d5a4d",
+          "copies": [
+            {
+              "file": "website/assets/img/manuscript-stitched-dark.webp",
+              "sha256": "03c29b37bbafb0bb621f7dc30ce24612e8958f59a1b61e3497f5628d49007802",
+              "width": 1600,
+              "height": 1025
+            }
+          ]
+        }
+      ]
     },
     "book": {
       "repository": "jamescjfoundation/wordsmith-book",
@@ -354,7 +415,68 @@
         "file": "website/wiki/content/docs/book/meta.json",
         "sha256": "6e197a7a83288ce3ee69ee216d6ed8d289d288841094813b26e44f243078a801"
       },
-      "images": []
+      "images": [
+        {
+          "source": "docs/images/designs.png",
+          "blob": "45968c5e39b82041e52fd7e683ed658896fb4617",
+          "copies": [
+            {
+              "file": "website/assets/img/book-designs.webp",
+              "sha256": "5be3cbfd5fc00977f0f7e183975698bb1062eddfeedc5a5ea80050198f026a14",
+              "width": 1600,
+              "height": 1025
+            }
+          ]
+        },
+        {
+          "source": "docs/images/details.png",
+          "blob": "55317ddbf163bdb13fada40052dd3945d4d2f534",
+          "copies": [
+            {
+              "file": "website/assets/img/book-details.webp",
+              "sha256": "a40a8540c82ec63f7d01f021c8eb9418dc8fa8ba6bb5b587daa37d888fcd01a0",
+              "width": 1600,
+              "height": 1025
+            }
+          ]
+        },
+        {
+          "source": "docs/images/ebook.png",
+          "blob": "9dff86a6aad8f7a799ac3f5f978f8be045ee61ec",
+          "copies": [
+            {
+              "file": "website/assets/img/book-ebook.webp",
+              "sha256": "fb381b176e83b9c09c48f085021ab4d912a26cb9558b9cca3238cf4e62bbf07e",
+              "width": 1600,
+              "height": 1025
+            }
+          ]
+        },
+        {
+          "source": "docs/images/preflight.png",
+          "blob": "f1864b34334cf70c21419077407874d5738cc3c0",
+          "copies": [
+            {
+              "file": "website/assets/img/book-preflight.webp",
+              "sha256": "c11ddfc09841b0fc773c167174dfb46209987e81ba02b9ab481bf267a1ae0ed7",
+              "width": 1600,
+              "height": 1025
+            }
+          ]
+        },
+        {
+          "source": "docs/images/print-preview.png",
+          "blob": "12624f8093d040de166f892c8bee4c0ac4ee39d9",
+          "copies": [
+            {
+              "file": "website/assets/img/book-print-preview.webp",
+              "sha256": "6248c19736ffbf4d43f71492779d17f6b8f27248351b64f176feb2cb7dcba22e",
+              "width": 1600,
+              "height": 1025
+            }
+          ]
+        }
+      ]
     }
   }
 }

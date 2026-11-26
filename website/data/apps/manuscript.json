@@ -29,5 +29,11 @@
   ],
   "guide": "docs/guide",
   "images": "docs/images",
-  "screenshots": []
+  "screenshots": [
+    "editor",
+    "corkboard",
+    "outline",
+    "bible",
+    "stitched-dark"
+  ]
 }

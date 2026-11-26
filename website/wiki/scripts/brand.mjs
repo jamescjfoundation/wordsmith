@@ -350,6 +350,11 @@ function main(argv) {
     const dirty = execFileSync('git', ['-C', root, 'status', '--porcelain', '--', 'brand'], { encoding: 'utf8' }).trim();
     if (dirty) throw new Error(`brand/ has changes that are not committed:\n${dirty}\nCommit and push the kit first: the app records the kit commit its copies came from.`);
     const commit = execFileSync('git', ['-C', root, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+    try {
+      execFileSync('git', ['-C', root, 'merge-base', '--is-ancestor', commit, 'origin/main'], { stdio: 'ignore' });
+    } catch {
+      console.log(`Note: kit commit ${commit.slice(0, 7)} is not on origin/main as this checkout knows it. Push wordsmith before the app's change lands, so the commit the app records is one everybody can read.`);
+    }
     const { changed, same, notes } = writeApp(root, slug, checkout, commit);
     for (const line of changed) console.log(line);
     for (const note of notes) console.log(note);

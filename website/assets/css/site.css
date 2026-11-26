@@ -210,6 +210,7 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .chip.pre { --chip: var(--accent); }
 .chip.dev { --chip: var(--script); }
 .chip.planned { --chip: var(--muted); }
+.chip.ok { --chip: var(--book); }
 
 /* ------------------------------------------------------------------ Home hero */
 .hero { position: relative; isolation: isolate; padding: clamp(48px, 7vw, 104px) 0 clamp(56px, 7vw, 104px); overflow: hidden; }
@@ -573,4 +574,21 @@ code { font-family: var(--mono); font-size: 0.95em; }
 @media (prefers-color-scheme: dark) {
   .app-head img, .callout img, .flow .step img, .app-id img.icon, .hero-apps img, .launch-apps img, .desk .badge, .status td:first-child img { box-shadow: 0 0 0 1px rgba(233,234,242,.16); }
   .flow .step img { box-shadow: 0 0 0 1px rgba(233,234,242,.16), 0 0 0 8px var(--sunken); }
+}
+
+/* ------------------------------------------------------------------ Downloads (an app page's #download) */
+.downloads { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.dl { background: var(--raised); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.dl h3 { margin: 0; font-size: 1.3rem; }
+.dl-for { margin: 0 0 14px; color: var(--muted); font-size: 0.95rem; }
+.dl .btn + .dl-file { margin-bottom: 12px; }
+.dl-file { margin: 4px 0 0; color: var(--muted); font-size: 0.85rem; overflow-wrap: anywhere; }
+.dl-notes { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(24px, 4vw, 56px); margin-top: clamp(28px, 4vw, 48px); }
+.dl-notes h3 { font-size: 1.12rem; margin: 0 0 8px; }
+.dl-notes p, .dl-notes li { color: var(--muted); font-size: 0.96rem; line-height: 1.6; }
+.dl-notes ul { padding-left: 1.2em; margin: 0 0 1em; }
+.dl-notes li + li { margin-top: 6px; }
+.dl-notes b { color: var(--ink); }
+@media (max-width: 860px) {
+  .downloads, .dl-notes { grid-template-columns: 1fr; }
 }

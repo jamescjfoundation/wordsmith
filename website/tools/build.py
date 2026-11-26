@@ -5,15 +5,36 @@
     python3 website/tools/build.py FOLDER     write them into FOLDER instead
     python3 website/tools/build.py --check    write them into a temporary folder, and fail when a
                                               page in website/ is not what this script writes
+    python3 website/tools/build.py FOLDER --releases FILE
+                                              take each app's latest release from FILE (the deploy
+                                              does this, with what releases.py just read from GitHub)
+
+What the pages say about an app's state comes from two places, never from words typed here:
+website/data/apps/<app>.json (the app's name, what it is for, its platforms and the wording for
+each state) and a releases file (the version, the date and the download links of the app's latest
+public release). Without --releases that file is website/data/releases.json, the last known
+answer, so this script never uses the network and --check gives the same result everywhere.
 """
-import difflib, json, pathlib, re, shutil, sys, tempfile
+import argparse, difflib, json, pathlib, re, shutil, sys, tempfile
+
+import releases as rel
 
 WEBSITE = pathlib.Path(__file__).resolve().parent.parent
-CHECK = sys.argv[1:] == ["--check"]
+ARGS = argparse.ArgumentParser(description="Write the website's pages.")
+ARGS.add_argument("folder", nargs="?", help="write the pages here instead of website/")
+ARGS.add_argument("--check", action="store_true", help="fail when a page in website/ is not what this script writes")
+ARGS.add_argument("--releases", help="the releases file to build from (default: website/data/releases.json)")
+ARGS = ARGS.parse_args()
+CHECK = ARGS.check
+if CHECK and (ARGS.folder or ARGS.releases):
+    sys.exit("build.py: --check compares the pages in website/ with website/data/releases.json; it takes no folder and no --releases.")
 if CHECK:
     OUT = pathlib.Path(tempfile.mkdtemp(prefix="wordsmith-pages-"))
 else:
-    OUT = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else WEBSITE
+    OUT = pathlib.Path(ARGS.folder) if ARGS.folder else WEBSITE
+APPS = {app["slug"]: app for app in rel.read_apps()}
+PLATFORMS = {platform["id"]: platform for platform in rel.read_platforms()}
+RELEASES = rel.read_kept(ARGS.releases or rel.KEPT)["apps"]
 ORG = "https://github.com/jamescjfoundation"
 FOUNDATION = "https://jamescj.org"
 B = "assets/brand/"
@@ -97,6 +118,86 @@ def shot(app, name, alt, lazy=True):
     size = SHOTS[file]
     return (f'<img src="{file}" alt="{alt}" width="{size["width"]}" height="{size["height"]}"'
             f'{' loading="lazy"' if lazy else ""}>')
+
+
+# ---------------------------------------------------------------- An app's state, from the data files
+def repo(slug):
+    return f"https://github.com/{APPS[slug]['repository']}"
+
+
+def state(slug):
+    """The app's words for where it stands: "chip", "line" and "download", with the version and date filled in."""
+    return rel.state_words(APPS[slug], RELEASES.get(slug))
+
+
+def chip(slug):
+    """The small label beside an app's name: its version once it has a release, nothing before."""
+    words = state(slug)["chip"]
+    kind = "pre" if rel.state_of(RELEASES.get(slug)) == "preview" else "ok"
+    return f'<span class="chip {kind}">{words}</span>' if words else ""
+
+
+def systems(slug, last=" and "):
+    names = [PLATFORMS[platform]["name"] for platform in APPS[slug]["platforms"]]
+    return ", ".join(names[:-1]) + last + names[-1]
+
+
+def download(slug, sunken=False):
+    """The download area of an app's page.
+
+    Before the app has a release: its systems, each with a link to the releases page. Once it has
+    one: the release's files for each system. The words above them are the app's own, from its
+    data file.
+    """
+    app, release = APPS[slug], RELEASES.get(slug)
+    cards = []
+    for platform in (PLATFORMS[one] for one in app["platforms"]):
+        files = rel.files_for(release, platform)
+        if files:
+            links = "".join(f'<a class="btn btn-primary" href="{file["url"]}">{DOWN} Download</a>'
+                            f'<p class="dl-file">{file["name"]} &middot; {rel.size_words(file["size"])}</p>' for file in files)
+        elif release:
+            links = (f'<a class="btn btn-ghost" href="{release["url"]}">Open the release {ARROW}</a>'
+                     f'<p class="dl-file">Version {release["version"]} has no file for this system.</p>')
+        else:
+            links = f'<a class="btn btn-ghost" href="{repo(slug)}/releases">Releases page {ARROW}</a>'
+        cards.append(f'          <div class="dl"><h3>{platform["name"]}</h3><p class="dl-for">{platform["detail"]}</p>{links}</div>')
+    sums = " and their checksums" if release and rel.has_checksums(release) else ""
+    all_files = (f'<a href="{release["url"]}">Every file of version {release["version"]}{sums}</a>' if release
+                 else f'<a href="{repo(slug)}/releases">{app["name"]} releases on GitHub</a>')
+    return f"""
+    <section class="section{' sunken' if sunken else ''}" id="download">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Download</p>
+          <h2>Get {app["name"]}.</h2>
+          <p class="lede">{state(slug)["download"]}</p>
+        </div>
+        <div class="downloads">
+{chr(10).join(cards)}
+        </div>
+        <div class="dl-notes">
+          <div>
+            <h3>The first time you open it</h3>
+            <p>The apps are not signed with a paid developer certificate, so macOS and Windows ask before they
+              open one for the first time.</p>
+            <ul>
+              <li><b>macOS:</b> open the app once and close the notice. Then open System Settings, choose
+                Privacy &amp; Security, and click Open Anyway.</li>
+              <li><b>Windows:</b> on the &ldquo;Windows protected your PC&rdquo; notice, click More info, then Run anyway.</li>
+            </ul>
+            <p><a href="wiki/start/install">Installing, step by step</a></p>
+          </div>
+          <div>
+            <h3>Free, and yours to check</h3>
+            <p>{app["name"]} costs nothing and needs no account. Downloads come only from the app's own
+              releases on GitHub. {all_files}.</p>
+            <p>The code is open source. To build the app yourself, follow the
+              <a href="{repo(slug)}#readme">README in its repository</a>.</p>
+          </div>
+        </div>
+      </div>
+    </section>"""
 
 
 def terminal(cmds):
@@ -305,18 +406,17 @@ DESK = f"""<div class="desk" role="img" aria-label="A Wordsmith Script screenpla
 
 
 # ---------------------------------------------------------------- Home
-def app_row(cls, slug, chip, chip_cls, for_, text, ticks, visual, ticks_label=""):
+def app_row(slug, text, ticks, visual):
     items = "".join(f"<li>{t}</li>" for t in ticks)
-    label = f'<p class="ticks-label">{ticks_label}</p>' if ticks_label else ""
     name = slug.capitalize()
     return f"""
-        <article class="app-row {cls}">
+        <article class="app-row p-{slug}">
           <div class="app-copy">
-            <div class="app-head"><img src="{B}wordsmith-{slug}-icon.svg" alt="" width="64" height="64"><span class="chip {chip_cls}">{chip}</span></div>
+            <div class="app-head"><img src="{B}wordsmith-{slug}-icon.svg" alt="" width="64" height="64">{chip(slug)}</div>
             {logo(f"wordsmith-{slug}-wordmark", f"Wordsmith {name}", "wordmark")}
-            <p class="app-for">{for_}</p>
+            <p class="app-for">{APPS[slug]["for"]}</p>
             <p class="app-text">{text}</p>
-            {label}<ul class="ticks">{items}</ul>
+            <ul class="ticks">{items}</ul>
             <a class="btn btn-ghost" href="{slug}">Explore {name} {ARROW}</a>
           </div>
           <div class="app-visual stage">
@@ -366,19 +466,18 @@ home = f"""
           <p class="lede">Each app does one job well, and they work together. All three run on macOS, Windows and Linux,
             and keep your work as plain files on your own computer.</p>
         </div>
-        <div class="app-rows">{app_row("p-script", "script", "Pre-release", "pre", "Screenplays, TV and stage plays",
+        <div class="app-rows">{app_row("script",
         "Write screenplays, TV episodes and stage plays, formatted as you type and ready for production.",
         ["Return and Tab do the formatting", "Pages, PDFs and printouts that match the screen", "Revision colors, scene numbers and locked pages"],
         f'<div class="shot">{shot("script", "index-cards", "Wordsmith Script showing index cards, one per scene")}</div>')}
-{app_row("p-manuscript", "manuscript", "Pre-release", "pre", "Novels and long work",
+{app_row("manuscript",
         "Plan, draft and revise novels and other long work, with your story bible beside the text.",
         ["Parts, chapters and scenes in one binder", "A corkboard, an outline and a story bible", "Drafts and snapshots you can compare"],
         CORK)}
-{app_row("p-book", "book", "In development", "dev", "Print books and ebooks",
+{app_row("book",
         "Design and typeset a finished manuscript as a print-ready book and an ebook for every store.",
         ["Book designs with chapter openings and drop caps", "A print-ready PDF and an accessible EPUB 3", "Preflight checks before you upload"],
-        f'<div role="img" aria-label="Illustration of a typeset two-page book spread">{spread(False)}</div>',
-        "What it will do")}
+        f'<div role="img" aria-label="Illustration of a typeset two-page book spread">{spread(False)}</div>')}
         </div>
       </div>
     </section>
@@ -505,6 +604,11 @@ about = f"""
 
 
 # ---------------------------------------------------------------- App page parts
+def hero_meta(slug):
+    """Under an app's first buttons: its version once it has one, its systems, and its state's one line."""
+    return f'{chip(slug)}<span>{systems(slug, ", ")}</span><span>{state(slug)["line"]}</span>'
+
+
 def app_hero(slug, name, h1, lede, actions, meta, visual):
     return f"""
     <section class="p-hero app-hero">
@@ -536,9 +640,9 @@ script = app_hero(
     "script", "Wordsmith Script", "Write the screenplay. The page takes care of itself.",
     """A free, open-source screenwriting app. Type with two keys doing the formatting, see every page
           as it will print, and take the script into production with revision colors, locked pages and scene numbers.""",
-    f"""<a class="btn btn-primary" href="{ORG}/wordsmith-script">{GH} View on GitHub</a>
+    f"""<a class="btn btn-primary" href="#download">{DOWN} Download</a>
             <a class="btn btn-ghost" href="wiki/script/">Read the guide</a>""",
-    '<span class="chip pre">Pre-release</span><span>macOS, Windows, Linux</span><span>No downloads yet: build from source</span>',
+    hero_meta("script"),
     f"""<div class="stage"><div class="shot">{shot("script", "page-view", "Wordsmith Script showing a screenplay page, the list of scenes on the left and the scene inspector on the right", lazy=False)}</div></div>
           <figcaption>The page view, with the scenes on the left and the scene at the caret on the right. Pictures are drawn by the app from "Everybody's Girl" (1918), a public-domain photoplay.</figcaption>""",
 ) + f"""
@@ -596,21 +700,7 @@ script = app_hero(
         </ul>
       </div>
     </section>
-
-    <section class="section">
-      <div class="wrap split">
-        <div>
-          <p class="eyebrow">Try it today</p>
-          <h2>Build it from source.</h2>
-          <p class="muted">There are no installers yet. If you're comfortable with a terminal and have
-            <a href="https://rustup.rs">Rust</a> installed, you can run the current version now. Installers for macOS,
-            Windows and Linux come with the first release.</p>
-        </div>
-        {terminal(f'''git clone {ORG}/wordsmith-script
-cd wordsmith-script
-cargo run --release -p wordsmith''')}
-      </div>
-    </section>
+{download("script")}
 """
 
 # ---------------------------------------------------------------- Manuscript
@@ -619,9 +709,9 @@ manuscript = app_hero(
     """A free, open-source app for writing novels and other long work. Plan on a corkboard, draft in a
           binder of chapters and scenes, keep your story bible beside the text, and hand the finished manuscript to
           Wordsmith Book.""",
-    f"""<a class="btn btn-primary" href="{ORG}/wordsmith-manuscript">{GH} View on GitHub</a>
+    f"""<a class="btn btn-primary" href="#download">{DOWN} Download</a>
             <a class="btn btn-ghost" href="wiki/manuscript/">Read the guide</a>""",
-    '<span class="chip pre">Pre-release</span><span>macOS, Windows, Linux</span><span>No downloads yet: build from source</span>',
+    hero_meta("manuscript"),
     """<div class="stage"><div class="mock" role="img" aria-label="Illustration of Wordsmith Manuscript: a binder of chapters, the text of a scene, and the inspector with the scene's synopsis and label">
             <div class="mock-bar"><i></i><i></i><i></i><span class="title">Little Women</span><span>· Draft 2</span></div>
             <div class="mock-body">
@@ -722,20 +812,7 @@ manuscript = app_hero(
         </div>
       </div>
     </section>
-
-    <section class="section sunken">
-      <div class="wrap split">
-        <div>
-          <p class="eyebrow">Try it today</p>
-          <h2>Build it from source.</h2>
-          <p class="muted">There are no installers yet. With <a href="https://rustup.rs">Rust</a> installed you can run
-            the current version now. The interface is in English and Spanish so far, and more languages can be added.</p>
-        </div>
-        {terminal(f'''git clone {ORG}/wordsmith-manuscript
-cd wordsmith-manuscript
-cargo run -p wordsmith-manuscript''')}
-      </div>
-    </section>
+{download("manuscript", sunken=True)}
 """
 
 # ---------------------------------------------------------------- Book
@@ -744,9 +821,9 @@ book = app_hero(
     """A free, open-source app for designing and typesetting books. Bring a finished manuscript, choose
           a design, set the trim size, fonts and chapter openings, and export a print-ready PDF and an accessible ebook,
           with every word checked against your source.""",
-    f"""<a class="btn btn-primary" href="{ORG}/wordsmith-book">{GH} Follow on GitHub</a>
-            <a class="btn btn-ghost" href="{ORG}/wordsmith-book/blob/main/docs/PLAN.md">Read the plan</a>""",
-    '<span class="chip dev">In development</span><span>macOS, Windows, Linux</span><span>Being built now</span>',
+    f"""<a class="btn btn-primary" href="#download">{DOWN} Download</a>
+            <a class="btn btn-ghost" href="wiki/book/">Read the guide</a>""",
+    hero_meta("book"),
     f"""<div class="spread-wrap" role="img" aria-label="Illustration of a typeset two-page book spread: a part page on the left and the opening of chapter one on the right">
             {spread()}
             <div class="book-ui" aria-hidden="true">
@@ -794,16 +871,7 @@ book = app_hero(
         </ul>
       </div>
     </section>
-
-    <section class="section sunken">
-      <div class="wrap">
-        <div class="callout">
-          <img src="{B}wordsmith-book-icon.svg" alt="" width="64" height="64">
-          <div><h3>Book is being built in the open.</h3><p>Watch the repository to follow along, or read the plan and tell us what your books need.</p></div>
-          <a class="btn btn-primary" href="{ORG}/wordsmith-book">{GH} Watch on GitHub</a>
-        </div>
-      </div>
-    </section>
+{download("book", sunken=True)}
 """
 
 # ---------------------------------------------------------------- Launcher
@@ -871,6 +939,19 @@ launcher = f"""
 """
 
 # ---------------------------------------------------------------- Open source
+def status_rows():
+    """One row per app: its latest release, from the releases file, or a link to where releases appear."""
+    rows = []
+    for slug, app in APPS.items():
+        release = RELEASES.get(slug)
+        latest = (f'<a href="{release["url"]}">{release["version"]}</a>, {rel.long_date(release["date"])}' if release
+                  else f'<a href="{repo(slug)}/releases">Releases page</a>')
+        name = app["repository"].split("/")[1]
+        rows.append(f'              <tr class="p-{slug}"><td><img src="{B}wordsmith-{slug}-icon.svg" alt="" width="28" height="28">{app["name"]}</td>'
+                    f'<td>{latest}</td><td>{app["for"]}</td><td><a href="{repo(slug)}">{name}</a></td></tr>')
+    return "\n".join(rows)
+
+
 opensource = f"""
     <section class="p-hero">
       <div class="wrap">
@@ -903,13 +984,11 @@ opensource = f"""
 
         <div class="table-scroll">
           <table class="status">
-            <thead><tr><th>App</th><th>Status</th><th>For</th><th>Code</th></tr></thead>
+            <thead><tr><th>App</th><th>Latest release</th><th>For</th><th>Code</th></tr></thead>
             <tbody>
-              <tr class="p-script"><td><img src="{B}wordsmith-script-icon.svg" alt="" width="28" height="28">Wordsmith Script</td><td><span class="chip pre">Pre-release</span></td><td>Screenplays, TV and stage plays</td><td><a href="{ORG}/wordsmith-script">wordsmith-script</a></td></tr>
-              <tr class="p-manuscript"><td><img src="{B}wordsmith-manuscript-icon.svg" alt="" width="28" height="28">Wordsmith Manuscript</td><td><span class="chip pre">Pre-release</span></td><td>Novels and long work</td><td><a href="{ORG}/wordsmith-manuscript">wordsmith-manuscript</a></td></tr>
-              <tr class="p-book"><td><img src="{B}wordsmith-book-icon.svg" alt="" width="28" height="28">Wordsmith Book</td><td><span class="chip dev">In development</span></td><td>Print books and ebooks</td><td><a href="{ORG}/wordsmith-book">wordsmith-book</a></td></tr>
+{status_rows()}
               <tr><td><img src="{B}wordsmith-and-ink-icon.svg" alt="" width="28" height="28">Wordsmith Launcher</td><td><span class="chip planned">Planned</span></td><td>Installing and opening the apps</td><td class="muted">Not started</td></tr>
-              <tr><td><span class="core-dot" aria-hidden="true"></span>open-source-core</td><td><span class="chip pre">Pre-release</span></td><td>The shared base every app is built on</td><td><a href="{ORG}/open-source-core">open-source-core</a></td></tr>
+              <tr><td><span class="core-dot" aria-hidden="true"></span>open-source-core</td><td><a href="{ORG}/open-source-core/releases">Releases</a></td><td>The shared base every app is built on</td><td><a href="{ORG}/open-source-core">open-source-core</a></td></tr>
             </tbody>
           </table>
         </div>

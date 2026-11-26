@@ -11,9 +11,9 @@ The pieces of Wordsmith that belong to the project as a whole. The apps (Wordsmi
 | `project/` | Markdown, three Python 3 scripts, no dependencies | The project map: every Wordsmith repository, how they depend on each other, the route for each kind of change, and the project-wide decisions; `carry.py`, which writes and checks the text the repositories carry word for word; `check_links.py`, which checks the links between this repository's Markdown files; and `privacy.py`, which looks for personal details and secrets in the files and the commits |
 | `brand/` | SVG, PNG, ICO, JSON tokens, PDFs, Python 3 build scripts | The brand kit: the source of every logo, icon and brand color |
 | `website/` | Plain HTML/CSS/JS, a Python 3 page generator, no dependencies | The public site, [wordsmithand.ink](https://wordsmithand.ink/) |
-| `website/wiki/` | Fumadocs (Next.js, MDX), static export | The wiki: user guides for the apps, at `/wiki/` |
+| `website/wiki/` | Fumadocs (Next.js, MDX), static export, Node.js scripts | The wiki, at `/wiki/`: each app's user guide, built from the guide in the app's own repository, and the pages about the project as a whole |
 | `launcher/` | Rust (planned) | Wordsmith Launcher, a desktop app. Not started |
-| `.github/` | GitHub Actions, Markdown | `workflows/checks.yml` (every check, on each pull request and each push to `main`), `workflows/pages.yml` (runs the same checks, then deploys the website and the wiki), `workflows/carried.yml` (compares the carried text with what the other repositories have published), and the pull request template |
+| `.github/` | GitHub Actions, Markdown | `workflows/checks.yml` (every check, on each pull request and each push to `main`), `workflows/pages.yml` (runs the same checks, then deploys the website and the wiki), `workflows/carried.yml` (compares the carried text with what the other repositories have published), `workflows/guides.yml` (compares each app's guide on `main` with the commit the wiki was built from), and the pull request template |
 
 At the root: `LICENSES.md` says which license covers which folder, with the license texts beside it (`LICENSE-MIT`, `LICENSE-APACHE`, `LICENSE-CC-BY-4.0`; the brand terms are `brand/LICENSE.md`). `SECURITY.md`, `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md` are for people arriving from outside; each carries text from `open-source-core` ([`project/`](#project) says how).
 
@@ -21,12 +21,12 @@ Keep a change inside one folder where you can. A change that spans folders (for 
 
 ## Start with the map
 
-**[`project/README.md`](project/README.md) is the project map.** Read it when a task touches another repository, or when you are not sure where a change belongs. It lists the five repositories and two forks and gives the steps for each route: a wiki page for an app (Route D), website text (Route E), a brand change that must reach the apps (Route F), screenshots (Route G), a fix that belongs in `open-source-core` (Route A).
+**[`project/README.md`](project/README.md) is the project map.** Read it when a task touches another repository, or when you are not sure where a change belongs. It lists the five repositories and two forks and gives the steps for each route: a change users will see in an app and its guide (Route C), a wiki page (Route D), website text (Route E), a brand change that must reach the apps (Route F), screenshots (Route G), a fix that belongs in `open-source-core` (Route A).
 
 The map's [Project rules](project/README.md#project-rules) hold in every Wordsmith repository, this one included: how changes land, what is public, naming, licensing, privacy, the product names and the writing style. They are not repeated here. Two of them are broken most often in this repository:
 
 - **The Foundation's name** is always "The James C. J. Foundation", never a shorter form.
-- **Say only what exists.** The website and the wiki describe what an app does today. Check the app's repository (code, `CHANGELOG.md`, releases page) before you write a claim, and mark planned things as planned.
+- **Say only what exists.** The website and the wiki describe what an app does today. Check the app's repository (code, `docs/guide/`, `CHANGELOG.md`, releases page) before you write a claim, and mark planned things as planned.
 
 The block below is carried word for word from `open-source-core` and is not edited here ([`project/`](#project) says how it is updated).
 
@@ -99,22 +99,28 @@ The copies of kit files, and what keeps each in step:
 
 - Pages are generated. The shared header, footer and all page text are in `website/tools/build.py`. Edit that, run `python3 website/tools/build.py` from the repository root, and commit the regenerated `.html` files with it. Never hand-edit the `.html` pages; the next build overwrites them, and `python3 website/tools/build.py --check` (run by the checks workflow) fails on a page that is not what the script writes.
 - Styles: `website/assets/css/site.css` (brand color tokens; the dark theme follows the system). JS: `website/assets/js/site.js`; the site must work with JS off.
+- `website/data/apps/<app>.json` is one small file per app: its name, its repository, and which of its screenshots the website shows. `build.py` and the wiki's tools read it. It is not published.
+- The screenshots in `website/assets/img/` are drawn by the apps and carried here by `npm run guide` in `website/wiki` ([website/wiki/](#websitewiki)), never copied or edited by hand. To show another one, add its name to `screenshots` in the app's data file, run `npm run guide`, and use it in `build.py` with `shot(app, name, alt)`, which takes the picture's size from the tool's lock file.
 - **No third-party requests.** No CDN, font service, analytics or embed: the site promises this to its visitors. The fonts are served from `website/assets/fonts/`, with their license files beside them.
 - Links between pages stay relative and leave off `.html` (`about`, not `about.html`): GitHub Pages serves `/about` from `about.html`, and old `.html` links still work. `build.py` writes them that way; keep new links in the same form, in this repository's other files too. The home page link is `./`. The site is served at `https://wordsmithand.ink/`; the only absolute URLs are the canonical, `og:url` and `og:image` tags, built from `SITE` in `build.py`. The 404 page is the exception: `build.py` makes its local links start at `/`, because Pages shows it at any missing address, including ones inside folders.
 - Preview: `python3 website/tools/serve.py`, then http://localhost:8000 (a port number as its argument changes the port, and a folder after the port serves that folder instead of `website/`). Plain `python3 -m http.server` cannot follow links without `.html`.
-- Deploy: `.github/workflows/pages.yml` runs on every push to `main` that touches `website/`. It runs every check first (it calls `checks.yml`), then publishes the site that run put together: `website/` with the wiki's static export in place of `website/wiki/`, and without `website/tools/` and `website/README.md`, which are for people working on the site. Everything else under `website/` is published as it is: put nothing there that should not be public. A new file or folder that should stay out of the site is added to the "Put the site together" step of `checks.yml`. Pages uses the "GitHub Actions" source, with the custom domain `wordsmithand.ink` set in the repository's Pages settings.
+- Deploy: `.github/workflows/pages.yml` runs on every push to `main` that touches `website/`. It runs every check first (it calls `checks.yml`), then publishes the site that run put together: `website/` with the wiki's static export in place of `website/wiki/`, and without `website/tools/`, `website/data/` and `website/README.md`, which are for people working on the site. Everything else under `website/` is published as it is: put nothing there that should not be public. A new file or folder that should stay out of the site is added to the "Put the site together" step of `checks.yml`. Pages uses the "GitHub Actions" source, with the custom domain `wordsmithand.ink` set in the repository's Pages settings.
 - Check before pushing: `python3 website/tools/build.py --check` passes, and `git status` shows only the pages you meant to change; no broken relative links or missing assets; images have `alt` text; the page reads well at phone width and in dark mode.
 
 ## website/wiki/
 
 - A separate project from the main site: Fumadocs on Next.js, exported as static files with `basePath: '/wiki'`, published at `https://wordsmithand.ink/wiki/` by the same Pages workflow (one repository has one Pages site). `website/wiki/README.md` has the commands.
 - Pages are MDX in `website/wiki/content/docs/`: `start/` (the shared "Wordsmith apps" tab, which also holds the home page) and one folder per app (`script/`, `manuscript/`, `book/`), each a sidebar tab (`root: true` in its `meta.json`). `meta.json` sets the page order.
+- **An app's folder is built, never written.** `npm run guide` in `website/wiki` (`scripts/guide.mjs`) reads the guide in the app's own repository, `docs/guide/`, at one commit, and writes the folder from it: each guide page as a wiki page, the folder's `meta.json` in the order of the guide's `README.md`, and the pictures the pages show. It records the commit in `website/wiki/guides.lock.json`, and the page footer shows it. To change what an app's page says, change the guide in the app's repository, land it there, then run `npm run guide` here and land what it writes ([Route C](project/README.md#route-c)). [Project decision 0005](project/decisions/0005-one-guide-per-app.md) has the reasons.
+- **Written here by hand:** `content/docs/index.mdx` and the pages in `content/docs/start/`, which are about the project as a whole: the apps and how they fit together, installing, your files, moving between the apps, getting help, questions and answers, privacy. A page about one app's features does not belong there: it belongs in that app's guide. If the wiki should say something an app's guide does not say, open an issue in the app's repository for the guide page.
+- `npm run guide` reads each app's `main` on GitHub with git: a checkout beside this repository when it already has the commit, a small temporary fetch otherwise. It never reads a working tree, so the recorded commit is always a published one. `npm run guide -- --app book --ref <branch, tag or commit>` builds one app at another place.
+- `npm run guide:check` fails when a page, a picture or the lock file is not what the recorded commits give, when an app's folder or `website/assets/img/` holds a file the tool does not make, and when a link from one wiki page to another, or to a heading of it, leads nowhere. `npm run guide:behind` fails when an app's guide on `main` has changed since the recorded commit. `npm test` runs the tool's tests (`scripts/guide.test.mjs`).
 - Its logos, app icons and favicons are the copies in `website/wiki/public/brand/` (see [brand/](#brand)). Never edit them. Each app's section uses that app's color only for small marks; links stay Margin Blue.
 - The fonts come from the main site's `/assets/fonts/`, so `npm run dev` shows the wiki without them. To see it as deployed, build it and serve it with the main site; `website/wiki/README.md` has the steps.
-- Content rules: write for writers, document only what the app does today, and check claims against the app's repository (code, `CHANGELOG.md`, `docs/guide/`). Mark anything not built with `<Status value="planned" />` or `"in-progress"`. Never use an app repository's `.private/` notes or reviews as content.
+- Content rules for the hand-written pages: write for writers, document only what the apps do today, and check claims against the apps' repositories (code, `docs/guide/`, `CHANGELOG.md`). Mark anything not built with `<Status value="planned" />` or `"in-progress"`. Never use an app repository's `.private/` notes or reviews as content.
 - `npm run dev` writes an `AGENTS.md` into `website/wiki`: Next.js makes it, with a note about its own documentation. Git ignores it. This file has the rules for the wiki.
 - A host name of your own machine never goes into `next.config.mjs`. If you reach the dev server under another name than `localhost`, name it in `WIKI_DEV_ORIGINS` in an untracked `website/wiki/.env.local`.
-- Check before pushing: `npm run brand:check`, `npm run lint`, `npm run types:check` and `npm run build` in `website/wiki` all pass, and every page and internal link you touched loads.
+- Check before pushing: `npm run brand:check`, `npm test`, `npm run guide:check`, `npm run lint`, `npm run types:check` and `npm run build` in `website/wiki` all pass, and every page you touched loads.
 
 ## launcher/
 
@@ -136,7 +142,7 @@ python3 -m unittest discover -s project
 python3 project/privacy.py
 python3 project/check_links.py
 python3 website/tools/build.py --check
-(cd website/wiki && npm ci && npm run brand:check && npm run lint && npm run types:check && npm run build)
+(cd website/wiki && npm ci && npm run brand:check && npm test && npm run guide:check && npm run lint && npm run types:check && npm run build)
 ```
 
 What runs on GitHub, and what does not:
@@ -144,11 +150,12 @@ What runs on GitHub, and what does not:
 | Check | Where it runs |
 | --- | --- |
 | The tools' tests (`python3 -m unittest discover -s project`), `python3 project/privacy.py`, `python3 project/check_links.py`, `python3 website/tools/build.py --check` | `checks.yml`, job "repository": on every pull request and every push to `main`, whatever changed; and by hand |
-| `npm run brand:check`, `npm run lint`, `npm run types:check` and `npm run build` in `website/wiki`, then the site put together as it is published | `checks.yml`, job "wiki and site": the same |
+| `npm run brand:check`, `npm test`, `npm run guide:check`, `npm run lint`, `npm run types:check` and `npm run build` in `website/wiki`, then the site put together as it is published | `checks.yml`, job "wiki and site": the same. `guide:check` reads each app's public repository at its recorded commit, so this job needs the network, as `npm ci` does |
 | All of the above again, before the deploy | `pages.yml`: on a push to `main` that touches `website/` or either workflow. It calls `checks.yml` and publishes only when every job passed. A failure there means the site was not updated |
 | `python3 project/carry.py --check --remote` | `carried.yml`: on a push to `main` or a pull request that touches `project/README.md`, `project/carry.py`, `AGENTS.md`, `SECURITY.md`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md` or the workflow; weekly; and by hand. It is red while a published copy is behind its source |
+| `npm run guide:behind`: an app's guide on `main` is still the one the wiki was built from | `guides.yml`: every day, by hand, and on a push to `main` that touches the lock file, the tool or an app's data file. It is red while an app's guide has moved on, until `npm run guide` is run and its result landed |
 | `python3 brand/source/build.py` matches the committed kit | Locally only |
-| A claim on the website or the wiki is true of the app; a link in a wiki page or a website page leads somewhere (the wiki build passes with a broken link); a link to another site works | Nowhere: check it yourself |
+| A claim on the website or in a hand-written wiki page is true of the app; a link in a website page leads somewhere; a link to another site works | Nowhere: check it yourself |
 
 Every workflow uses GitHub's own actions only, each pinned to a full commit hash with its version in a comment (the organisation allows no others). To move one to a newer version, look the tag's commit up (`gh api repos/actions/<name>/git/ref/tags/<tag>`; for an annotated tag, follow it to the commit) and change the hash and the comment together, in every workflow that uses the action.
 

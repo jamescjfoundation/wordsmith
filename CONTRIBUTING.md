@@ -6,8 +6,10 @@ This repository holds what belongs to Wordsmith as a whole: the project map, the
 
 ## The quickest way to help
 
-Fix a wiki page. Every page of [the wiki](https://wordsmithand.ink/wiki/) has an "Edit on GitHub" link, and the pages are plain text files in `website/wiki/content/docs/`.
+Fix a wiki page. Every page of [the wiki](https://wordsmithand.ink/wiki/) has an "Edit on GitHub" link, which opens the file the page is made from.
 
+- A page about one app is that app's own guide, kept in the app's repository under `docs/guide/`: the link takes you there, and the wiki follows the guide ([project decision 0005](project/decisions/0005-one-guide-per-app.md)). The copies in `website/wiki/content/docs/<app>/` are written by a tool and never edited.
+- The pages about the project as a whole are written here, in `website/wiki/content/docs/start/` and `website/wiki/content/docs/index.mdx`.
 - Write for writers, in plain, short sentences.
 - Describe only what the app does today. Check it in the app before you write it.
 - Mark anything not built yet as planned.
@@ -30,12 +32,15 @@ cd website/wiki
 npm ci                                    # once
 npm run dev                               # the wiki at http://localhost:3000/wiki/
 npm run brand:check                       # the brand copies match the kit
+npm test                                  # the wiki's tools' own tests
+npm run guide                             # build each app's section again from the app's guide
+npm run guide:check                       # each app's section is what its recorded commit gives
 npm run lint
 npm run types:check
 npm run build                             # the static export, as the deploy builds it
 ```
 
-The "Checks" workflow runs every check above on each pull request and each push to `main`. `carry.py` has its own workflow, which compares the carried text with what the other repositories have published. Run the checks for the folder you changed before you push; `AGENTS.md` lists them by folder.
+The "Checks" workflow runs every check above on each pull request and each push to `main`. `carry.py` has its own workflow, which compares the carried text with what the other repositories have published, and so has `npm run guide:behind`, which reports an app's guide that has changed since the wiki was built from it. Run the checks for the folder you changed before you push; `AGENTS.md` lists them by folder.
 
 ## Where things are
 
@@ -48,10 +53,11 @@ The "Checks" workflow runs every check above on each pull request and each push 
 | `website/tools/build.py` | The website's generator: the header, the footer and all page text |
 | `website/*.html` | The generated pages. Never edited by hand |
 | `website/assets/` | Styles, the menu script, fonts, pictures, and copies of brand files |
-| `website/wiki/content/docs/` | The wiki's pages, one folder per app and `start/` for what the apps share |
+| `website/wiki/content/docs/` | The wiki's pages: `start/` and `index.mdx`, written here, and one folder per app, built from the app's own guide by `website/wiki/scripts/guide.mjs` |
+| `website/data/apps/` | One small file per app: its name, repository and what the tools carry from it |
 | `website/wiki/` (the rest) | The wiki's own code: Fumadocs on Next.js, exported as static files |
 | `launcher/` | Wordsmith Launcher. Planned, not started |
-| `.github/workflows/` | `checks.yml` (every check), `pages.yml` (the deploy), `carried.yml` (the carried text, against what is published) |
+| `.github/workflows/` | `checks.yml` (every check), `pages.yml` (the deploy), `carried.yml` (the carried text, against what is published), `guides.yml` (the apps' guides, against what the wiki was built from) |
 | `LICENSES.md` | Which license covers which folder |
 
 <!-- BEGIN open-source-core: contributing -->

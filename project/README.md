@@ -64,7 +64,7 @@ All are public, under [github.com/jamescjfoundation](https://github.com/jamescjf
 [github.com/jamescjfoundation/wordsmith](https://github.com/jamescjfoundation/wordsmith)
 
 - **Owns:** everything that belongs to the project as a whole. `project/` (this map and the project's decisions), `brand/` (the brand kit, the source of every logo, icon and brand color), `website/` (the public site), `website/wiki/` (the wiki), `launcher/` (planned, not started).
-- **Stack:** Python 3 scripts for the brand kit and the website pages; Fumadocs on Next.js for the wiki. No Rust yet.
+- **Stack:** Python 3 scripts for the brand kit and the website pages; Fumadocs on Next.js for the wiki, with Node.js scripts that build its app sections. No Rust yet.
 - **Publishes:** [wordsmithand.ink](https://wordsmithand.ink/) and [wordsmithand.ink/wiki/](https://wordsmithand.ink/wiki/), by `.github/workflows/pages.yml` on every push to `main` that touches `website/`, after every check in `.github/workflows/checks.yml` has passed.
 - **Licenses:** by folder, in [`LICENSES.md`](../LICENSES.md): code is MIT OR Apache-2.0, the words of the website and the wiki are CC BY 4.0, and the brand files are not open source.
 - **Rules:** [`AGENTS.md`](../AGENTS.md).
@@ -75,7 +75,7 @@ All are public, under [github.com/jamescjfoundation](https://github.com/jamescjf
 
 - **Owns:** Wordsmith Script, the app for screenplays, TV and stage plays. The screenplay rules (elements, typing, pagination, Fountain, scene numbers, reports) and the `.wss` file format (`docs/format.md`).
 - **Stack:** Rust on open-source-core. Crates `wordsmith-script`, `wordsmith-format`, `wordsmith-ui` in `crates/`; programs `wordsmith`, `wordsmith-cli`, `wordsmith-web` in `apps/`.
-- **Publishes:** release files on its GitHub releases page (none yet), which the app's update check reads. Its user guide is `docs/guide/`.
+- **Publishes:** release files on its GitHub releases page (none yet), which the app's update check reads. Its user guide is `docs/guide/`, the source of its section of the wiki ([Route C](#route-c)).
 - **Rules:** its [`AGENTS.md`](https://github.com/jamescjfoundation/wordsmith-script/blob/main/AGENTS.md).
 
 ### wordsmith-manuscript
@@ -84,7 +84,7 @@ All are public, under [github.com/jamescjfoundation](https://github.com/jamescjf
 
 - **Owns:** Wordsmith Manuscript, the app for novels and long work. The binder, the story bible, import and export, the `.wsm` project folder and its packed form `.wsmz` (`docs/format.md`), and the book view that Wordsmith Book reads (`docs/book-handoff.md`).
 - **Stack:** Rust on open-source-core. Crates `manuscript-model`, `manuscript-format`, `manuscript-io`, `manuscript-ui` in `crates/`; programs `manuscript`, `manuscript-cli`, `manuscript-web` in `apps/`.
-- **Publishes:** release files on its GitHub releases page (none yet), which the app's update check reads; and the tag Book builds on (`book-view-1.3` today; a new one is cut each time Manuscript moves to a newer core). Its user guide is `docs/guide/`.
+- **Publishes:** release files on its GitHub releases page (none yet), which the app's update check reads; and the tag Book builds on (`book-view-1.3` today; a new one is cut each time Manuscript moves to a newer core). Its user guide is `docs/guide/`, the source of its section of the wiki ([Route C](#route-c)).
 - **Rules:** its [`AGENTS.md`](https://github.com/jamescjfoundation/wordsmith-manuscript/blob/main/AGENTS.md).
 
 ### wordsmith-book
@@ -93,7 +93,7 @@ All are public, under [github.com/jamescjfoundation](https://github.com/jamescjf
 
 - **Owns:** Wordsmith Book, the app that designs and typesets print books and ebooks. Designs, editions, print typesetting, the ebook writer, preflight, the `.wsbk` project folder and its packed form `.wsbkz` (`docs/format.md`, `docs/design-format.md`).
 - **Stack:** Rust on open-source-core, and on Manuscript's `manuscript-model` and `manuscript-format` crates. Crates `book-model`, `book-format`, `book-design`, `book-import`, `book-typeset`, `book-epub`, `book-check`, `book-ui` in `crates/`; programs `book`, `book-cli` in `apps/`.
-- **Publishes:** release files on its GitHub releases page (none yet), which the app's update check reads. Its user guide is `docs/guide/`.
+- **Publishes:** release files on its GitHub releases page (none yet), which the app's update check reads. Its user guide is `docs/guide/`, the source of its section of the wiki ([Route C](#route-c)).
 - **Rules:** its [`AGENTS.md`](https://github.com/jamescjfoundation/wordsmith-book/blob/main/AGENTS.md).
 
 ### open-source-core
@@ -141,7 +141,8 @@ All are public, under [github.com/jamescjfoundation](https://github.com/jamescjf
 | Book → Manuscript (files) | `.wsm` project folders and `.wsmz` packed projects, read; an offers file written beside the project | Book never writes a Manuscript project. It reads Manuscript's project schema, so a schema change in Manuscript reaches Book |
 | Manuscript → Script (files) | `.wss` files kept inside a Manuscript project, shown read-only | Manuscript's own reader, `crates/manuscript-io/src/screenplay.rs`. The format is Script's, in its [`docs/format.md`](https://github.com/jamescjfoundation/wordsmith-script/blob/main/docs/format.md) |
 | Each app → wordsmith (brand) | Logos, icons, the palette card | Copies in the app's `assets/brand/`, taken from `brand/wordsmith-<app>/production/` here |
-| wordsmith → each app (facts) | What the wiki and the website say about an app | Written by hand from the app's `docs/guide/`, `CHANGELOG.md` and releases |
+| wordsmith → each app (the guide) | Each app's section of the wiki, and the screenshots the wiki and the website show | Built by `npm run guide` in `website/wiki` from the app's `docs/guide/` and `docs/images/` at a commit recorded in `website/wiki/guides.lock.json`. `npm run guide:check` (in `checks.yml`) fails when a page here is not what that commit gives; `guides.yml` fails while the app's guide on `main` has moved on ([Route C](#route-c)) |
+| wordsmith → each app (facts) | What the website and the wiki's project pages say about an app | Written by hand from the app's `docs/guide/`, `CHANGELOG.md`, code and releases |
 | Each app → its GitHub releases | The in-app update check | The only network request an app makes on its own; it reads the app's own published releases and can be turned off |
 
 Book and Manuscript move to a new core together, Manuscript first: Book's graph holds one core release, so the book-view tag Book pins must be cut on the core release Book pins ([Route I](#route-i)).
@@ -197,28 +198,35 @@ Two pairs exist: Book builds on Manuscript's crates and reads its projects, and 
 <a id="route-c"></a>
 ### Route C: a change users will see in an app
 
-1. In the app: make the change, update the page in the app's `docs/guide/`, and add a `CHANGELOG.md` line. Manuscript and Book also add a line to `docs/progress.md`.
-2. If screenshots changed, redraw them ([Route G](#route-g)).
-3. In wordsmith: update the app's wiki pages ([Route D](#route-d)). If the change finishes something the wiki marks as planned, change its `<Status>` mark and the app's `whats-next.mdx`.
-4. In wordsmith: if the app's status, feature list or platforms changed, update the website text ([Route E](#route-e)).
-5. Land the app's change first, then the wordsmith change, which names the app's commit or pull request ([Route L](#route-l)).
+Each app has one user guide, `docs/guide/` in its own repository. The wiki's section for the app is built from it, so the guide is written once ([decision 0005](decisions/0005-one-guide-per-app.md)).
 
-**Held by:** the apps' pull request template (from core v0.1.18) asks what users will see and whether the guide and `CHANGELOG.md` say it. This repository's template asks for the app's change to be linked. Nothing checks that a guide page, a changelog line, the wiki or the website followed a change.
+1. In the app: make the change, update the page in the app's `docs/guide/`, and add a `CHANGELOG.md` line. Manuscript and Book also add a line to `docs/progress.md`. A new guide page gets a line in the guide's `README.md`, which sets the order of the wiki's pages; the words after its link there become the page's description.
+2. If screenshots changed, redraw them in the app ([Route G](#route-g)).
+3. Land the app's change on its `main`.
+4. In wordsmith, in `website/wiki`: run `npm ci` once, then `npm run guide`. It reads each app's `main` on GitHub, writes the app's section of the wiki and its pictures again, records the commit, and prints what changed and anything to look at. Never edit a page it writes.
+5. Read what changed. If a page was renamed or removed, a link to it from a hand-written page breaks: `npm run guide:check` names it. Then run the rest of [Route D](#route-d), step 4, and land the change, naming the app's commit ([Route L](#route-l)).
+6. If the change also moves what the website or the wiki's project pages say about the app (its feature list, its platforms, how it fits with the other apps), update them ([Route E](#route-e), [Route D](#route-d)).
 
-**Today:** each app has two user guides, `docs/guide/` in its own repository and its section of the wiki, written separately. Neither is declared the source, so update both. The website's "Read the guide" buttons point at the app's `docs/guide/`.
+**Held by:** in wordsmith, `npm run guide:check` (in `checks.yml`, on every pull request and push, and again before the deploy) fails when a page or picture of an app's section is not exactly what the recorded commit of the app gives, so a section cannot be edited by hand or left half built. `guides.yml` runs `npm run guide:behind` every day and is red while an app's guide on `main` differs from the recorded commit, until step 4 is done. In the apps, the pull request template (from core v0.1.18) asks what users will see and whether the guide and `CHANGELOG.md` say it. Nothing checks that a guide page follows a change to the app's code, or that step 6 was done.
+
+**Today:** steps 4 and 5 are done by hand after an app's change lands; the daily run is the reminder. The wiki shows each app's guide as it is on `main`, not as it was at a release.
 
 <a id="route-d"></a>
 ### Route D: a wiki page
 
-"The wiki" always means the one in this repository, published at [wordsmithand.ink/wiki/](https://wordsmithand.ink/wiki/). It is not the app's `docs/guide/` and not the wiki tab on GitHub.
+"The wiki" always means the one in this repository, published at [wordsmithand.ink/wiki/](https://wordsmithand.ink/wiki/). It is not the wiki tab on GitHub. It holds two kinds of page.
 
-1. Work in the wordsmith repository. Pages are MDX in `website/wiki/content/docs/`: `script/`, `manuscript/`, `book/`, and `start/` for what the apps share.
-2. Take the facts from the app's repository: its `docs/guide/`, `CHANGELOG.md` and code. Document only what the app does today; mark anything not built with `<Status value="planned" />` or `"in-progress"`. Never use an app's `.private/` notes.
-3. Add or edit the page, and list a new page in the folder's `meta.json`, which sets the order. `website/wiki/README.md` has the frontmatter, the components and the picture rules.
-4. In `website/wiki`, run `npm ci` once, then `npm run brand:check`, `npm run lint`, `npm run types:check` and `npm run build`. All four must pass.
+**A page about one app** (`website/wiki/content/docs/script/`, `manuscript/`, `book/`) is that app's guide. It is changed in the app's repository, in `docs/guide/`, and reaches the wiki by [Route C](#route-c). If the wiki should say something about an app that its guide does not, open an issue in the app's repository for the guide page.
+
+**A page about the project as a whole** (`website/wiki/content/docs/index.mdx` and `start/`: the apps and how they fit together, installing, your files, moving between the apps, getting help, questions and answers, privacy) is written here:
+
+1. Work in the wordsmith repository.
+2. Take the facts from the apps' repositories: `docs/guide/`, `CHANGELOG.md` and code. Document only what the apps do today; mark anything not built with `<Status value="planned" />` or `"in-progress"`. Never use an app's `.private/` notes.
+3. Add or edit the page, and list a new page in `start/meta.json`, which sets the order. `website/wiki/README.md` has the frontmatter, the components and the picture rules.
+4. In `website/wiki`, run `npm ci` once, then `npm run brand:check`, `npm test`, `npm run guide:check`, `npm run lint`, `npm run types:check` and `npm run build`. All must pass.
 5. Land it on `main`. The push deploys the site and the wiki together; the page is live when the "Deploy website and wiki to GitHub Pages" run is green. Open the live page to check it.
 
-**Held by:** `checks.yml` runs the four commands of step 4 on every pull request and every push to `main`, and puts the site together as it is published. `pages.yml` runs the same checks again before it publishes, and the site is not updated when one fails. `python3 project/check_links.py` (in `checks.yml`) checks the links between the Markdown files of this repository, not the wiki's `.mdx` pages. Nothing checks the links in a wiki page: the build passes with a link to a page that does not exist, so open every link you touched. Nothing checks a page's claims against the app.
+**Held by:** `checks.yml` runs the commands of step 4 on every pull request and every push to `main`, and puts the site together as it is published. `pages.yml` runs the same checks again before it publishes, and the site is not updated when one fails. `npm run guide:check` fails on a file in an app's section that the tool did not write, so a hand-written page cannot be put there; and it fails on a link from one wiki page to another page, a heading of it or a picture that is not there. `python3 project/check_links.py` checks the links between the other Markdown files of this repository. Nothing checks a link from a wiki page to another site, or a hand-written page's claims against the apps.
 
 **Today:** the checks are not required on `main`: a red run does not stop a merge or a direct push, only the deploy. Watch the "Checks" run of your own push.
 
@@ -256,12 +264,13 @@ What an app owns and may edit: its interface theme file (`assets/brand/tokens.js
 ### Route G: screenshots
 
 1. In the app, run `cargo xtask screenshots`. The app draws its own pictures into `docs/images/`. Never use a screenshot of a real desktop.
-2. Land them in the app.
-3. In wordsmith, replace the WebP copies: `website/wiki/content/docs/<app>/images/` for the wiki, and `website/assets/img/` for the website. Keep the file names the pages already use.
+2. Land them in the app. A guide page shows one with an ordinary Markdown picture link (`![The window](../images/page-view.png)`).
+3. In wordsmith, in `website/wiki`, run `npm run guide` ([Route C](#route-c), step 4). It carries every picture a guide page shows into the app's section of the wiki, and every picture named under `screenshots` in `website/data/apps/<app>.json` into `website/assets/img/` as `<app>-<name>.webp`, each scaled to 1600 pixels wide and written as WebP. A picture is never copied, converted or cropped by hand.
+4. To show another screenshot on the website: add its name to `screenshots` in the app's data file, run `npm run guide`, and place it in `website/tools/build.py` with `shot(app, name, alt)` ([Route E](#route-e)).
 
-**Held by:** nothing. The app draws the pictures itself, so they cannot show a real desktop; converting, cropping and copying them here is unchecked.
+**Held by:** the app draws the pictures itself, so they cannot show a real desktop. `npm run guide:check` (in `checks.yml`) fails when a picture here is not the file the tool wrote, when its source is not the file at the recorded commit, and when `website/assets/img/` or an app's section holds a picture the tool does not make. `guides.yml` is red while a carried picture has been redrawn on the app's `main`. `build.py` stops when a page asks for a screenshot that is not carried. Nothing checks that a picture still shows what its caption says.
 
-**Today:** the copies are converted to WebP and cropped by hand (the title bar is cut off); no script does it. Book has no pictures in the wiki yet, and the website still shows drawn illustrations for Manuscript and Book.
+**Today:** only Wordsmith Script's guide shows a picture. The guides of Manuscript and Book show none of the pictures in their `docs/images/`, so their wiki sections have none.
 
 <a id="route-h"></a>
 ### Route H: a security problem
@@ -317,7 +326,7 @@ When to move: before starting new work on an app and before releasing it. `cargo
    - Script: push to the `release` branch. The workflow builds a draft release; it is published by hand on GitHub, or by starting the workflow on that branch with "publish" ticked.
    - Manuscript and Book: push a tag `vX.Y.Z`. The workflow publishes the release.
 4. Check the published release: the files for each platform are there, and the app's update check finds them.
-5. In wordsmith, the same day: the app's status and download words on the website ([Route E](#route-e)), and in the wiki the `<Status>` marks, the app's `whats-next.mdx` and `start/install.mdx` ([Route D](#route-d)).
+5. In wordsmith, the same day: the app's status and download words on the website ([Route E](#route-e)), the status marks and `start/install.mdx` in the wiki's project pages ([Route D](#route-d)), and `npm run guide`, so the wiki shows the guide of the released app ([Route C](#route-c)).
 
 A person or an agent may release an app once its gate passes ([decision 0002](decisions/0002-how-changes-land-and-who-releases.md)).
 
@@ -445,7 +454,8 @@ Paths are inside the repository named. Links go to `main`.
 | Upstream pins, carried patches, follow / hold / own | The core's [`docs/UPSTREAM.md`](https://github.com/jamescjfoundation/open-source-core/blob/main/docs/UPSTREAM.md) |
 | What is missing or planned in an app | Script: `docs/gaps.md` and `ROADMAP.md`. Manuscript and Book: `docs/PLAN.md` (both plans are finished) and `docs/progress.md`. **Today:** no repository keeps one live list of what is planned |
 | What was done, step by step | Each app's `docs/progress.md`; the core's `CHANGELOG.md` |
-| How users do something in an app | The app's `docs/guide/`, and the app's section of the wiki, `website/wiki/content/docs/<app>/` here ([Route C](#route-c)) |
+| How users do something in an app | The app's `docs/guide/`. The app's section of the wiki, `website/wiki/content/docs/<app>/` here, is built from it and never edited ([Route C](#route-c)) |
+| Which commit of an app the wiki shows | `website/wiki/guides.lock.json` here, and the line under each wiki page |
 | What the public is told about the apps | `website/tools/build.py` and `website/wiki/content/docs/start/` here |
 | Brand rules, logos, icons, colors | `brand/suite/BRAND_GUIDE.md` and `brand/README.md` here. An app's interface theme: its own `tokens.json`, in the format of the core's [`crates/jcj-theme/TOKENS.md`](https://github.com/jamescjfoundation/open-source-core/blob/main/crates/jcj-theme/TOKENS.md) |
 | Test data and reference outputs | Each app's `docs/golden.md`; Manuscript's and Book's `docs/fixtures.md` |

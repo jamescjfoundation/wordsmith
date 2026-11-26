@@ -1,0 +1,52 @@
+name: Check the guides against the apps
+
+# Each app's section of the wiki is built from the guide in the app's own repository
+# (docs/guide/), at the commit recorded in website/wiki/guides.lock.json. This compares that
+# commit's guide with the guide at the head of each app's main.
+#
+# It goes red while an app's guide has moved on. That is the point: it stays red until someone
+# runs `npm run guide` in website/wiki and lands the pages it writes (Route C in
+# project/README.md). A guide that has not changed keeps it green however far main has moved.
+#
+# checks.yml holds the other half: the pages in this repository are exactly what the recorded
+# commits give. It does not look at an app's main, so an app's push never turns it red.
+#
+# The tool reads the apps' public repositories with git: no token, no API. It needs Node.js and
+# nothing installed.
+#
+# Only GitHub's own actions, pinned to full commit SHAs.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "website/wiki/guides.lock.json"
+      - "website/wiki/scripts/guide.mjs"
+      - "website/wiki/scripts/guide-pages.mjs"
+      - "website/data/apps/**"
+      - ".github/workflows/guides.yml"
+  schedule:
+    - cron: "41 5 * * *" # every day, 05:41 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: guides-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  behind:
+    name: each app's guide on main against the recorded commit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+      - name: Compare
+        run: node website/wiki/scripts/guide.mjs --behind

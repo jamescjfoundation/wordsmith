@@ -19,12 +19,13 @@ Plain HTML and CSS, so GitHub Pages can serve the pages as they are. To preview 
 | `assets/css/site.css` | All styles. Colors are the brand kit's tokens, with a dark theme that follows the system |
 | `assets/js/site.js` | The menu button on small screens (the site works without it) |
 | `assets/brand/` | Logos and icons copied unchanged from the brand kit in `brand/` by `npm run brand` in `wiki/` (`npm run brand:check` fails when one differs), and `og-image.png` for link previews, which is not a kit file. `favicon.svg`, beside the pages, is a kit copy too |
-| `assets/img/` | Wordsmith Script screenshots from the app's repository (`docs/images`), with the title bar cropped off |
+| `assets/img/` | Screenshots drawn by the apps, carried from each app's repository (`docs/images/`) by `npm run guide` in `wiki/` and written as WebP. Never copied or edited by hand: `npm run guide:check` fails on a file there the tool did not write |
+| `data/apps/` | One small file per app: its name, its repository, and which screenshots are carried here. Not published |
 | `assets/fonts/` | Courier Prime and Inter (SIL Open Font License 1.1, license files included), served from here so no visitor data goes to a font service |
 | `.nojekyll` | Tells GitHub Pages to serve the files as they are |
 | `wiki/` | The wiki, a separate Fumadocs project published at `/wiki/`. See [`wiki/README.md`](wiki/README.md) |
 
-The Manuscript, Book and Launcher pictures are HTML illustrations, not screenshots, and say so in their captions. Manuscript and Book can now draw their own pictures; replacing the illustrations follows Route G of the [project map](../project/README.md#route-g).
+The Manuscript, Book and Launcher pictures are HTML illustrations, not screenshots, and say so in their captions. Manuscript and Book draw their own pictures now; showing them follows Route G of the [project map](../project/README.md#route-g).
 
 ## Editing
 
@@ -34,6 +35,6 @@ The words of the site are under CC BY 4.0, the code that builds it under MIT OR 
 
 ## Publishing on GitHub Pages
 
-The workflow in `.github/workflows/pages.yml` publishes this folder whenever a push to `main` changes it (or run it by hand from the Actions tab). It first runs every check a pull request gets (`.github/workflows/checks.yml`): the pages against `build.py`, the brand copies against the kit, and the wiki's lint, type check and build. If one fails, nothing is published. The wiki's static export is published at `/wiki/` in place of the wiki's source, and `tools/` and this README are left out. Everything else in this folder is published as it is. Pages is enabled with Source set to "GitHub Actions", and the site is live at https://wordsmithand.ink, a custom domain set in the repository's Pages settings (DNS is on Cloudflare). The deploy doesn't need a `CNAME` file.
+The workflow in `.github/workflows/pages.yml` publishes this folder whenever a push to `main` changes it (or run it by hand from the Actions tab). It first runs every check a pull request gets (`.github/workflows/checks.yml`): the pages against `build.py`, the brand copies against the kit, and the wiki's lint, type check and build. If one fails, nothing is published. The wiki's static export is published at `/wiki/` in place of the wiki's source, and `tools/`, `data/` and this README are left out. Everything else in this folder is published as it is. Pages is enabled with Source set to "GitHub Actions", and the site is live at https://wordsmithand.ink, a custom domain set in the repository's Pages settings (DNS is on Cloudflare). The deploy doesn't need a `CNAME` file.
 
 All links between pages are relative and leave off `.html` (`about`, not `about.html`). GitHub Pages serves `/about` from `about.html`, and old `.html` addresses still work.

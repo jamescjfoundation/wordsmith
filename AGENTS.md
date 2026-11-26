@@ -8,11 +8,14 @@ A monorepo for the shared, project-wide pieces of Wordsmith. The apps (Script, M
 
 | Folder | Stack | Owns |
 | --- | --- | --- |
+| `project/` | Markdown | The project map: every Wordsmith repository, how they depend on each other, the route for each kind of change, and the project-wide decisions |
 | `brand/` | SVG, PNG, ICO, JSON tokens, PDFs | The brand kit: logos, icons, palettes, guidelines |
 | `website/` | Plain HTML/CSS/JS, a Python 3 page generator, no dependencies | The public site |
 | `website/wiki/` | Fumadocs (Next.js, MDX), static export | The wiki: user guides for the apps, at `/wiki/` |
 | `launcher/` | Rust (planned) | Wordsmith Launcher desktop app |
 | `.github/workflows/` | GitHub Actions | CI and deploys, one workflow per folder |
+
+**Start with [`project/README.md`](project/README.md)** when a task touches another repository, or when you are not sure where a change belongs. It lists the five repositories and two forks, and gives the steps for each route: a wiki page for an app, a brand change that must reach the apps, website text after an app release, a fix that belongs in `open-source-core`. This repository owns that map and the rules in `project/decisions/`; the other repositories carry a copy of its top block in their `AGENTS.md`. Change the block here first, then the copies. `project/` is not part of the website and is never published with it.
 
 Keep changes inside one folder where you can. A change that spans folders (for example, launcher status on the website) should say so in the commit message.
 
@@ -65,6 +68,7 @@ Not started. When it is:
 
 ## Git
 
-- `main` is the default branch and deploys the website. Work on a branch and open a pull request for anything beyond a typo.
+- `main` is the default branch and deploys the website. A change may be pushed straight to `main` once the checks for its folder pass; a pull request is optional and its author merges it (`project/decisions/0002-how-changes-land-and-who-releases.md`).
+- Working notes, reviews and anything private go in `.private/`, which Git ignores. Never commit them.
 - Keep commits focused, with a short imperative subject.
 - Don't commit build output other than the generated website pages, or `target/`, `node_modules/` or editor files.

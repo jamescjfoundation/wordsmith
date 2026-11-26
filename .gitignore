@@ -15,3 +15,6 @@ brand/build/
 brand/source/fonts/
 brand/source/node_modules/
 brand/source/package-lock.json
+
+# Private notes, reviews and security write-ups: never tracked
+.private/

@@ -8,6 +8,7 @@ The apps themselves live in their own repositories. This repository is a small m
 
 | Folder | What it is | Status |
 | --- | --- | --- |
+| [`project/`](project/) | The project map: the repositories, how they depend on each other, where each kind of change goes, and the project-wide decisions | Current |
 | [`brand/`](brand/) | The brand kit: logos, app icons, palettes, tokens and brand guidelines | v1.0 |
 | [`website/`](website/) | The public website, plain HTML and CSS, published with GitHub Pages | Draft, live |
 | [`website/wiki/`](website/wiki/) | The wiki: user guides for Script, Manuscript and Book (Fumadocs), at wordsmithand.ink/wiki/ | Draft |
@@ -21,7 +22,10 @@ The apps themselves live in their own repositories. This repository is a small m
 | [wordsmith-manuscript](https://github.com/jamescjfoundation/wordsmith-manuscript) | Wordsmith Manuscript: novels and long work |
 | [wordsmith-book](https://github.com/jamescjfoundation/wordsmith-book) | Wordsmith Book: print books and ebooks |
 | [open-source-core](https://github.com/jamescjfoundation/open-source-core) | The shared base every app is built on |
-| wordsmith (this one) | Website, wiki, launcher |
+| wordsmith (this one) | Project map, brand kit, website, wiki, launcher |
+| [wordcraft](https://github.com/jamescjfoundation/wordcraft), [craft-libs](https://github.com/jamescjfoundation/craft-libs) | Our forks of the upstream projects the shared base builds on |
+
+How they fit together, and where each kind of change goes, is in the [project map](project/README.md).
 
 ## Working on it
 

@@ -10,8 +10,8 @@ The apps themselves live in their own repositories. This repository is a small m
 | --- | --- | --- |
 | [`project/`](project/) | The project map: the repositories, how they depend on each other, where each kind of change goes, and the project-wide decisions | Current |
 | [`brand/`](brand/) | The brand kit: logos, app icons, palettes, tokens and brand guidelines | v1.0 |
-| [`website/`](website/) | The public website, plain HTML and CSS, published with GitHub Pages | Draft, live |
-| [`website/wiki/`](website/wiki/) | The wiki: user guides for Script, Manuscript and Book (Fumadocs), at wordsmithand.ink/wiki/ | Draft |
+| [`website/`](website/) | The public website, plain HTML and CSS, published with GitHub Pages | Live |
+| [`website/wiki/`](website/wiki/) | The wiki (Fumadocs), at wordsmithand.ink/wiki/: each app's user guide, built from the guide in the app's own repository, and the pages about the project as a whole | Live |
 | [`launcher/`](launcher/) | Wordsmith Launcher, a Rust app that installs, updates and opens the Wordsmith apps | Not started |
 
 ## The Wordsmith repositories

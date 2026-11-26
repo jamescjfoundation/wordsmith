@@ -200,11 +200,6 @@ def download(slug, sunken=False):
     </section>"""
 
 
-def terminal(cmds):
-    return (f'<div class="terminal"><div class="terminal-bar" aria-hidden="true"><i></i><i></i><i></i><span>Terminal</span></div>'
-            f'<pre><code>{cmds}</code></pre></div>')
-
-
 NAV = [[("script", "Script", "n-script"), ("manuscript", "Manuscript", "n-manuscript"), ("book", "Book", "n-book")],
        [("launcher", "Launcher", ""), ("wiki/", "Wiki", ""), ("open-source", "Open source", ""), ("about", "About", "")]]
 
@@ -293,7 +288,7 @@ def page(file, title, desc, body, cls=""):
             <li><a href="wiki/">Wiki</a></li>
             <li><a href="about">About</a></li>
             <li><a href="open-source">Open source</a></li>
-            <li><a href="open-source#roadmap">Road to 1.0</a></li>
+            <li><a href="open-source#releases">Releases and plans</a></li>
             <li><a href="open-source#get-involved">Get involved</a></li>
             <li><a href="open-source#privacy">Privacy</a></li>
           </ul>
@@ -355,54 +350,28 @@ BOOKS = """<svg class="books-art" viewBox="0 0 560 330" role="img" aria-label="A
   </g>
 </svg>"""
 
-CORK = """<div class="cork" role="img" aria-label="Illustration of a corkboard with six index cards, one per chapter">
-          <div class="icard"><b>Playing Pilgrims</b><span>Christmas Eve by the fire. Mother's letter from the war.</span></div>
-          <div class="icard"><b>A Merry Christmas</b><span>The girls give their breakfast away.</span></div>
-          <div class="icard"><b>The Laurence Boy</b><span>Jo meets Laurie at the New Year's party.</span></div>
-          <div class="icard"><b>Burdens</b><span>Each sister and her own trouble.</span></div>
-          <div class="icard"><b>Being Neighborly</b><span>Jo crosses the snow to the big house.</span></div>
-          <div class="icard"><b>Beth Finds the Palace Beautiful</b><span>The piano, and Mr. Laurence.</span></div>
-        </div>"""
+# Where the apps' pictures come from: each app draws its own, from a public-domain text.
+DRAWN = {
+    "script": 'Pictures are drawn by the app from "Everybody\'s Girl" (1918), a public-domain photoplay.',
+    "manuscript": ("Pictures are drawn by the app from the first chapters of <i>Pride and Prejudice</i> (1813), in the public domain. "
+                   "The chapter titles, synopses and bible entries were written for the pictures."),
+    "book": "Pictures are drawn by the app from <i>Gulliver's Travels</i> (1726), in the public domain.",
+}
 
-
-def spread(guides=True):
-    g = '<div class="guides" aria-hidden="true"></div>' if guides else ""
-    return f"""<div class="spread">
-              <div class="leaf left">
-                <div class="ch-num" style="margin-top:58%">VOLUME I</div>
-                <div class="orn" style="margin-top:1.2em">&#10087;</div>
-              </div>
-              <div class="leaf right">
-                {g}
-                <div class="ch-num">CHAPTER I</div>
-                <div class="orn" style="margin-top:0.8em">&#10087;</div>
-                <p class="first"><span class="sc">It is a truth</span> universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.</p>
-                <p>However little known the feelings or views of such a man may be on his first entering a neighbourhood, this truth is so well fixed in the minds of the surrounding families, that he is considered the rightful property of some one or other of their daughters.</p>
-                <p>“My dear Mr. Bennet,” said his lady to him one day, “have you heard that Netherfield Park is let at last?”</p>
-                <p>Mr. Bennet replied that he had not.</p>
-                <p>“But it is,” returned she; “for Mrs. Long has just been here, and she told me all about it.”</p>
-                <div class="folio">1</div>
-              </div>
-            </div>"""
-
-
-# The home page's "desk": a real Script screenshot with an index card and a book page laid over it.
-DESK = f"""<div class="desk" role="img" aria-label="A Wordsmith Script screenplay page, with an index card and a typeset book page laid on top: the three apps on one desk">
+# The home page's "desk": one real screenshot of each app, laid over each other.
+DESK = f"""<div class="desk" role="img" aria-label="Three screenshots: a screenplay page in Wordsmith Script, with Wordsmith Manuscript's corkboard and Wordsmith Book's print preview laid over it">
           <div class="desk-shot">{shot("script", "page-view", "", lazy=False)}</div>
-          <div class="desk-card">
-            <img class="badge" src="{B}wordsmith-manuscript-icon.svg" alt="" width="40" height="40">
-            <b>Playing Pilgrims</b>
-            <span>Christmas Eve by the fire. The four sisters wish for presents, and Mother's letter comes from the war.</span>
-          </div>
-          <div class="desk-leaf">
-            <img class="badge" src="{B}wordsmith-book-icon.svg" alt="" width="40" height="40">
-            <div class="ch-num">CHAPTER I</div>
-            <div class="orn">&#10087;</div>
-            <p class="first"><span class="sc">It is a truth</span> universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.</p>
-            <p>However little known the feelings or views of such a man may be on his first entering a neighbourhood, this truth is so well fixed in the minds of the surrounding families.</p>
-          </div>
+          <div class="desk-inset desk-a"><img class="badge" src="{B}wordsmith-manuscript-icon.svg" alt="" width="40" height="40">{shot("manuscript", "corkboard", "", lazy=False)}</div>
+          <div class="desk-inset desk-b"><img class="badge" src="{B}wordsmith-book-icon.svg" alt="" width="40" height="40">{shot("book", "print-preview", "", lazy=False)}</div>
           <img class="badge badge-shot" src="{B}wordsmith-script-icon.svg" alt="" width="40" height="40">
         </div>"""
+
+
+def gallery(app, shots):
+    """A grid of an app's screenshots: (name, alt, caption)."""
+    figures = "\n".join(f'          <figure><div class="shot">{shot(app, name, alt)}</div><figcaption>{caption}</figcaption></figure>'
+                        for name, alt, caption in shots)
+    return f'<div class="gallery">\n{figures}\n        </div>'
 
 
 # ---------------------------------------------------------------- Home
@@ -429,13 +398,13 @@ home = f"""
     <section class="hero">
       <div class="wrap hero-grid">
         <div class="hero-copy">
-          <p class="kicker"><span class="chip pre">Early days</span><span>No downloads yet. <a href="open-source#roadmap">See the road to 1.0</a></span></p>
+          <p class="kicker"><span>Free and open source, for {systems("script")}</span></p>
           <h1>Free writing tools, from first page to finished book.</h1>
           <p class="lede">A family of open-source apps for screenwriters, novelists and authors. Write a screenplay,
             draft a novel, and turn it into a print book and an ebook.</p>
           <div class="actions">
             <a class="btn btn-primary" href="#apps">Meet the apps {DOWN}</a>
-            <a class="btn btn-ghost" href="{ORG}">{GH} Follow on GitHub</a>
+            <a class="btn btn-ghost" href="wiki/">Read the guides</a>
           </div>
           <ul class="hero-apps" aria-label="The Wordsmith apps">
             <li><a href="script" class="n-script"><img src="{B}wordsmith-script-icon.svg" alt="" width="48" height="48"><span><b>Script</b><small>Screenplays</small></span></a></li>
@@ -463,7 +432,7 @@ home = f"""
         <div class="section-head center">
           <p class="eyebrow">The apps</p>
           <h2>One family, three desks.</h2>
-          <p class="lede">Each app does one job well, and they work together. All three run on macOS, Windows and Linux,
+          <p class="lede">Each app does one job well, and they work together. All three run on {systems("script")},
             and keep your work as plain files on your own computer.</p>
         </div>
         <div class="app-rows">{app_row("script",
@@ -473,11 +442,11 @@ home = f"""
 {app_row("manuscript",
         "Plan, draft and revise novels and other long work, with your story bible beside the text.",
         ["Parts, chapters and scenes in one binder", "A corkboard, an outline and a story bible", "Drafts and snapshots you can compare"],
-        CORK)}
+        f'<div class="shot">{shot("manuscript", "corkboard", "Wordsmith Manuscript showing the corkboard, one card per chapter with its synopsis")}</div>')}
 {app_row("book",
-        "Design and typeset a finished manuscript as a print-ready book and an ebook for every store.",
-        ["Book designs with chapter openings and drop caps", "A print-ready PDF and an accessible EPUB 3", "Preflight checks before you upload"],
-        f'<div role="img" aria-label="Illustration of a typeset two-page book spread">{spread(False)}</div>')}
+        "Design and typeset a finished manuscript as a print-ready book and an ebook for the stores.",
+        ["Thirteen book designs, or your own", "A print-ready PDF and an accessible EPUB, every word checked", "Preflight before you export"],
+        f'<div class="shot">{shot("book", "print-preview", "Wordsmith Book showing a chapter and its print pages as spreads")}</div>')}
         </div>
       </div>
     </section>
@@ -495,7 +464,7 @@ home = f"""
           <li><a class="step n-manuscript" href="manuscript"><span class="step-num">2</span><img src="{B}wordsmith-manuscript-icon.svg" alt="" width="72" height="72"><h3>Manuscript</h3><p>Draft and revise the story, with characters and places in one bible.</p></a></li>
           <li><a class="step n-book" href="book"><span class="step-num">3</span><img src="{B}wordsmith-book-icon.svg" alt="" width="72" height="72"><h3>Book</h3><p>Turn the finished manuscript into a print book and an ebook.</p></a></li>
         </ol>
-        <p class="flow-note">The planned <a href="launcher">Wordsmith Launcher</a> will bring all three together in one download.</p>
+        <p class="flow-note">The <a href="launcher">Wordsmith Launcher</a>, which is planned, will bring all three together in one download.</p>
       </div>
     </section>
 
@@ -519,21 +488,21 @@ home = f"""
       <div class="wrap">
         <div class="cta-panel">
           <div class="cta-copy">
-            <p class="eyebrow">Early days</p>
-            <h2>Help us get to 1.0.</h2>
-            <p class="lede">The apps are young and there are no downloads yet. If you write, code, design or translate,
-              there's a place for you. Watch the repositories to hear about the first releases.</p>
+            <p class="eyebrow">Open source</p>
+            <h2>Built in the open. Come and help.</h2>
+            <p class="lede">Every line is public: the code, the plans and the decisions. If you write, code, design
+              or translate, there's a place for you.</p>
             <div class="actions">
               <a class="btn btn-primary" href="open-source#get-involved">Get involved</a>
               <a class="btn btn-ghost" href="{ORG}">{GH} jamescjfoundation on GitHub</a>
             </div>
           </div>
-          <ol class="mini-road" aria-label="The road to 1.0">
-            <li class="now"><b>Now</b><span>Building the base</span></li>
-            <li><b>Next</b><span>First releases</span></li>
-            <li><b>1.0</b><span>Ready for real work</span></li>
-            <li><b>Beyond</b><span>Growing together</span></li>
-          </ol>
+          <ul class="ticks boxed">
+            <li>Write something real in an app, and report what gets in your way</li>
+            <li>Fix a page of a guide: every wiki page links to its source</li>
+            <li>Translate: Manuscript and Book already come in English and Spanish</li>
+            <li>Write code: the apps are in Rust, on one shared base</li>
+          </ul>
         </div>
       </div>
     </section>
@@ -609,7 +578,9 @@ def hero_meta(slug):
     return f'{chip(slug)}<span>{systems(slug, ", ")}</span><span>{state(slug)["line"]}</span>'
 
 
-def app_hero(slug, name, h1, lede, actions, meta, visual):
+def app_hero(slug, h1, lede, picture, alt, caption):
+    """The top of an app's page: its name, what it is, the download and guide buttons, and one screenshot."""
+    name = APPS[slug]["name"]
     return f"""
     <section class="p-hero app-hero">
       <div class="wrap">
@@ -624,12 +595,14 @@ def app_hero(slug, name, h1, lede, actions, meta, visual):
           <h1>{h1}</h1>
           <p class="lede">{lede}</p>
           <div class="actions">
-            {actions}
+            <a class="btn btn-primary" href="#download">{DOWN} Download</a>
+            <a class="btn btn-ghost" href="wiki/{slug}/">Read the guide</a>
           </div>
-          <div class="meta">{meta}</div>
+          <div class="meta">{hero_meta(slug)}</div>
         </div>
         <figure class="visual">
-          {visual}
+          <div class="stage"><div class="shot">{shot(slug, picture, alt, lazy=False)}</div></div>
+          <figcaption>{caption} {DRAWN[slug]}</figcaption>
         </figure>
       </div>
     </section>"""
@@ -637,14 +610,11 @@ def app_hero(slug, name, h1, lede, actions, meta, visual):
 
 # ---------------------------------------------------------------- Script
 script = app_hero(
-    "script", "Wordsmith Script", "Write the screenplay. The page takes care of itself.",
+    "script", "Write the screenplay. The page takes care of itself.",
     """A free, open-source screenwriting app. Type with two keys doing the formatting, see every page
           as it will print, and take the script into production with revision colors, locked pages and scene numbers.""",
-    f"""<a class="btn btn-primary" href="#download">{DOWN} Download</a>
-            <a class="btn btn-ghost" href="wiki/script/">Read the guide</a>""",
-    hero_meta("script"),
-    f"""<div class="stage"><div class="shot">{shot("script", "page-view", "Wordsmith Script showing a screenplay page, the list of scenes on the left and the scene inspector on the right", lazy=False)}</div></div>
-          <figcaption>The page view, with the scenes on the left and the scene at the caret on the right. Pictures are drawn by the app from "Everybody's Girl" (1918), a public-domain photoplay.</figcaption>""",
+    "page-view", "Wordsmith Script showing a screenplay page, the list of scenes on the left and the scene inspector on the right",
+    "The page view, with the scenes on the left and the scene at the caret on the right.",
 ) + f"""
 
     <section class="section sunken">
@@ -657,10 +627,10 @@ script = app_hero(
     ("keys", "Formatting on two keys", "Return and Tab move between scene headings, action, characters, parentheticals, dialogue and transitions. The status bar always says what comes next."),
     ("page", "Industry pages", "Courier Prime on standard margins, with (MORE) and (CONT'D), scene continueds, a title page, and PDFs and printouts that match the screen."),
     ("type", "Autocomplete that waits", "Character names, places and times offered as you type, never typed for you. Spelling, find and replace, and notes on any text."),
-    ("cards", "Structure", "Index cards and a scene view that reorder the script, a story board of beats, an outline in lanes, scene colors and a structure strip."),
-    ("flag", "Production", "Revision mode on the standard color cycle with margin marks, scene numbers with A-scenes and omitted scenes, locked pages and revised-pages-only printing."),
-    ("chart", "Reports", "Scene lengths in eighths, a character report, a representation report and writing statistics, with goals and a sprint timer."),
-    ("layers", "Templates", "Feature screenplays, TV episodes, stage plays and more, with dual dialogue when two people talk at once."),
+    ("cards", "Structure", "Index cards and a scene view that reorder the script, story boards of beats, an outline in lanes, scene colors and a structure strip."),
+    ("flag", "Production", "Revision mode on the standard color cycle with margin marks, scene numbers with A-scenes and omitted scenes, locked pages, tracked changes and revised-pages-only printing."),
+    ("chart", "Reports", "Scenes, locations, cast and single characters, scene lengths in eighths, a representation report, and writing statistics with goals and a sprint timer."),
+    ("layers", "Templates", "Screenplays, TV episodes, sitcoms, stage plays and audio dramas, your own templates, and dual dialogue when two people talk at once."),
     ("code", "Open files", "A plain-text native format that reads well in version control. Fountain both ways, import from text, RTF and PDF, export to PDF, RTF, text, HTML and CSV."),
     ("terminal", "Command line", "Convert, export and report from a terminal or a build script, and let tools you choose drive the app."),
 ])}
@@ -673,12 +643,12 @@ script = app_hero(
           <p class="eyebrow">A closer look</p>
           <h2>Plan it, write it, shoot it.</h2>
         </div>
-        <div class="gallery">
-          <figure><div class="shot">{shot("script", "index-cards", "Index cards, one per scene, with scene summaries")}</div><figcaption>Index cards: drag a card and the scene moves in the script.</figcaption></figure>
-          <figure><div class="shot">{shot("script", "story-board", "The story board with beats arranged in acts")}</div><figcaption>The story board: plan beats before you write them.</figcaption></figure>
-          <figure><div class="shot">{shot("script", "ribbon-production", "The Production tab with revision tools")}</div><figcaption>Production: revisions, scene numbers and locked pages.</figcaption></figure>
-          <figure><div class="shot">{shot("script", "draft-view-dark", "The draft view in the dark theme")}</div><figcaption>The draft view, in the dark theme.</figcaption></figure>
-        </div>
+        {gallery("script", [
+    ("index-cards", "Index cards, one per scene, with scene summaries", "Index cards: drag a card and the scene moves in the script."),
+    ("story-board", "The story board with beats arranged in acts", "The story board: plan beats before you write them."),
+    ("ribbon-production", "The Production tab with revision tools", "Production: revisions, scene numbers and locked pages."),
+    ("draft-view-dark", "The draft view in the dark theme", "The draft view, in the dark theme."),
+])}
       </div>
     </section>
 
@@ -687,15 +657,15 @@ script = app_hero(
         <div>
           <p class="eyebrow">Familiar from day one</p>
           <h2>Works the way screenwriters already work.</h2>
-          <p class="muted">Wordsmith Script follows the conventions the industry has used for decades, so you can move
-            between it and other screenwriting software without relearning anything. The ribbon is named for screenplay
-            work: Write, Insert, Plan, Production, Review and View.</p>
+          <p class="muted">Wordsmith Script follows the conventions the industry has used for decades, so the pages
+            look the way readers and crews expect. The ribbon is named for screenplay work: Write, Insert, Plan,
+            Production, Review and View.</p>
         </div>
         <ul class="ticks boxed">
           <li>Plain-text scripts you can read, back up and compare anywhere</li>
           <li>Auto-save and timestamped backups, every file saved safely</li>
           <li>No telemetry. The only request it makes is an update check you can turn off</li>
-          <li>Screen readers supported through the platform's accessibility tools</li>
+          <li>Screen readers supported through the system's accessibility tools</li>
           <li>MIT or Apache-2.0 licensed: free to use, study and improve</li>
         </ul>
       </div>
@@ -705,50 +675,12 @@ script = app_hero(
 
 # ---------------------------------------------------------------- Manuscript
 manuscript = app_hero(
-    "manuscript", "Wordsmith Manuscript", "The whole novel, in one place.",
+    "manuscript", "The whole novel, in one place.",
     """A free, open-source app for writing novels and other long work. Plan on a corkboard, draft in a
           binder of chapters and scenes, keep your story bible beside the text, and hand the finished manuscript to
           Wordsmith Book.""",
-    f"""<a class="btn btn-primary" href="#download">{DOWN} Download</a>
-            <a class="btn btn-ghost" href="wiki/manuscript/">Read the guide</a>""",
-    hero_meta("manuscript"),
-    """<div class="stage"><div class="mock" role="img" aria-label="Illustration of Wordsmith Manuscript: a binder of chapters, the text of a scene, and the inspector with the scene's synopsis and label">
-            <div class="mock-bar"><i></i><i></i><i></i><span class="title">Little Women</span><span>· Draft 2</span></div>
-            <div class="mock-body">
-              <div class="mock-side">
-                <h4>Manuscript</h4>
-                <div class="row">Part One</div>
-                <div class="row in">1. Playing Pilgrims</div>
-                <div class="row in sel">&nbsp;&nbsp;The four sisters</div>
-                <div class="row in">&nbsp;&nbsp;Mother's letter</div>
-                <div class="row in">2. A Merry Christmas</div>
-                <div class="row in">3. The Laurence Boy</div>
-                <div class="row in">4. Burdens</div>
-                <h4 class="gap">Story bible</h4>
-                <div class="row"><span class="dot"></span>Jo March</div>
-                <div class="row"><span class="dot"></span>Meg March</div>
-                <div class="row"><span class="dot muted-dot"></span>Orchard House</div>
-                <h4 class="gap">Research</h4>
-                <div class="row">Pilgrim's Progress notes</div>
-              </div>
-              <div class="mock-page">
-                <h5>CHAPTER ONE</h5>
-                <p>"Christmas won't be Christmas without any presents," grumbled Jo, lying on the rug.</p>
-                <p>"It's so dreadful to be poor!" sighed Meg, looking down at her old dress.</p>
-                <p>"I don't think it's fair for some girls to have plenty of pretty things, and other girls nothing at all," added little Amy, with an injured sniff.</p>
-                <p>"We've got Father and Mother, and each other," said Beth contentedly from her corner.<span class="caret"></span></p>
-              </div>
-              <div class="mock-side right">
-                <h4>Inspector</h4>
-                <div class="field"><b>Synopsis</b><span>The sisters by the fire on Christmas Eve, wishing for presents.</span></div>
-                <div class="field"><b>Label</b><span><span class="dot"></span>Jo's thread</span></div>
-                <div class="field"><b>Status</b><span>Second draft</span></div>
-                <div class="field"><b>In this scene</b><span>Jo, Meg, Amy, Beth</span></div>
-              </div>
-            </div>
-            <div class="mock-foot"><span>Scene: 412 words</span><span>Session 1,240 of 1,800 <span class="target"><b></b></span></span></div>
-          </div></div>
-          <figcaption>An illustration of the main window, not a screenshot. The text is from <i>Little Women</i> (1868), in the public domain.</figcaption>""",
+    "editor", "Wordsmith Manuscript showing a scene's text, the binder of chapters and scenes on the left and the inspector on the right",
+    "The editor, with the binder on the left and the scene's synopsis, label, status and bible entries on the right.",
 ) + f"""
 
     <section class="section sunken">
@@ -758,28 +690,33 @@ manuscript = app_hero(
           <h2>Plan it, write it, revise it, finish it.</h2>
         </div>
         {features([
-    ("list", "The binder", "Parts, chapters and scenes in one list. Drag to reorder, split and merge, and read any run of scenes as one continuous text."),
+    ("list", "The binder", "Parts, chapters and scenes in one tree, with research and notes beside them. Drag to reorder, and read a chapter, or the whole book, as one continuous text."),
     ("cards", "Corkboard and outline", "Index cards for every scene, a freeform board with lines between ideas, and an outline with your own columns."),
-    ("people", "Story bible", "Characters, places and anything else, with your own templates, relationships read from both sides, and suggested links from the names in a scene."),
-    ("layers", "Drafts", "Keep the manuscript as it is and start a new draft. Compare drafts chapter by chapter and choose which one goes to print."),
-    ("history", "Snapshots", "Save a scene before a big change and compare it word by word later. Restore it in one click."),
-    ("target", "Targets and history", "Word targets for the session and the book, a writing calendar kept on your computer, and progress you can see."),
+    ("people", "Story bible", "Characters, places and anything else, with your own entry types, relationships read from both sides, and suggested links from the names in a scene."),
+    ("layers", "Drafts", "Keep the manuscript as it is and start a new draft. Compare drafts chapter by chapter and choose which one is exported."),
+    ("history", "Snapshots", "Keep a scene as it is before a big change, compare it word by word later, and restore it in one click."),
+    ("target", "Targets and history", "Word targets for the session and the book with a deadline, and a writing calendar kept on your computer, never in the project."),
     ("timeline", "Threads and timeline", "Lanes for plot threads or points of view, and a timeline of the story's own dates."),
     ("books", "Series", "Several books can share one story bible, so what you learn about a character in book one is there in book three."),
-    ("pen", "Revision tools", "Split the editor, leave comments, mark revision passes in color, and turn on offline grammar hints if you want them."),
+    ("pen", "Revision tools", "Split the editor, leave comments, mark revision passes in color, and turn on grammar hints that run on your own computer."),
 ])}
       </div>
     </section>
 
     <section class="section">
-      <div class="wrap split wide-visual">
-        <div>
-          <p class="eyebrow">Planning</p>
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">A closer look</p>
           <h2>See the shape of the story.</h2>
-          <p class="muted">Every scene is a card. Write a line on it, color it by thread or point of view, and move it
-            around until the story works. The text moves with it.</p>
+          <p class="lede">Every scene is a card. Write a line on it, color it by label, and move it around until the
+            story works. The text moves with it.</p>
         </div>
-        <div class="stage">{CORK}</div>
+        {gallery("manuscript", [
+    ("corkboard", "The corkboard: one card per chapter with its synopsis, label color and status", "The corkboard: one card per chapter, with its synopsis, label and status."),
+    ("outline", "The outline: chapters and scenes with label, status, words, target, point of view and scene date", "The outline: sort it, edit it in place, add your own columns."),
+    ("bible", "A character's sheet in the story bible", "The story bible: a character's sheet, beside the text."),
+    ("stitched-dark", "The whole manuscript as one text, in the dark theme", "The whole manuscript read as one text, in the dark theme."),
+])}
       </div>
     </section>
 
@@ -788,9 +725,9 @@ manuscript = app_hero(
         <div>
           <p class="eyebrow">Your words, safe</p>
           <h2>Bring everything in. Lose nothing.</h2>
-          <p class="muted">Import from Word, OpenDocument, RTF, Markdown, web pages, EPUB and plain text, or a whole
-            folder of documents at once. Chapters and scene breaks are found for you, and every import is checked word
-            for word against the source. If a single word doesn't match, the import isn't made.</p>
+          <p class="muted">Import from Word, OpenDocument, RTF, Markdown, web pages, EPUB and plain text, an outline,
+            or a whole folder of documents at once. Chapters and scene breaks are found for you, and every import is
+            checked word for word against the source. If a single word doesn't match, the import isn't made.</p>
         </div>
         <ul class="ticks boxed">
           <li>A project is a folder of plain text files, readable in any text editor</li>
@@ -799,6 +736,7 @@ manuscript = app_hero(
           <li>Export to Word, OpenDocument, RTF, Markdown, HTML and EPUB, each one checked</li>
           <li>Hand the book to Wordsmith Book as one package, ready to typeset</li>
           <li>Keep Wordsmith Script screenplays inside the same project</li>
+          <li>The interface comes in English and Spanish</li>
         </ul>
       </div>
     </section>
@@ -817,61 +755,71 @@ manuscript = app_hero(
 
 # ---------------------------------------------------------------- Book
 book = app_hero(
-    "book", "Wordsmith Book", "From manuscript to a book you'd be proud to sell.",
+    "book", "From manuscript to a book you'd be proud to sell.",
     """A free, open-source app for designing and typesetting books. Bring a finished manuscript, choose
-          a design, set the trim size, fonts and chapter openings, and export a print-ready PDF and an accessible ebook,
-          with every word checked against your source.""",
-    f"""<a class="btn btn-primary" href="#download">{DOWN} Download</a>
-            <a class="btn btn-ghost" href="wiki/book/">Read the guide</a>""",
-    hero_meta("book"),
-    f"""<div class="spread-wrap" role="img" aria-label="Illustration of a typeset two-page book spread: a part page on the left and the opening of chapter one on the right">
-            {spread()}
-            <div class="book-ui" aria-hidden="true">
-              <span>Trim 5.5 &times; 8.5 in</span><span>Cream paper</span><span>Design: Classic</span><span class="ok">Preflight passed</span><span class="ok">EPUB valid</span>
-            </div>
-          </div>
-          <figcaption>An illustration of a print preview, with the safe-area guide shown on the right page. Not a screenshot: Book is still being built. Text from <i>Pride and Prejudice</i> (1813), in the public domain.</figcaption>""",
+          a design, set the trim size and the front and back matter, and export a print-ready PDF and an accessible
+          ebook, with every word checked against your source.""",
+    "print-preview", "Wordsmith Book showing a chapter's text, the book's outline on the left and its print pages as spreads on the right",
+    "A chapter open from the Outline, with its print pages as spreads in the Print Preview.",
 ) + f"""
 
     <section class="section sunken">
       <div class="wrap">
         <div class="section-head">
-          <p class="eyebrow">What it will do</p>
-          <h2>Beautiful by default. Ready for every store.</h2>
-          <p class="lede">Book is planned to give independent authors and small presses the typesetting quality of a
-            traditional publisher, without learning typesetting.</p>
+          <p class="eyebrow">What it does</p>
+          <h2>Beautiful by default. Ready to print and to sell.</h2>
+          <p class="lede">For independent authors and small presses: a typeset book and a clean ebook from the same
+            manuscript, without learning typesetting.</p>
         </div>
         {features([
-    ("import", "Import", "Open a Wordsmith Manuscript project directly, or bring in Word, Google Docs downloads, Markdown or plain text. Chapters and scene breaks are found for you."),
-    ("letters", "Book designs", "Designs for every genre, with chapter openings, drop caps, ornaments and running heads. Mix parts of two designs, and save your own."),
-    ("page", "Front and back matter", "Title and copyright pages filled in from your book's details, dedication, contents, about the author, \"also by\" and more."),
-    ("print", "Print-ready PDF", "Standard trim sizes, margins that grow with the page count, chapters on the right-hand page, and paperback and hardcover settings."),
-    ("tablet", "Ebooks", "An accessible EPUB 3 that passes the industry's validator, with a live preview on phone, tablet and e-reader frames."),
-    ("check", "Preflight", "Checks the store rules before you upload: blank pages, font sizes, image resolution, cover size and more."),
-    ("open-book", "Cover template", "The exact full-wrap cover size for your page count and paper, with spine, bleed and safe areas marked."),
-    ("copies", "Store editions", "One book, several editions: the right links and pages for each ebook store, built from one source."),
-    ("shield", "Your words, untouched", "Typographic cleanup (curly quotes, dashes, ellipses) is shown and reversible, never silent. A switch keeps the text exactly as written."),
+    ("import", "Bring the manuscript", "Link a Wordsmith Manuscript project, which Book reads and never changes, or import Word, OpenDocument, RTF, Markdown, plain text or EPUB. Chapters, parts and scene breaks are found for you, and you review them first."),
+    ("letters", "Book designs", "Thirteen designs, from Classic and Literary to Fantasy, Poetry and Large Print, each previewed with your own first chapter. Mix parts of two designs, save your own, and share it as a file."),
+    ("page", "Front and back matter", "A half title, title page, copyright page and contents made from your book's details, and a dedication, epigraph, about the author, \"also by\" and more, each put where convention has it."),
+    ("print", "Print-ready PDF", "Eighteen trim sizes, mirrored margins with a gutter that grows with the page count, paperback and hardcover profiles, bleed, footnotes on the page, and a large-print edition of any design."),
+    ("tablet", "Ebooks", "EPUB 3.3 with a table of contents, accessibility metadata and alternative text for pictures, embedded fonts where their licenses allow, pop-up notes and the print edition's page numbers."),
+    ("check", "Preflight", "Builds an edition and reads the file back: page size and margins, embedded fonts, picture resolution, the cover, ISBNs and every word against the source. Each finding links to its page or setting."),
+    ("open-book", "Cover template", "The full-wrap cover template for your page count and paper, with the spine, bleed, safe areas and barcode area marked, and a check of the cover you bring."),
+    ("copies", "Editions", "A paperback, a hardcover, a large-print edition and an ebook from one book, each with its own ISBN. Add an ebook edition per store, each carrying only its own links."),
+    ("shield", "Your words, untouched", "Typographic cleanup (curly quotes, dashes, ellipses) is shown change by change and can be undone. A fix to a linked manuscript is offered back to the writer, never written into it."),
 ])}
       </div>
     </section>
 
     <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">A closer look</p>
+          <h2>Choose, preview, check, export.</h2>
+        </div>
+        {gallery("book", [
+    ("designs", "The design chooser: genres and moods, and a sample chapter opening for each design", "The design chooser: filter by genre and mood, and see each design on your own chapter."),
+    ("ebook", "The Ebook Preview on a phone, with the chapter's opening in small capitals", "The ebook preview: a phone, an e-ink reader or a tablet."),
+    ("preflight", "Preflight on the paperback: nothing blocks export, and each note has a button to its page or setting", "Preflight: what blocks export, what to look at, and where."),
+    ("details", "Details: the book's metadata, what it still needs and its editions with their ISBNs", "Details: the book's metadata, what a store would miss, and the editions."),
+])}
+      </div>
+    </section>
+
+    <section class="section sunken">
       <div class="wrap split">
         <div>
           <p class="eyebrow">For a small press too</p>
           <h2>One author or a whole catalogue.</h2>
-          <p class="muted">House styles lock a design for an imprint or a series, so every book matches. Builds can run
-            from the command line, so a press can produce a whole list the same way every time.</p>
+          <p class="muted">A press keeps its imprints, its series and the ISBNs it owns in one house file. An imprint
+            or a series can lock its design, so every book matches, and builds run from the command line, the same
+            way every time.</p>
         </div>
         <ul class="ticks boxed">
-          <li>Designs in an open format that can be shared and versioned</li>
-          <li>Series pages and box sets with one master contents</li>
-          <li>Reproducible builds from a script</li>
-          <li>Built on established open-source typesetting, not reinvented</li>
+          <li>Title and copyright pages from the imprint, with its logo and wording</li>
+          <li>A series line, an "Also by" list in order, and box sets with one contents</li>
+          <li>Each ISBN checked and given once, and an ONIX 3.0 record for distributors</li>
+          <li>The same project gives the same files, byte for byte, every time</li>
+          <li>A command line that builds, checks and verifies without the window</li>
+          <li>The interface comes in English and Spanish</li>
         </ul>
       </div>
     </section>
-{download("book", sunken=True)}
+{download("book")}
 """
 
 # ---------------------------------------------------------------- Launcher
@@ -884,12 +832,13 @@ launcher = f"""
             <div><p class="eyebrow flat">Wordsmith Launcher</p></div>
           </div>
           <h1>One download for the whole desk.</h1>
-          <p class="lede">The Wordsmith Launcher is planned as the front door to the suite: a small app that installs the
-            Wordsmith apps you want, keeps them up to date, and opens your recent work from any of them.</p>
-          <div class="meta"><span class="chip planned">Planned</span><span>Details are still being worked out</span></div>
+          <p class="lede">The Wordsmith Launcher is planned, and not started. It will be the front door to the suite: a
+            small app that installs the Wordsmith apps you want, keeps them up to date, and opens your recent work
+            from any of them.</p>
+          <div class="meta"><span class="chip planned">Planned</span><span>Not started</span><span>Until it exists, each app is its own download</span></div>
         </div>
         <figure class="launch">
-          <div class="mock" role="img" aria-label="Illustration of the planned launcher: the three apps with their status, and a list of recent projects">
+          <div class="mock" role="img" aria-label="Sketch of the planned launcher: the three apps with their status, and a list of recent projects">
             <div class="mock-bar"><i></i><i></i><i></i><span class="title">Wordsmith</span></div>
             <div class="mock-body">
               <div class="launch-apps">
@@ -905,7 +854,7 @@ launcher = f"""
               </div>
             </div>
           </div>
-          <figcaption>An early sketch, not a design.</figcaption>
+          <figcaption>A sketch of the idea, not a design. Nothing of the launcher is built yet.</figcaption>
         </figure>
       </div>
     </section>
@@ -913,8 +862,8 @@ launcher = f"""
     <section class="section sunken">
       <div class="wrap">
         <div class="section-head">
-          <p class="eyebrow">The idea</p>
-          <h2>What the launcher is for.</h2>
+          <p class="eyebrow">The plan</p>
+          <h2>What the launcher will be for.</h2>
         </div>
         {features([
     ("import", "Install what you need", "Pick the apps you want. A screenwriter may only need Script; a novelist may want Manuscript and Book."),
@@ -931,12 +880,13 @@ launcher = f"""
       <div class="wrap">
         <div class="callout">
           <img src="{B}wordsmith-and-ink-icon.svg" alt="" width="64" height="64">
-          <div><h3>Have ideas for the launcher?</h3><p>It hasn't been built yet, so now is the best time to shape it. Tell us what would help you.</p></div>
-          <a class="btn btn-ghost" href="open-source#get-involved">Get involved</a>
+          <div><h3>Have ideas for the launcher?</h3><p>It hasn't been built yet, so now is the best time to shape it. Its plan is an open issue: tell us there what would help you.</p></div>
+          <a class="btn btn-ghost" href="{ORG}/wordsmith/milestone/1">{GH} The plan on GitHub</a>
         </div>
       </div>
     </section>
 """
+
 
 # ---------------------------------------------------------------- Open source
 def status_rows():
@@ -957,41 +907,33 @@ opensource = f"""
       <div class="wrap">
         <p class="eyebrow">Open source</p>
         <h1>Built in the open, for every writer.</h1>
-        <p class="lede">Every line of Wordsmith is public: the code, the plans and the decisions. Here is where the
-          project stands, where it's going, and how you can help it get there.</p>
+        <p class="lede">Every line of Wordsmith is public: the code, the plans and the decisions. Here is where each
+          app's releases are, where its plans are kept, and how you can help.</p>
       </div>
     </section>
 
-    <section class="section" id="roadmap">
+    <section class="section" id="releases">
       <div class="wrap">
         <div class="section-head">
-          <p class="eyebrow">Early days</p>
-          <h2>The road to 1.0.</h2>
-          <p class="lede">We're at the start. The apps work, but they're young: no installers yet, and plenty still to
-            build. The hope is to reach a solid 1.0 for each app, and to grow a community that carries the work
-            forward from there.</p>
+          <p class="eyebrow">Where things stand</p>
+          <h2>Releases and plans.</h2>
+          <p class="lede">Each app is released from its own repository, and this page reads its latest release from
+            there. What comes next is not written here: it is kept as issues, where anyone can read it and add to it.</p>
         </div>
-        <ol class="road">
-          <li class="now"><span class="when">Now</span><h3>Building the base</h3>
-            <ul><li>Script and Manuscript rebuilt on one shared core</li><li>Book's first steps</li><li>Code, plans and decisions public</li></ul></li>
-          <li><span class="when">Next</span><h3>First releases</h3>
-            <ul><li>Installers for macOS, Windows and Linux</li><li>Verified downloads from GitHub</li><li>The launcher</li></ul></li>
-          <li><span class="when">1.0</span><h3>Ready for real work</h3>
-            <ul><li>Each app complete for daily writing</li><li>Script to Manuscript to Book, end to end</li><li>Stable file formats</li></ul></li>
-          <li><span class="when">Beyond</span><h3>Growing together</h3>
-            <ul><li>More languages</li><li>Templates and book designs from the community</li><li>Whatever writers ask for</li></ul></li>
-        </ol>
-
         <div class="table-scroll">
           <table class="status">
             <thead><tr><th>App</th><th>Latest release</th><th>For</th><th>Code</th></tr></thead>
             <tbody>
 {status_rows()}
               <tr><td><img src="{B}wordsmith-and-ink-icon.svg" alt="" width="28" height="28">Wordsmith Launcher</td><td><span class="chip planned">Planned</span></td><td>Installing and opening the apps</td><td class="muted">Not started</td></tr>
-              <tr><td><span class="core-dot" aria-hidden="true"></span>open-source-core</td><td><a href="{ORG}/open-source-core/releases">Releases</a></td><td>The shared base every app is built on</td><td><a href="{ORG}/open-source-core">open-source-core</a></td></tr>
+              <tr><td><span class="core-dot" aria-hidden="true"></span>open-source-core</td><td><a href="{ORG}/open-source-core/releases">Releases page</a></td><td>The shared base every app is built on</td><td><a href="{ORG}/open-source-core">open-source-core</a></td></tr>
             </tbody>
           </table>
         </div>
+        <p class="after-table">What is planned: the open issues of
+          <a href="{repo("script")}/issues">Script</a>, <a href="{repo("manuscript")}/issues">Manuscript</a> and
+          <a href="{repo("book")}/issues">Book</a>, and for this website, the wiki and the launcher, the
+          <a href="{ORG}/wordsmith/milestone/1">v1 milestone</a>. What changed in a release is in each repository's changelog.</p>
       </div>
     </section>
 
@@ -1003,11 +945,11 @@ opensource = f"""
           <p class="lede">You don't need to write code to help. Everything happens in the open on GitHub.</p>
         </div>
         {features([
-    ("star", "Watch and star", "Watch the repositories to hear about the first releases. Stars help other writers find the project."),
-    ("chat", "Try it and tell us", "Build an app from source, write something real in it, and open an issue for anything that gets in your way."),
+    ("star", "Watch and star", "Watch a repository to hear about its releases. Stars help other writers find the project."),
+    ("chat", "Try it and tell us", "Write something real in an app, and open an issue for anything that gets in your way."),
     ("code", "Write code", "The apps are written in Rust. Each repository's contributing guide explains how changes are made and checked."),
-    ("globe", "Translate", "Help bring the apps to writers in your language. Manuscript already speaks English and Spanish."),
-    ("letters", "Design", "Book designs, templates and documentation all need people with an eye for detail."),
+    ("globe", "Translate", "Help bring the apps to writers in your language. Manuscript and Book already come in English and Spanish."),
+    ("letters", "Design", "Book designs, templates and the guides all need people with an eye for detail."),
     ("megaphone", "Spread the word", "Tell a writer who could use free tools. That's how a community starts."),
 ])}
         <div class="actions"><a class="btn btn-primary" href="{ORG}">{GH} jamescjfoundation on GitHub</a></div>
@@ -1028,9 +970,12 @@ opensource = f"""
           <span class="ficon">{icon("eye-off")}</span>
           <p class="eyebrow">Privacy</p>
           <h2>Your writing stays with you.</h2>
-          <p class="muted">The apps send no telemetry and have no accounts. Your writing, notes and file names are never
-            sent anywhere. The only request an app makes on its own is a check for updates with GitHub, which you can
-            turn off.</p>
+          <p class="muted">The apps have no accounts and send no telemetry: no usage reports, no crash reports. Your
+            writing, notes and file names are never sent anywhere.</p>
+          <p class="muted">One request leaves your computer by itself: the update check. When an app starts, it asks
+            GitHub for the list of that app's releases. GitHub sees your IP address and the app's name and version,
+            and nothing else. Turn it off in File &rsaquo; Preferences. An update is downloaded only when you choose
+            to install it. <a href="wiki/start/privacy">Privacy, in full</a>.</p>
         </div>
       </div>
     </section>
@@ -1042,10 +987,10 @@ opensource = f"""
           <h2>Free to use, study and change.</h2>
         </div>
         <div class="prose">
-          <p>The apps' code is licensed under the MIT license or the Apache License 2.0, at your option. The fonts are
-            under the SIL Open Font License.</p>
-          <p>The words of this website and of the wiki are under the Creative Commons Attribution 4.0 license. Copy
-            them, translate them and build on them, and give credit to the Wordsmith contributors.
+          <p>The apps' code is licensed under the MIT license or the Apache License 2.0, at your option, and so is
+            each app's guide, which the wiki shows. The fonts are under the SIL Open Font License.</p>
+          <p>The words of this website and of the wiki's own pages are under the Creative Commons Attribution 4.0
+            license. Copy them, translate them and build on them, and give credit to the Wordsmith contributors.
             <a href="{ORG}/wordsmith/blob/main/LICENSES.md">Which license covers what</a>.</p>
           <p class="muted">The names Wordsmith, Wordsmith &amp; Ink, Wordsmith Script, Wordsmith Manuscript, Wordsmith
             Book and Wordsmith Launcher, and their logos, are trademarks of The James C. J. Foundation, and the logo
@@ -1073,9 +1018,9 @@ page("index.html", "Wordsmith: free, open-source writing apps",
 page("script.html", "Wordsmith Script", "A free, open-source screenwriting app for macOS, Windows and Linux.", script, "p-script")
 page("manuscript.html", "Wordsmith Manuscript", "A free, open-source app for writing novels and other long work.", manuscript, "p-manuscript")
 page("book.html", "Wordsmith Book", "A free, open-source app for designing and typesetting print books and ebooks.", book, "p-book")
-page("launcher.html", "Wordsmith Launcher", "One download to install, update and open the Wordsmith apps.", launcher)
+page("launcher.html", "Wordsmith Launcher", "The planned Wordsmith Launcher: one download to install, update and open the Wordsmith apps.", launcher)
 page("about.html", "About", "Wordsmith is made by Wordsmith & Ink, a project of The James C. J. Foundation, to give writers free, open tools.", about)
-page("open-source.html", "Open source", "Wordsmith is an open-source project of The James C. J. Foundation. Read about the project, the road to 1.0 and how to help.", opensource)
+page("open-source.html", "Open source", "Wordsmith is an open-source project of The James C. J. Foundation. Read where each app's releases and plans are, and how to help.", opensource)
 page("404.html", "Page not found", "This page could not be found.", notfound)
 
 if CHECK:

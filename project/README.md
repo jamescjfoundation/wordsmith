@@ -81,7 +81,7 @@ All are public, under [github.com/jamescjfoundation](https://github.com/jamescjf
 
 - **Owns:** Wordsmith Manuscript, the app for novels and long work. The binder, the story bible, import and export, the `.wsm` project folder and its packed form `.wsmz` (`docs/format.md`), and the book view that Wordsmith Book reads (`docs/book-handoff.md`).
 - **Stack:** Rust on open-source-core. Crates `manuscript-model`, `manuscript-format`, `manuscript-io`, `manuscript-ui` in `crates/`; programs `manuscript`, `manuscript-cli`, `manuscript-web` in `apps/`.
-- **Publishes:** release files on its GitHub releases page (none yet), which the app's update check reads; and the tag Book builds on (`book-view-1.1` today). Its user guide is `docs/guide/`.
+- **Publishes:** release files on its GitHub releases page (none yet), which the app's update check reads; and the tag Book builds on (`book-view-1.2` today; a new one is cut each time Manuscript moves to a newer core). Its user guide is `docs/guide/`.
 - **Rules:** its [`AGENTS.md`](https://github.com/jamescjfoundation/wordsmith-manuscript/blob/main/AGENTS.md).
 
 ### wordsmith-book
@@ -134,7 +134,7 @@ All are public, under [github.com/jamescjfoundation](https://github.com/jamescjf
 | Each app → wordsmith (the map) | The project block at the top of this file | A copy in the app's `AGENTS.md`, written by `python3 project/carry.py --write` here and checked by this repository's `carried.yml` workflow ([Route N](#route-n)) |
 | wordsmith → open-source-core | The core's `public` block ("What is public") | A copy in this repository's `AGENTS.md`, written and checked by the same tool against the core's newest release |
 | open-source-core → the forks | WordCraft and craft-libs code | The patch block in the core's `Cargo.toml` points the upstream names at our fork's commits; `cargo xtask pins` checks it against `docs/UPSTREAM.md`. Apps never name an upstream crate or type |
-| Book → Manuscript (code) | The crates `wordsmith-manuscript-model` and `wordsmith-manuscript-format` | Git dependencies in Book's `Cargo.toml` at Manuscript's tag `book-view-1.1`, cut on the same core release Book pins. The contract is Manuscript's [`docs/book-handoff.md`](https://github.com/jamescjfoundation/wordsmith-manuscript/blob/main/docs/book-handoff.md) |
+| Book → Manuscript (code) | The crates `wordsmith-manuscript-model` and `wordsmith-manuscript-format` | Git dependencies in Book's `Cargo.toml` at a Manuscript tag `book-view-1.N`, cut on the same core release Book pins (Book's `Cargo.toml` names the current one). The contract is Manuscript's [`docs/book-handoff.md`](https://github.com/jamescjfoundation/wordsmith-manuscript/blob/main/docs/book-handoff.md) |
 | Book → Manuscript (files) | `.wsm` project folders and `.wsmz` packed projects, read; an offers file written beside the project | Book never writes a Manuscript project. It reads Manuscript's project schema, so a schema change in Manuscript reaches Book |
 | Manuscript → Script (files) | `.wss` files kept inside a Manuscript project, shown read-only | Manuscript's own reader, `crates/manuscript-io/src/screenplay.rs`. The format is Script's, in its [`docs/format.md`](https://github.com/jamescjfoundation/wordsmith-script/blob/main/docs/format.md) |
 | Each app → wordsmith (brand) | Logos, icons, the palette card | Copies in the app's `assets/brand/`, taken from `brand/wordsmith-<app>/production/` here |
@@ -185,7 +185,7 @@ Two pairs exist: Book builds on Manuscript's crates and reads its projects, and 
 **Today:**
 
 - Book's needs from Manuscript are listed in Book's `docs/requests-to-manuscript.md` and have not been filed as Manuscript issues yet. File a new need as an issue and add its link to that file.
-- The book-view tag has no written scheme yet. `book-view-1.1` is the view's version (1), then a count of tags cut for it. Nothing in Manuscript's CI builds Book. A breaking change shows only when Book moves to a new tag.
+- The book-view tag has no written scheme yet. `book-view-1.2` is the view's version (1), then a count of tags cut for it. Nothing in Manuscript's CI builds Book. A breaking change shows only when Book moves to a new tag.
 - Manuscript's `.wss` reader does not check the format version it is given.
 
 <a id="route-c"></a>

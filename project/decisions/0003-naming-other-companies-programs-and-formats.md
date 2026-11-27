@@ -17,6 +17,7 @@ The change was raised in each app separately, as the same issue three times: [wo
 - An app is never described as replacing, following or being inspired by another product.
 - **Apps never name WordCraft or craft-libs crates or types.** That is an architecture rule of the core (core decision [0002](https://github.com/jamescjfoundation/open-source-core/blob/main/docs/decisions/0002-layers.md)), and it does not change.
 - **People are never named** in any repository.
+  - 2026-11-27: one exception, at the owner's request. The founder's signed "A note from the founder", on the website's home page, the wiki's start page and the READMEs of the five repositories and the launcher, carries the founder's own signature. It is not a precedent for naming anyone else.
 - A check that only read the private list of names is removed, not kept as a check that cannot fail.
 
 ## Consequences

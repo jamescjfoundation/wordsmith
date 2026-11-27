@@ -92,9 +92,10 @@ than "as discussed".
 
 ## Commits, pushes and pull requests
 
-- While no app built on the core has a public release, a push to `main` is allowed once the
-  repository's gate passes (`cargo xtask ci` where it has `cargo xtask`). A pull request is
-  optional; its author may merge it once its checks pass
+- Every change lands on `main` through a pull request whose required checks pass; GitHub
+  refuses a direct push. Its author, a person or an agent, merges it once they pass, and no
+  approval is required. Run the repository's gate (`cargo xtask ci` where it has
+  `cargo xtask`) before you push the branch
   ([core decision 0013](https://github.com/jamescjfoundation/open-source-core/blob/main/docs/decisions/0013-app-and-core.md)).
 - A release is cut, and in the core an upstream pin is moved, only on a commit whose full gate
   has passed; a person or an agent may do either (core decisions
@@ -116,7 +117,7 @@ than "as discussed".
 
 The rules above are carried word for word from open-source-core and are written for a repository with Cargo. Read them here as follows.
 
-- **The checks.** There is no `cargo xtask` outside `launcher/`. `python3 project/privacy.py` does the job of `cargo xtask privacy`, and the checks under "Building and checking" stand where the rules say `cargo xtask ci`: a push to `main` is allowed once the ones for the folders you changed pass.
+- **The checks.** There is no `cargo xtask` outside `launcher/`. `python3 project/privacy.py` does the job of `cargo xtask privacy`, and the checks under "Building and checking" stand where the rules say `cargo xtask ci`: run the ones for the folders you changed before you push the branch of your pull request, whose two "Checks" jobs must pass before it is merged.
 - **Licenses.** A contribution takes the license of the folder it is made in, and [`LICENSES.md`](LICENSES.md) has the list: code is MIT OR Apache-2.0, and the words of the website and the wiki are CC BY 4.0. The brand files are not open source. Do not send a changed logo or icon: open an issue that says what should change.
 - **Releases and the changelog.** Only the launcher is released from here: a tag `vX.Y.Z` in this repository is a version of the launcher, made by its release workflow, and its changelog is `launcher/CHANGELOG.md`. The website, the wiki, the brand kit and the project map have no releases and no changelog: the website and the wiki are published from `main` by the deploy. A change that follows a change in an app links it ([Route L](project/README.md#route-l) of the project map).
 - **Say only what exists.** The website and the wiki describe what an app does today. Check the app's repository before you write a claim.

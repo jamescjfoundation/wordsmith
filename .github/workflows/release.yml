@@ -30,7 +30,8 @@
 #    release is published with the changelog section as its text.
 #
 # To release: in `launcher/`, make the release commit (`cargo xtask release <version>`), run
-# `cargo xtask ci`, push it to main, then
+# `cargo xtask ci`, land it on main through a pull request whose checks pass (GitHub refuses a
+# direct push), then
 #
 #   gh workflow run release.yml --ref main
 #

@@ -211,3 +211,9 @@ html > body[data-scroll-locked] {
 a.ws-status { text-decoration: none; }
 .ws-downloads { border: 1px solid var(--color-fd-border); border-radius: 0.75rem; padding: 0.25rem 1.25rem; background: var(--color-fd-card); }
 .ws-downloads li { overflow-wrap: anywhere; }
+
+/* The founder's note on the start page (content/docs/index.mdx): a signed note, so the quote
+   marks and italics a Markdown quote gets by default are left off */
+.ws-founder-note blockquote { font-style: normal; font-weight: 400; }
+.ws-founder-note blockquote p::before,
+.ws-founder-note blockquote p::after { content: none; }

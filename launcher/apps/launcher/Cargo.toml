@@ -1,0 +1,37 @@
+[package]
+name = "wordsmith-launcher"
+description = "Wordsmith Launcher, the desktop program"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+wordsmith-launcher-core = { workspace = true }
+# With the window: the core's start-up opens it (`jcj_shell::desktop`).
+jcj-shell = { workspace = true, features = ["window"] }
+serde_json = { workspace = true }
+
+# Embeds the Windows icon and the program's name (build.rs); nothing for other targets.
+[build-dependencies]
+winresource = { workspace = true }
+
+# What Windows shows for the program (Explorer, the taskbar): read by build.rs.
+[package.metadata.winresource]
+ProductName = "Wordsmith Launcher"
+FileDescription = "Wordsmith Launcher"
+CompanyName = "The James C. J. Foundation"
+LegalCopyright = "Copyright (c) the Wordsmith contributors. MIT OR Apache-2.0"
+
+[lib]
+name = "wordsmith_launcher"
+path = "src/lib.rs"
+
+[[bin]]
+name = "wordsmith-launcher"
+path = "src/main.rs"

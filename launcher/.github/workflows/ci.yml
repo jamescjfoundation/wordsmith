@@ -1,0 +1,58 @@
+# CI for an app built on open-source-core. Owned by the core (template/.github/workflows/ci.yml)
+# and kept identical in every app by `cargo xtask sync`; put app-only jobs in another workflow file.
+#
+# This file only says when CI runs. The jobs are the core's shared workflow, called at the tag
+# `workflows-v1`:
+# https://github.com/jamescjfoundation/open-source-core/blob/workflows-v1/.github/workflows/shared-ci.yml
+# The core moves that tag to a commit whose own CI run passed, so a fix to CI reaches every app
+# at once, with no core release and no change here. The tag asks of an app only what every core
+# release from 0.1.19 on gives it; a workflow that needs more gets a new tag, and this file
+# names it from the core release that brings what it needs (core decision 0003).
+#
+# What runs, in three parallel jobs:
+#
+# - checks: `cargo xtask ci` without clippy and tests. On every push to main and every pull
+#   request, a change to Markdown alone included. It fails if the app's shared files, marked
+#   blocks or patch block differ from the pinned core release, if a local core dev-link was
+#   committed, or if the app names or builds more than one core release (how far behind the pin
+#   is: core-pin.yml).
+# - cargo-deny.
+# - build: clippy and tests for what changed since the last commit that passed CI on main, and
+#   for everything that depends on it. A changed file that a package's sources name (a design, a
+#   font, a fixture, a golden file, a page a test compares) counts as that package's. Manifests,
+#   the lock file or the toolchain changing means everything.
+#
+# A newer push cancels an older run. The app's release, with the gate and the builds on the other
+# systems, is release.yml in this folder; other app-only jobs go in a workflow file of the app's.
+#
+# Core decisions: https://github.com/jamescjfoundation/open-source-core/tree/main/docs/decisions
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      full:
+        description: "Run every test, not only what changed"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    # The shared workflow's jobs get this token and no more: read the code, and read the list of
+    # workflow runs to find the last one that passed.
+    permissions:
+      contents: read
+      actions: read
+    uses: jamescjfoundation/open-source-core/.github/workflows/shared-ci.yml@workflows-v1
+    with:
+      full: ${{ inputs.full == true }}

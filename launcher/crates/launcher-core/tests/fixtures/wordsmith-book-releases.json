@@ -1,0 +1,30 @@
+[
+    {
+        "assets": [
+            {
+                "digest": "sha256:128908f711eebd5f7260c387106b91c663ed3ce4e9adcd34402b107eda4caab6",
+                "name": "SHA256SUMS.txt",
+                "size": 324
+            },
+            {
+                "digest": "sha256:11c724e31d518b7d210a194e7e51fe6fd74998ae159679b3455b9a9f3fa281ad",
+                "name": "wordsmith-book-0.9.0-linux-x86_64.tar.gz",
+                "size": 54239233
+            },
+            {
+                "digest": "sha256:3ec22b7e6d3ea8b9aed183683f20a2265b25871aece6cf91514c3db66c86d629",
+                "name": "wordsmith-book-0.9.0-macos-aarch64.dmg",
+                "size": 53085868
+            },
+            {
+                "digest": "sha256:e92bbc84d4f667792b897e5af8de320c8f08c50b09bf26198548b56b86a808e9",
+                "name": "wordsmith-book-0.9.0-windows-x64-portable.zip",
+                "size": 47972886
+            }
+        ],
+        "draft": false,
+        "prerelease": false,
+        "published_at": "2026-11-27T08:08:01Z",
+        "tag_name": "v0.9.0"
+    }
+]

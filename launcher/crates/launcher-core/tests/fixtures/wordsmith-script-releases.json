@@ -1,0 +1,30 @@
+[
+    {
+        "assets": [
+            {
+                "digest": "sha256:f318828393ed3a16336933539485d9f6873ef8312094bee8dcd017c1f4095845",
+                "name": "SHA256SUMS.txt",
+                "size": 330
+            },
+            {
+                "digest": "sha256:7d149db1226c076e25f1957af093ccd0d5273a04ea2fba3324db850d90425d1c",
+                "name": "wordsmith-script-0.9.0-linux-x86_64.tar.gz",
+                "size": 56798012
+            },
+            {
+                "digest": "sha256:04cd0e7a6ae06ce913aa3a86dea134255089332f7960ae345786727890bf7eb5",
+                "name": "wordsmith-script-0.9.0-macos-aarch64.dmg",
+                "size": 55446727
+            },
+            {
+                "digest": "sha256:4ef448499824047d8c6b324443d790d8eb62617ebb0b5855e4ad1c4ade662988",
+                "name": "wordsmith-script-0.9.0-windows-x64-portable.zip",
+                "size": 49848561
+            }
+        ],
+        "draft": false,
+        "prerelease": false,
+        "published_at": "2026-11-27T06:19:36Z",
+        "tag_name": "v0.9.0"
+    }
+]

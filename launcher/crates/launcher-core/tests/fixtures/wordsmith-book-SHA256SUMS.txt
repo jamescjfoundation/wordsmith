@@ -1,0 +1,3 @@
+11c724e31d518b7d210a194e7e51fe6fd74998ae159679b3455b9a9f3fa281ad  wordsmith-book-0.9.0-linux-x86_64.tar.gz
+3ec22b7e6d3ea8b9aed183683f20a2265b25871aece6cf91514c3db66c86d629  wordsmith-book-0.9.0-macos-aarch64.dmg
+e92bbc84d4f667792b897e5af8de320c8f08c50b09bf26198548b56b86a808e9  wordsmith-book-0.9.0-windows-x64-portable.zip

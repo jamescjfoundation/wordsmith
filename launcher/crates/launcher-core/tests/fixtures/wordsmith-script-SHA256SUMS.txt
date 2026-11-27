@@ -1,0 +1,3 @@
+7d149db1226c076e25f1957af093ccd0d5273a04ea2fba3324db850d90425d1c  wordsmith-script-0.9.0-linux-x86_64.tar.gz
+04cd0e7a6ae06ce913aa3a86dea134255089332f7960ae345786727890bf7eb5  wordsmith-script-0.9.0-macos-aarch64.dmg
+4ef448499824047d8c6b324443d790d8eb62617ebb0b5855e4ad1c4ade662988  wordsmith-script-0.9.0-windows-x64-portable.zip

@@ -1,0 +1,93 @@
+# The release of an app built on open-source-core. Owned by the core
+# (template/.github/workflows/release.yml) and kept identical in every app by `cargo xtask sync`.
+#
+# This file only says when the release workflow runs, which token its jobs get and which secrets
+# they are handed. The jobs are the core's shared workflow, called at the tag `workflows-v1`
+# (ci.yml in this folder says how that tag works):
+# https://github.com/jamescjfoundation/open-source-core/blob/workflows-v1/.github/workflows/shared-release.yml
+# What a release is made of, file by file, is the core's contract:
+# https://github.com/jamescjfoundation/open-source-core/blob/main/docs/app-releases.md
+#
+# To release: make the release commit (`cargo xtask release <version>`), run `cargo xtask ci`,
+# push it to main, then
+#
+#   gh workflow run release.yml --ref main
+#
+# The run checks that the commit is a release commit that is not released yet, runs the whole
+# gate on Linux, macOS and Windows with cargo-deny, builds the release file of each system and
+# writes SHA256SUMS.txt. Only when all of that has passed does it make the tag `vX.Y.Z` and
+# publish the GitHub release, with the changelog section as its text. A person or an agent may
+# start it. Never push a `v*` tag by hand: nothing runs for it, and it cannot be taken back.
+#
+# To try it without releasing: `gh workflow run release.yml --ref <branch> -f dry-run=true`.
+# It builds and checks every release file on any commit and stops; the files are kept with the
+# run for a week. The same dry run starts by itself once a week, so a release that would fail
+# is known before it is needed; when that run fails, an issue is opened here.
+#
+# The macOS and Windows programs are signed, and the macOS disk image notarised, when the
+# repository or the organisation has the secrets named below; without them the packages are
+# unsigned and the run says so. The contract says what each secret holds.
+#
+# GitHub switches a scheduled workflow off when its repository has had no activity for 60 days,
+# and tells nobody: `gh workflow enable release.yml` switches it back on.
+#
+# Core decisions: https://github.com/jamescjfoundation/open-source-core/tree/main/docs/decisions
+name: Release
+
+on:
+  schedule:
+    - cron: "23 6 * * 2"
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: "Build and check every release file, and stop: no tag, no release"
+        type: boolean
+        default: false
+      gate:
+        description: "In a dry run: also run the full gate on the three systems"
+        type: boolean
+        default: false
+      commit:
+        description: "The release commit, on main. Empty: the newest commit of the branch this is started on."
+        type: string
+        default: ""
+      older-core:
+        description: "Release although the app is not on the newest open-source-core release"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+# One release at a time; a second one waits.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    # The most any job of the shared workflow may take; each takes less. Read the code and the
+    # runs' cache; write the tag and the release (the last job alone); sign the attestation of
+    # the files; open an issue when a scheduled dry run fails.
+    permissions:
+      contents: write
+      actions: read
+      id-token: write
+      attestations: write
+      issues: write
+    uses: jamescjfoundation/open-source-core/.github/workflows/shared-release.yml@workflows-v1
+    with:
+      # Only a run started by hand can release; the scheduled one is always a dry run.
+      dry-run: ${{ github.event_name != 'workflow_dispatch' || inputs.dry-run == true }}
+      gate: ${{ inputs.gate == true }}
+      commit: ${{ inputs.commit }}
+      older-core: ${{ inputs.older-core == true }}
+    # Named one by one: the shared workflow is handed these and no other secret.
+    secrets:
+      MACOS_CERTIFICATE_P12: ${{ secrets.MACOS_CERTIFICATE_P12 }}
+      MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+      MACOS_NOTARY_KEY: ${{ secrets.MACOS_NOTARY_KEY }}
+      MACOS_NOTARY_KEY_ID: ${{ secrets.MACOS_NOTARY_KEY_ID }}
+      MACOS_NOTARY_ISSUER_ID: ${{ secrets.MACOS_NOTARY_ISSUER_ID }}
+      WINDOWS_CERTIFICATE_PFX: ${{ secrets.WINDOWS_CERTIFICATE_PFX }}
+      WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}

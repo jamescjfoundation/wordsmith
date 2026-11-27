@@ -16,6 +16,8 @@ Nothing is in users' hands yet. No app has a published release, so a broken `mai
 - **Core pins.** An app moves to the newest core release before new work starts on it and before its own release. Between those it may fall behind. An app more than three core releases behind gets an issue in its repository saying so.
 - **What still needs a person.** Rewriting public history, changing a repository's settings on GitHub, and anything that cannot be undone.
 
+- **Amended 2026-11-27, landing.** All four programs have published 0.9.0, which is the moment this record named for looking again. From now on every change in every Wordsmith repository lands through a pull request whose required checks pass. Its author, a person or an agent, merges it; no approval is required, since one account does the work and an approval would not be a second pair of eyes. GitHub enforces it: the `main` ruleset of each repository requires a pull request and the repository's CI checks, and refuses a direct push. The first bullet above holds only for the time before 2026-11-27.
+
 ## Consequences
 
 - The text now matches what happens, so it can be followed.
@@ -27,5 +29,7 @@ Nothing is in users' hands yet. No app has a published release, so a broken `mai
 ## Revisit when
 
 The first app publishes a release. From then on a broken `main` or a bad release reaches writers, and the landing and release rules are looked at again: required checks before `main` changes, and who may publish an app release.
+
+Looked at on 2026-11-27, after the 0.9.0 releases: landing changed to pull requests with required checks (above); who may release is unchanged. Look again at 1.0.0, or when a second person joins and an approval could mean a review.
 
 2026-11-27: this is due. The three apps and the launcher each published 0.9.0, a preview, on that day. The rules have not been looked at again yet, and changes still land as above; [issue 28](https://github.com/jamescjfoundation/wordsmith/issues/28) holds the question.

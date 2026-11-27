@@ -1,0 +1,250 @@
+# The gate of Wordsmith Launcher, the Rust program in `launcher/` (launcher decision 0001,
+# launcher/docs/decisions/).
+#
+# An app built on open-source-core has a short `ci.yml` that calls the core's shared workflow.
+# That workflow runs every step at the root of the calling repository and has no input for a
+# folder, so it cannot be called for the launcher, whose workspace is `launcher/`. This file is
+# therefore the launcher's own: the jobs of the core's `shared-ci.yml`, with `launcher` as the
+# folder the steps run in. When the core's workflow takes a folder (open-source-core#50),
+# this file becomes the short caller. Until then, whoever moves the launcher to a newer core
+# compares this file with the core's.
+#
+# Where it differs from the core's on purpose:
+#
+# - It runs only for a change under `launcher/` (and to this file and the root `hooks/`). The
+#   rest of the repository is checked by checks.yml, which needs no Rust; this workflow builds
+#   nothing for a change to the website.
+# - It always runs clippy and every test, never only what changed: `cargo xtask ci --changed`
+#   reads changed files as paths from the repository's root and would find that nothing in the
+#   workspace changed. The launcher is two small packages, so a whole run costs little.
+# - A fourth job, `live`, runs the launcher's own code against GitHub and a real release on
+#   Linux, macOS and Windows (`cargo xtask live`): it installs one Wordsmith app into a scratch
+#   folder, asks the installed program its version, and removes it. The gate's tests use no
+#   network; this is where the three systems' install steps are tried for real.
+#
+# What is kept between runs, as in the core's workflow: the crates Cargo downloaded
+# (`launcher-cargo-home-<lock file>`) and the build output of the dependencies only
+# (`launcher-deps-<system>-<toolchain and settings>-<dependencies>`), both saved from `main`
+# only and only when no archive with that name exists.
+#
+# Only GitHub's own actions, pinned to full commit SHAs.
+name: Launcher
+
+on:
+  push:
+    branches: [main]
+    paths: ["launcher/**", "hooks/**", ".github/workflows/launcher.yml"]
+  pull_request:
+    paths: ["launcher/**", "hooks/**", ".github/workflows/launcher.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: launcher-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+    working-directory: launcher
+
+# A tool's version and the checksum of each file downloaded for it: the same values as in
+# release.yml, and as in the core's shared workflows at the release the launcher pins. To move
+# to a newer version: change the version, then each checksum, to the `sha256` the project's
+# release page shows for the file (`gh release view <tag> --repo <project> --json assets`).
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: "0"
+  CARGO_NET_RETRY: "10"
+  RUST_BACKTRACE: "short"
+  CARGO_DENY_VERSION: "0.20.2"
+  CARGO_DENY_LINUX_SHA256: "9f12ed4c49936e09b48bf862b595cde2fe64fcbd9d74dfacac6131ca824c8d5f"
+  CARGO_NEXTEST_VERSION: "0.9.152"
+  CARGO_NEXTEST_LINUX_SHA256: "d039b43c3e0958441b6ad0a39c8884d018b3d2e8fb9928f209074b1100b5e17a"
+
+jobs:
+  # Everything that needs no product build.
+  checks:
+    name: checks (every task but clippy and test)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0 # privacy checks every commit identity
+      - name: Toolchain
+        run: rustup show active-toolchain || rustup toolchain install
+      - name: Restore cargo home
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: launcher-cargo-home-${{ hashFiles('launcher/Cargo.lock') }}
+          restore-keys: launcher-cargo-home-
+      - name: cargo xtask ci (checks only)
+        run: cargo xtask ci --skip clippy,test
+
+  deny:
+    name: cargo-deny (licenses, advisories, sources)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Toolchain
+        run: rustup show active-toolchain || rustup toolchain install
+      - name: Restore cargo home
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: launcher-cargo-home-${{ hashFiles('launcher/Cargo.lock') }}
+          restore-keys: launcher-cargo-home-
+      - name: Install cargo-deny (the project's release file, checksum checked)
+        run: |
+          file="cargo-deny-$CARGO_DENY_VERSION-x86_64-unknown-linux-musl.tar.gz"
+          cd "$RUNNER_TEMP"
+          curl --proto '=https' --tlsv1.2 --fail --silent --show-error --location --retry 5 --output "$file" \
+            "https://github.com/EmbarkStudios/cargo-deny/releases/download/$CARGO_DENY_VERSION/$file"
+          echo "$CARGO_DENY_LINUX_SHA256  $file" | sha256sum --check --strict -
+          tar -xzf "$file" --strip-components=1 -C "$(dirname "$(command -v cargo)")" "${file%.tar.gz}/cargo-deny"
+          cargo deny --version
+      - name: cargo deny check
+        run: cargo deny --locked check
+
+  # Clippy and every test of the workspace.
+  build:
+    name: clippy and tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Toolchain
+        run: rustup show active-toolchain || rustup toolchain install
+      - name: Restore cargo home
+        id: home
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: launcher-cargo-home-${{ hashFiles('launcher/Cargo.lock') }}
+          restore-keys: launcher-cargo-home-
+      - name: Name the dependencies' build output
+        id: name
+        env:
+          KIND: launcher-deps-${{ runner.os }}
+        run: |
+          # What decides the build output of the dependencies, and nothing else: the toolchain,
+          # Cargo's settings, the locked packages that come from elsewhere (a package of the
+          # workspace has no `source` line), and the manifests without the workspace's own
+          # version. A change to the workspace's code, or a release that moves only its
+          # version, keeps the archive it has.
+          hash() { if command -v sha256sum >/dev/null; then sha256sum; else shasum -a 256; fi | cut -c1-32; }
+          settings=$(cat rust-toolchain.toml .cargo/config.toml | hash)
+          dependencies=$({
+            awk -v RS= '/\nsource = /' Cargo.lock
+            git ls-files -z -- '*Cargo.toml' | xargs -0 grep -hv '^version = '
+          } | hash)
+          {
+            echo "key=$KIND-$settings-$dependencies"
+            echo "older=$KIND-$settings-"
+          } >> "$GITHUB_OUTPUT"
+      # The archive for these dependencies, or else the newest one for this toolchain: after a
+      # dependency moves, most of the others are still as they were.
+      - name: Restore the dependencies' build output
+        id: deps
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: launcher/target
+          key: ${{ steps.name.outputs.key }}
+          restore-keys: ${{ steps.name.outputs.older }}
+      # Restored from another lock file: the output of every dependency that moved since, and of
+      # everything built on one, will never be read again.
+      - name: Drop the output of dependencies that moved
+        if: steps.deps.outputs.cache-hit != 'true' && steps.deps.outputs.cache-matched-key != ''
+        run: |
+          if [ ! -f target/deps.lock ] || ! cargo xtask prune-target target/deps.lock; then
+            echo "::notice::Could not tell which restored build output is stale: starting from nothing"
+            rm -rf target
+          fi
+      - name: Install cargo-nextest (the project's release file, checksum checked)
+        run: |
+          file="cargo-nextest-$CARGO_NEXTEST_VERSION-x86_64-unknown-linux-gnu.tar.gz"
+          cd "$RUNNER_TEMP"
+          curl --proto '=https' --tlsv1.2 --fail --silent --show-error --location --retry 5 --output "$file" \
+            "https://github.com/nextest-rs/nextest/releases/download/cargo-nextest-$CARGO_NEXTEST_VERSION/$file"
+          echo "$CARGO_NEXTEST_LINUX_SHA256  $file" | sha256sum --check --strict -
+          tar -xzf "$file" -C "$(dirname "$(command -v cargo)")"
+          cargo nextest --version
+      - name: cargo xtask ci (clippy and tests)
+        run: cargo xtask ci --only clippy,test
+      # Saved from main only, and only when these dependencies have no archive yet.
+      - name: Keep the dependencies' build output, not the workspace's own
+        id: trim
+        if: github.ref == 'refs/heads/main' && steps.deps.outputs.cache-hit != 'true'
+        run: |
+          # Every package built from a folder (the workspace's own) is taken out, with the
+          # scratch folders of tests and tools: a fresh checkout is newer than any output of
+          # theirs, so they are built again whatever is kept.
+          cargo metadata --format-version 1 --locked \
+            | jq -r '.packages[] | select(.source == null) | "--package=\(.name)"' | tr -d '\r' \
+            | xargs -r cargo clean --locked
+          rm -rf target/tmp target/nextest target/xtask-sync target/*/incremental target/*/examples
+          cp Cargo.lock target/deps.lock
+          du -sh target
+      - name: Save the dependencies' build output (main only)
+        if: steps.trim.outcome == 'success'
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        continue-on-error: true # a run that could not save is still a run that passed
+        with:
+          path: launcher/target
+          key: ${{ steps.name.outputs.key }}
+      - name: Save cargo home (main only)
+        if: github.ref == 'refs/heads/main' && steps.home.outputs.cache-hit != 'true'
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        continue-on-error: true
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: ${{ steps.home.outputs.cache-primary-key }}
+
+  # The launcher's own code against GitHub and a real release, on each system it is built for.
+  live:
+    name: a real release, installed and removed (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Toolchain
+        run: rustup show active-toolchain || rustup toolchain install
+      - name: Restore cargo home
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: launcher-cargo-home-${{ hashFiles('launcher/Cargo.lock') }}
+          restore-keys: launcher-cargo-home-
+      - name: cargo xtask live
+        run: cargo xtask live

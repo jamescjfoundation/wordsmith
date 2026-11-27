@@ -1,0 +1,638 @@
+# The release of Wordsmith Launcher, and its dry run. The launcher is the one thing this
+# repository releases: a tag `vX.Y.Z` here is a version of the launcher (launcher decision 0001,
+# launcher/docs/decisions/).
+#
+# A release follows the contract every app built on open-source-core follows
+# (https://github.com/jamescjfoundation/open-source-core/blob/main/docs/app-releases.md, core
+# decision 0019). An app's `release.yml` is a short file that calls the core's shared workflow.
+# That workflow runs every step at the root of the calling repository and has no input for a
+# folder, so it cannot be called for the launcher, whose workspace is `launcher/`. This file is
+# therefore the launcher's own: the jobs of the core's `shared-release.yml`, step for step, with
+# `launcher` as the folder the steps run in. When the core's workflow takes a folder
+# (open-source-core#50), this file becomes the short caller. Until then, whoever moves the
+# launcher to a newer core compares this file with the core's.
+#
+# The order is the core's own (core decision 0011): the gate first, then the tag.
+#
+# 1. `check`: the commit is a release commit of `main` (`cargo xtask release --check`: the
+#    version in launcher/Cargo.toml, a dated changelog section for it with text, package data
+#    that is sound), is not released yet, and the launcher is on the newest core.
+# 2. `gate` and `deny`: `cargo xtask ci`, whole, on Linux, macOS and Windows, and cargo-deny
+#    with today's advisories.
+# 3. `package`: `cargo xtask package` on each system makes that system's release file. The
+#    macOS and Windows programs are signed when the certificate's secrets exist, and the macOS
+#    disk image is notarised when the notary's do; without them the step says so and the
+#    package is unsigned.
+# 4. `assemble`: the three files in one folder, checked to be this release's and nothing else,
+#    with `SHA256SUMS.txt` written beside them.
+# 5. `attest`: a signed statement, kept by GitHub, that these files were built here.
+# 6. `publish`: only now the annotated tag `vX.Y.Z` is made on the commit and the GitHub
+#    release is published with the changelog section as its text.
+#
+# To release: in `launcher/`, make the release commit (`cargo xtask release <version>`), run
+# `cargo xtask ci`, push it to main, then
+#
+#   gh workflow run release.yml --ref main
+#
+# A person or an agent may start it. Never push a `v*` tag by hand: nothing runs for it, and it
+# cannot be taken back.
+#
+# To try it without releasing: `gh workflow run release.yml --ref <branch> -f dry-run=true`. A
+# dry run does 1, 3 and 4 on any commit, release commit or not, and stops: no tag, no release,
+# nothing signed off. Its files are kept with the run for a week. `-f gate=true` adds 2. The
+# same dry run starts by itself once a week; when that run fails, the job `failed` opens an
+# issue here, or adds to the open one.
+#
+# GitHub switches a scheduled workflow off when its repository has had no activity for 60 days,
+# and tells nobody: `gh workflow enable release.yml` switches it back on.
+#
+# Each job takes the least it needs; only `publish` can write to the repository.
+# Only GitHub's own actions, pinned to full commit SHAs.
+name: Release
+
+on:
+  schedule:
+    - cron: "23 6 * * 2"
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: "Build and check every release file, and stop: no tag, no release"
+        type: boolean
+        default: false
+      gate:
+        description: "In a dry run: also run the full gate on the three systems"
+        type: boolean
+        default: false
+      commit:
+        description: "The release commit, on main. Empty: the newest commit of the branch this is started on."
+        type: string
+        default: ""
+      older-core:
+        description: "Release although the launcher is not on the newest open-source-core release"
+        type: boolean
+        default: false
+
+# One release at a time; a second one waits.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+# A tool's version and the checksum of each file downloaded for it: the same values as in
+# launcher.yml, and as in the core's shared workflows at the release the launcher pins.
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: "0"
+  CARGO_NET_RETRY: "10"
+  RUST_BACKTRACE: "short"
+  CARGO_DENY_VERSION: "0.20.2"
+  CARGO_DENY_LINUX_SHA256: "9f12ed4c49936e09b48bf862b595cde2fe64fcbd9d74dfacac6131ca824c8d5f"
+  CARGO_NEXTEST_VERSION: "0.9.152"
+  CARGO_NEXTEST_LINUX_SHA256: "d039b43c3e0958441b6ad0a39c8884d018b3d2e8fb9928f209074b1100b5e17a"
+  CARGO_NEXTEST_MACOS_SHA256: "2fadf57df4243e691f088ee3bff4f4ab9af16da0c95a1db84b5cb1685e098a76"
+  CARGO_NEXTEST_WINDOWS_SHA256: "0384fc89a5a547d4fd5e183fcc101d31dba2837feafd8e64d5ea003a0ddb1941"
+
+jobs:
+  check:
+    name: what is released, and whether it may be
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: launcher
+    outputs:
+      commit: ${{ steps.release.outputs.commit }}
+      id: ${{ steps.release.outputs.id }}
+      product: ${{ steps.release.outputs.product }}
+      version: ${{ steps.release.outputs.version }}
+      tag: ${{ steps.release.outputs.tag }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.commit }}
+          persist-credentials: false
+          fetch-depth: 0 # to see that the commit is on main
+      - name: Toolchain
+        run: rustup show active-toolchain || rustup toolchain install
+      - name: Restore cargo home
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: launcher-cargo-home-${{ hashFiles('launcher/Cargo.lock') }}
+          restore-keys: launcher-cargo-home-
+      - name: The release, from the app's own data
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DRY_RUN: ${{ (github.event_name != 'workflow_dispatch' || inputs.dry-run == true) }}
+          OLDER_CORE: ${{ inputs.older-core == true }}
+        run: |
+          commit=$(git rev-parse HEAD)
+          if [ "$DRY_RUN" = "true" ]; then
+            # Any commit: what the launcher would ship is there, and its names are printed.
+            cargo xtask release-data
+            cargo xtask package --describe | tee "$RUNNER_TEMP/release"
+          else
+            if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+              echo "::error::Start a release on main (gh workflow run release.yml --ref main): it is main's copy of the workflow that releases."
+              exit 1
+            fi
+            git fetch --quiet origin main
+            if ! git merge-base --is-ancestor "$commit" FETCH_HEAD; then
+              echo "::error::$commit is not a commit of main"
+              exit 1
+            fi
+            # Prints `version=X.Y.Z` and the release's names, or says what stops this from
+            # being a release commit.
+            cargo xtask release --check | tee "$RUNNER_TEMP/release"
+          fi
+          version=$(sed -n 's/^version=//p' "$RUNNER_TEMP/release")
+          tag=$(sed -n 's/^tag=//p' "$RUNNER_TEMP/release")
+          if [ -z "$version" ] || [ "$tag" != "v$version" ]; then
+            echo "::error::the launcher's xtask named no version and tag (cargo xtask package --describe)"
+            exit 1
+          fi
+          {
+            echo "commit=$commit"
+            grep -E '^(id|product|version|tag)=' "$RUNNER_TEMP/release"
+          } >> "$GITHUB_OUTPUT"
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "A dry run of $tag on $commit: every release file is built and checked; nothing is tagged or published." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          # An annotated tag names a tag object; `^{}` is the commit behind it.
+          tagged=$(git ls-remote origin "refs/tags/$tag^{}" | cut -f1)
+          if [ -z "$tagged" ]; then tagged=$(git ls-remote origin "refs/tags/$tag" | cut -f1); fi
+          if [ -n "$tagged" ] && [ "$tagged" != "$commit" ]; then
+            echo "::error::$tag exists on $tagged, another commit. A tag is never moved: this commit needs the next version."
+            exit 1
+          fi
+          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "::error::$tag is already released. The next release needs the next version (cargo xtask release <version>)."
+            exit 1
+          fi
+          if [ -n "$tagged" ]; then
+            echo "::notice::$tag exists on this commit and has no release yet: this run decides whether it gets one"
+          fi
+          # The launcher is released on the newest core (core decision 0011).
+          if ! cargo xtask core-pin --max-behind 0; then
+            if [ "$OLDER_CORE" = "true" ]; then
+              echo "::warning::The launcher is not on the newest open-source-core release; released as asked (older-core)."
+            else
+              echo "::error::The launcher is not on the newest open-source-core release. Move it first, or start the release with older-core=true and say why in the changelog."
+              exit 1
+            fi
+          fi
+
+  # The whole gate on the three systems. launcher.yml runs it on Linux.
+  gate:
+    name: full gate (${{ matrix.os }})
+    needs: check
+    if: ${{ !(github.event_name != 'workflow_dispatch' || inputs.dry-run == true) || inputs.gate == true }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+        working-directory: launcher
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.check.outputs.commit }}
+          persist-credentials: false
+          fetch-depth: 0 # privacy checks every commit identity
+      - name: Toolchain
+        run: rustup show active-toolchain || rustup toolchain install
+      - name: Restore cargo home
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: launcher-cargo-home-${{ hashFiles('launcher/Cargo.lock') }}
+          restore-keys: launcher-cargo-home-
+      - name: Name the dependencies' build output
+        id: name
+        env:
+          KIND: launcher-deps-${{ runner.os }}
+        run: |
+          # BEGIN same: name the build output
+          # What decides the build output of the dependencies, and nothing else: the toolchain,
+          # Cargo's settings, the locked packages that come from elsewhere (a package of the
+          # workspace has no `source` line), and the manifests without the workspace's own
+          # version. A change to the workspace's code, or a release that moves only its
+          # version, keeps the archive it has.
+          hash() { if command -v sha256sum >/dev/null; then sha256sum; else shasum -a 256; fi | cut -c1-32; }
+          settings=$(cat rust-toolchain.toml .cargo/config.toml | hash)
+          dependencies=$({
+            awk -v RS= '/\nsource = /' Cargo.lock
+            git ls-files -z -- '*Cargo.toml' ':(exclude)template/*' | xargs -0 grep -hv '^version = '
+          } | hash)
+          {
+            echo "key=$KIND-$settings-$dependencies"
+            echo "older=$KIND-$settings-"
+          } >> "$GITHUB_OUTPUT"
+          # END same: name the build output
+      # On Linux this is the archive launcher.yml saves on `main`. Nothing is saved from here:
+      # a release is rare, and an archive for macOS or Windows would push out the ones in use.
+      - name: Restore the dependencies' build output
+        id: deps
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: launcher/target
+          key: ${{ steps.name.outputs.key }}
+          restore-keys: ${{ steps.name.outputs.older }}
+      - name: Drop the output of dependencies that moved
+        if: steps.deps.outputs.cache-hit != 'true' && steps.deps.outputs.cache-matched-key != ''
+        run: |
+          if [ ! -f target/deps.lock ] || ! cargo xtask prune-target target/deps.lock; then
+            echo "::notice::Could not tell which restored build output is stale: starting from nothing"
+            rm -rf target
+          fi
+      - name: Install cargo-nextest (the project's release file, checksum checked)
+        run: |
+          # BEGIN same: install cargo-nextest on any system
+          case "$RUNNER_OS" in
+            Linux) platform="x86_64-unknown-linux-gnu"; sum="$CARGO_NEXTEST_LINUX_SHA256" ;;
+            macOS) platform="universal-apple-darwin"; sum="$CARGO_NEXTEST_MACOS_SHA256" ;;
+            Windows) platform="x86_64-pc-windows-msvc"; sum="$CARGO_NEXTEST_WINDOWS_SHA256" ;;
+            *) echo "::error::no cargo-nextest file is named here for $RUNNER_OS"; exit 1 ;;
+          esac
+          file="cargo-nextest-$CARGO_NEXTEST_VERSION-$platform.tar.gz"
+          bin="$(dirname "$(command -v cargo)")"
+          cd "$RUNNER_TEMP"
+          curl --proto '=https' --tlsv1.2 --fail --silent --show-error --location --retry 5 --output "$file" \
+            "https://github.com/nextest-rs/nextest/releases/download/cargo-nextest-$CARGO_NEXTEST_VERSION/$file"
+          # The three systems name the checksum program differently, so the sums are compared here.
+          have=$( (sha256sum "$file" 2>/dev/null || shasum -a 256 "$file") | cut -d ' ' -f 1)
+          if [ "$have" != "$sum" ]; then
+            echo "::error::$file has the checksum $have, not $sum: it is not the file this workflow names"
+            exit 1
+          fi
+          # Unpacked here and moved, so that no system's tar is given a path of another's kind.
+          mkdir nextest
+          tar -xzf "$file" -C nextest
+          mv nextest/* "$bin/"
+          cargo nextest --version
+          # END same: install cargo-nextest on any system
+      - name: cargo xtask ci
+        run: cargo xtask ci
+
+  deny:
+    name: cargo-deny (licenses, advisories, sources)
+    needs: check
+    if: ${{ !(github.event_name != 'workflow_dispatch' || inputs.dry-run == true) || inputs.gate == true }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: launcher
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.check.outputs.commit }}
+          persist-credentials: false
+      - name: Toolchain
+        run: rustup show active-toolchain || rustup toolchain install
+      - name: Restore cargo home
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: launcher-cargo-home-${{ hashFiles('launcher/Cargo.lock') }}
+          restore-keys: launcher-cargo-home-
+      - name: Install cargo-deny (the project's release file, checksum checked)
+        run: |
+          file="cargo-deny-$CARGO_DENY_VERSION-x86_64-unknown-linux-musl.tar.gz"
+          cd "$RUNNER_TEMP"
+          curl --proto '=https' --tlsv1.2 --fail --silent --show-error --location --retry 5 --output "$file" \
+            "https://github.com/EmbarkStudios/cargo-deny/releases/download/$CARGO_DENY_VERSION/$file"
+          echo "$CARGO_DENY_LINUX_SHA256  $file" | sha256sum --check --strict -
+          tar -xzf "$file" --strip-components=1 -C "$(dirname "$(command -v cargo)")" "${file%.tar.gz}/cargo-deny"
+          cargo deny --version
+      - name: cargo deny check
+        run: cargo deny --locked check
+
+  # One release file a system, made on that system by the launcher's `cargo xtask package`.
+  # Starts with the gate, not after it: the files are published only when both have passed.
+  package:
+    name: package (${{ matrix.platform }})
+    needs: check
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # A named Linux image, not the newest: the package needs that image's C library or a
+          # newer one, and that must not change by itself (the core's docs/app-releases.md).
+          - { os: ubuntu-24.04, platform: linux-x86_64 }
+          - { os: macos-latest, platform: macos-aarch64 }
+          - { os: windows-latest, platform: windows-x64 }
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+        working-directory: launcher
+    env:
+      PLATFORM: ${{ matrix.platform }}
+      # Whether the secrets exist, without naming their values. A dry run signs nothing with a
+      # real identity: its files are not for anyone.
+      SIGN_MACOS: ${{ !(github.event_name != 'workflow_dispatch' || inputs.dry-run == true) && secrets.MACOS_CERTIFICATE_P12 != '' }}
+      NOTARISE_MACOS: ${{ !(github.event_name != 'workflow_dispatch' || inputs.dry-run == true) && secrets.MACOS_CERTIFICATE_P12 != '' && secrets.MACOS_NOTARY_KEY != '' }}
+      SIGN_WINDOWS: ${{ !(github.event_name != 'workflow_dispatch' || inputs.dry-run == true) && secrets.WINDOWS_CERTIFICATE_PFX != '' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.check.outputs.commit }}
+          persist-credentials: false
+      - name: Toolchain
+        run: rustup show active-toolchain || rustup toolchain install
+      - name: Restore cargo home
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: launcher-cargo-home-${{ hashFiles('launcher/Cargo.lock') }}
+          restore-keys: launcher-cargo-home-
+
+      # macOS: the certificate goes into a keychain of this run's own, which the runner
+      # discards with the machine. The package task signs with the identity found in it.
+      - name: The macOS signing certificate
+        if: runner.os == 'macOS' && env.SIGN_MACOS == 'true'
+        env:
+          P12: ${{ secrets.MACOS_CERTIFICATE_P12 }}
+          P12_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+        run: |
+          keychain="$RUNNER_TEMP/release.keychain-db"
+          password=$(uuidgen)
+          printf '%s' "$P12" | base64 --decode > "$RUNNER_TEMP/certificate.p12"
+          security create-keychain -p "$password" "$keychain"
+          security set-keychain-settings -lut 21600 "$keychain"
+          security unlock-keychain -p "$password" "$keychain"
+          security import "$RUNNER_TEMP/certificate.p12" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$keychain"
+          rm -f "$RUNNER_TEMP/certificate.p12"
+          security set-key-partition-list -S apple-tool:,apple: -k "$password" "$keychain" >/dev/null
+          security list-keychains -d user -s "$keychain" login.keychain-db
+          identity=$(security find-identity -v -p codesigning "$keychain" | sed -n 's/^ *[0-9]*) \([0-9A-F]\{40\}\) "Developer ID Application.*/\1/p' | head -n 1)
+          if [ -z "$identity" ]; then
+            echo "::error::MACOS_CERTIFICATE_P12 holds no Developer ID Application certificate with its key"
+            exit 1
+          fi
+          echo "PACKAGE_MACOS_IDENTITY=$identity" >> "$GITHUB_ENV"
+      # Windows: the certificate file, and the signing program of the newest Windows SDK here.
+      - name: The Windows signing certificate
+        if: runner.os == 'Windows' && env.SIGN_WINDOWS == 'true'
+        env:
+          PFX: ${{ secrets.WINDOWS_CERTIFICATE_PFX }}
+        run: |
+          printf '%s' "$PFX" | base64 --decode > "$RUNNER_TEMP/certificate.pfx"
+          signtool=$(find "/c/Program Files (x86)/Windows Kits/10/bin" -path '*/x64/signtool.exe' 2>/dev/null | sort -V | tail -n 1)
+          if [ -z "$signtool" ]; then
+            echo "::error::no signtool.exe was found under the Windows SDK on this runner"
+            exit 1
+          fi
+          {
+            echo "PACKAGE_WINDOWS_PFX=$(cygpath -w "$RUNNER_TEMP/certificate.pfx")"
+            echo "PACKAGE_WINDOWS_SIGNTOOL=$(cygpath -w "$signtool")"
+          } >> "$GITHUB_ENV"
+
+      # The password is read only where a certificate file was named above.
+      - name: cargo xtask package
+        env:
+          PACKAGE_WINDOWS_PFX_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+        run: cargo xtask package "$PLATFORM"
+      - name: Remove the Windows certificate file
+        if: always() && runner.os == 'Windows' && env.SIGN_WINDOWS == 'true'
+        run: rm -f "$RUNNER_TEMP/certificate.pfx"
+
+      # Apple checks the signed disk image and returns a ticket, which is fixed to the image so
+      # that it opens on a computer that is offline.
+      - name: Notarise the macOS disk image
+        if: runner.os == 'macOS' && env.NOTARISE_MACOS == 'true'
+        env:
+          NOTARY_KEY: ${{ secrets.MACOS_NOTARY_KEY }}
+          NOTARY_KEY_ID: ${{ secrets.MACOS_NOTARY_KEY_ID }}
+          NOTARY_ISSUER_ID: ${{ secrets.MACOS_NOTARY_ISSUER_ID }}
+        run: |
+          printf '%s' "$NOTARY_KEY" | base64 --decode > "$RUNNER_TEMP/notary.p8"
+          image=$(ls dist/*.dmg)
+          xcrun notarytool submit "$image" --key "$RUNNER_TEMP/notary.p8" --key-id "$NOTARY_KEY_ID" --issuer "$NOTARY_ISSUER_ID" --wait
+          rm -f "$RUNNER_TEMP/notary.p8"
+          xcrun stapler staple "$image"
+          xcrun stapler validate "$image"
+      - name: Say how the package is signed
+        run: |
+          case "$RUNNER_OS" in
+            macOS) [ "$SIGN_MACOS" = "true" ] && how="signed with the Developer ID certificate" || how="signed ad hoc: no certificate is configured (MACOS_CERTIFICATE_P12), or this is a dry run"
+                   [ "$NOTARISE_MACOS" = "true" ] && how="$how, and notarised" || how="$how; not notarised" ;;
+            Windows) [ "$SIGN_WINDOWS" = "true" ] && how="signed with the certificate" || how="not signed: no certificate is configured (WINDOWS_CERTIFICATE_PFX), or this is a dry run" ;;
+            *) how="not signed: a Linux package is verified by its checksum and its attestation" ;;
+          esac
+          echo "$PLATFORM: $how." | tee -a "$GITHUB_STEP_SUMMARY"
+      # The names are the contract's, and nothing else is in the folder.
+      - name: The package is this release's
+        run: |
+          cargo xtask package --sums dist
+          rm dist/SHA256SUMS.txt
+      - name: Keep the package
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: package-${{ matrix.platform }}
+          path: launcher/dist/*
+          if-no-files-found: error
+          compression-level: 0 # each file is an archive already
+          retention-days: 7
+
+  # The release's files in one folder: the three packages, checked, and their checksums.
+  assemble:
+    name: the release's files and their checksums
+    needs: [check, package]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: launcher
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.check.outputs.commit }}
+          persist-credentials: false
+      - name: Toolchain
+        run: rustup show active-toolchain || rustup toolchain install
+      - name: Restore cargo home
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+          key: launcher-cargo-home-${{ hashFiles('launcher/Cargo.lock') }}
+          restore-keys: launcher-cargo-home-
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: package-*
+          path: launcher/dist
+          merge-multiple: true
+      - name: One file a system, nothing else, and SHA256SUMS.txt
+        env:
+          TAG: ${{ needs.check.outputs.tag }}
+          DRY_RUN: ${{ (github.event_name != 'workflow_dispatch' || inputs.dry-run == true) }}
+        run: |
+          cargo xtask package --sums dist --complete
+          # What `sha256sum` reads is what was written.
+          (cd dist && sha256sum --check --strict SHA256SUMS.txt)
+          {
+            echo "### The files of $TAG"
+            echo
+            echo '```text'
+            (cd dist && ls -l -- *)
+            echo
+            cat dist/SHA256SUMS.txt
+            echo '```'
+            if [ "$DRY_RUN" = "true" ]; then
+              echo
+              echo "A dry run: nothing was tagged or published. The files are kept with this run for a week."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: The release's text, from the changelog
+        if: ${{ !(github.event_name != 'workflow_dispatch' || inputs.dry-run == true) }}
+        run: cargo xtask release --notes > "$RUNNER_TEMP/notes.md"
+      - name: Keep the release's text
+        if: ${{ !(github.event_name != 'workflow_dispatch' || inputs.dry-run == true) }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: notes
+          path: ${{ runner.temp }}/notes.md
+          if-no-files-found: error
+          retention-days: 7
+      - name: Keep the release's files
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release
+          path: launcher/dist/*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7
+
+  # A statement, signed through this run's own identity and kept by GitHub, that each file was
+  # built here from this commit. This job can sign and cannot write to the repository.
+  attest:
+    name: attest the release's files
+    needs: [check, gate, deny, assemble]
+    if: ${{ !(github.event_name != 'workflow_dispatch' || inputs.dry-run == true) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release
+          path: dist
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-checksums: dist/SHA256SUMS.txt
+
+  publish:
+    name: tag and publish
+    needs: [check, gate, deny, assemble, attest]
+    if: ${{ !(github.event_name != 'workflow_dispatch' || inputs.dry-run == true) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Only this job writes to the repository.
+    permissions:
+      contents: write
+    env:
+      COMMIT: ${{ needs.check.outputs.commit }}
+      VERSION: ${{ needs.check.outputs.version }}
+      TAG: ${{ needs.check.outputs.tag }}
+      PRODUCT: ${{ needs.check.outputs.product }}
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release
+          path: dist
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: notes
+          path: notes
+      # An annotated tag, made through the API by this run's own token: a tag object that names
+      # the commit, then the ref that names the object. Run again after a failure further down,
+      # it finds the tag it made and goes on.
+      - name: Tag the commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          remote="https://github.com/$GITHUB_REPOSITORY"
+          tagged=$(git ls-remote "$remote" "refs/tags/$TAG^{}" | cut -f1)
+          if [ -z "$tagged" ]; then tagged=$(git ls-remote "$remote" "refs/tags/$TAG" | cut -f1); fi
+          if [ "$tagged" = "$COMMIT" ]; then
+            echo "$TAG is already on $COMMIT"
+            exit 0
+          fi
+          if [ -n "$tagged" ]; then
+            echo "::error::$TAG exists on $tagged, another commit"
+            exit 1
+          fi
+          object=$(gh api "repos/$GITHUB_REPOSITORY/git/tags" --raw-field tag="$TAG" --raw-field message="$PRODUCT $VERSION" \
+                   --raw-field object="$COMMIT" --raw-field type=commit --jq '.sha')
+          gh api "repos/$GITHUB_REPOSITORY/git/refs" --raw-field ref="refs/tags/$TAG" --raw-field sha="$object" --silent
+          echo "Tagged $COMMIT as $TAG" | tee -a "$GITHUB_STEP_SUMMARY"
+      # The files go up while the release is a draft; it is published once all of them are on it.
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --verify-tag --title "$PRODUCT $VERSION" \
+            --notes-file notes/notes.md dist/*
+          echo "Published $PRODUCT $VERSION: https://github.com/$GITHUB_REPOSITORY/releases/tag/$TAG" | tee -a "$GITHUB_STEP_SUMMARY"
+
+  # Nobody watches a scheduled run. When it fails, this repository gets an issue, or the
+  # open one a comment, so that the release is mended before it is needed.
+  failed:
+    name: report a failed scheduled dry run
+    needs: [check, package, assemble]
+    if: ${{ failure() && github.event_name == 'schedule' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      issues: write
+    steps:
+      - name: Open or update the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          TITLE: "The launcher's release dry run failed"
+        run: |
+          {
+            echo "The scheduled dry run of the release failed on \`${GITHUB_SHA::9}\`: $RUN"
+            echo
+            echo "It builds the release file of each system as a release would, without tagging or publishing. Until it passes again, a release would fail the same way."
+            echo
+            echo "- Read the failed job in the run above."
+            echo "- Try it again after a fix: \`gh workflow run release.yml --ref main -f dry-run=true\`."
+            echo "- How a release is put together: https://github.com/jamescjfoundation/open-source-core/blob/main/docs/app-releases.md"
+          } > "$RUNNER_TEMP/body.md"
+          number=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "\"$TITLE\" in:title" --json number,title \
+                   --jq "[.[] | select(.title == \"$TITLE\")][0].number // empty")
+          if [ -n "$number" ]; then
+            gh issue comment "$number" --repo "$GITHUB_REPOSITORY" --body-file "$RUNNER_TEMP/body.md"
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" --title "$TITLE" --body-file "$RUNNER_TEMP/body.md"
+          fi

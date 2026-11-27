@@ -1,0 +1,19 @@
+#!/bin/sh
+# The wordsmith repository's pre-commit hook. Git runs it once `core.hooksPath` is `hooks`, which
+# `cargo xtask install-hooks` in `launcher/` sets.
+#
+# When the commit touches `launcher/`, it runs what an app's pre-commit hook runs, in that
+# folder: formatting, the privacy scan of the lines being committed, and that no tracked file
+# holds a dev-link. The launcher's own `hooks/pre-commit` is the core's file and is written for
+# a repository whose root is the app (launcher decision 0001, launcher/docs/decisions/).
+#
+# For the rest of the repository it runs nothing: run `python3 project/privacy.py` before a push
+# (AGENTS.md, "Before you push").
+set -e
+if git diff --cached --quiet -- launcher; then
+    exit 0
+fi
+cd "$(git rev-parse --show-toplevel)/launcher"
+cargo fmt --all -- --check || { echo "pre-commit: run 'cargo fmt --all' in launcher/"; exit 1; }
+cargo xtask privacy --staged
+cargo xtask unlinked --tracked

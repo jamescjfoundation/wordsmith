@@ -1,0 +1,28 @@
+#!/bin/sh
+# The wordsmith repository's pre-push hook. Git runs it once `core.hooksPath` is `hooks`, which
+# `cargo xtask install-hooks` in `launcher/` sets.
+#
+# When the push changes `launcher/`, it runs the launcher's whole gate (`cargo xtask ci`), the
+# same one CI runs. Never `ci --changed` here: it reads changed files as paths from the
+# repository's root and would find that nothing in the launcher changed (launcher decision 0001,
+# launcher/docs/decisions/). Skip once with `git push --no-verify`.
+#
+# For the rest of the repository it runs nothing: the checks are in AGENTS.md, "Before you push".
+set -e
+touched=""
+while read -r local_ref local_sha remote_ref remote_sha; do
+    zero="0000000000000000000000000000000000000000"
+    if [ "$local_sha" = "$zero" ]; then
+        continue
+    fi
+    if [ -n "$remote_sha" ] && [ "$remote_sha" != "$zero" ] && git cat-file -e "$remote_sha" 2>/dev/null; then
+        if ! git diff --quiet "$remote_sha" "$local_sha" -- launcher; then touched="yes"; fi
+    else
+        touched="yes"
+    fi
+done
+if [ -z "$touched" ]; then
+    exit 0
+fi
+cd "$(git rev-parse --show-toplevel)/launcher"
+cargo xtask ci

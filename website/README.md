@@ -1,6 +1,6 @@
 # Wordsmith website
 
-The public site for the Wordsmith apps (Script, Manuscript, Book and the planned Launcher), from Wordsmith & Ink, a project of The James C. J. Foundation.
+The public site for the Wordsmith apps (Script, Manuscript, Book) and the Launcher, from Wordsmith & Ink, a project of The James C. J. Foundation.
 
 Plain HTML and CSS, so GitHub Pages can serve the pages as they are. To preview it locally, run `python3 website/tools/serve.py` from the repository root and visit http://localhost:8000. It works like `python3 -m http.server`, but serves `/about` from `about.html` the way Pages does.
 
@@ -10,7 +10,7 @@ Plain HTML and CSS, so GitHub Pages can serve the pages as they are. To preview 
 | --- | --- |
 | `index.html` | Home: the suite, the three apps, how they fit, the Foundation |
 | `script.html`, `manuscript.html`, `book.html` | One page per app |
-| `launcher.html` | The planned Wordsmith Launcher |
+| `launcher.html` | Wordsmith Launcher: what it does, its picture and its downloads, from its releases like an app's |
 | `about.html` | The Foundation, James, principles, Wordsmith & Ink |
 | `open-source.html` | Each app's latest release and where its plans are kept, how to help, privacy, licenses |
 | `404.html` | Page not found |
@@ -26,7 +26,7 @@ Plain HTML and CSS, so GitHub Pages can serve the pages as they are. To preview 
 | `.nojekyll` | Tells GitHub Pages to serve the files as they are |
 | `wiki/` | The wiki, a separate Fumadocs project published at `/wiki/`. See [`wiki/README.md`](wiki/README.md) |
 
-Every picture of an app is a screenshot the app drew itself, carried here by Route G of the [project map](../project/README.md#route-g). Two pictures are drawn in `build.py` and are not screenshots: the stack of three books on the home page, which is decoration, and the sketch on the launcher's page, whose caption says nothing of the launcher is built.
+Every picture of an app is a screenshot the app drew itself, carried here by Route G of the [project map](../project/README.md#route-g). One picture is drawn in `build.py` and is not a screenshot: the stack of three books on the home page, which is decoration. The launcher's picture is drawn by the launcher (`cargo xtask screenshots` in `launcher/`) and carried the same way.
 
 ## Editing
 

@@ -3,7 +3,7 @@
    publishes a release, without an edit. */
 import { appState, sizeWords } from '@/lib/releases.mjs';
 
-type Slug = 'script' | 'manuscript' | 'book';
+type Slug = 'script' | 'manuscript' | 'book' | 'launcher';
 
 /** The app's latest release as a small mark: "Version 1.0.0", or a link to its releases page before it has one. */
 export function AppRelease({ app }: { app: Slug }) {

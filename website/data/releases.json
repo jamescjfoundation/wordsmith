@@ -1,8 +1,105 @@
 {
   "note": "The last known public release of each app. Written by website/tools/releases.py --write; never edit it. The published site reads GitHub again at every deploy.",
   "apps": {
-    "script": null,
-    "manuscript": null,
-    "book": null
+    "script": {
+      "version": "0.9.0",
+      "tag": "v0.9.0",
+      "date": "2026-11-27",
+      "url": "https://github.com/jamescjfoundation/wordsmith-script/releases/tag/v0.9.0",
+      "prerelease": false,
+      "files": [
+        {
+          "name": "SHA256SUMS.txt",
+          "url": "https://github.com/jamescjfoundation/wordsmith-script/releases/download/v0.9.0/SHA256SUMS.txt",
+          "size": 330,
+          "sha256": "f318828393ed3a16336933539485d9f6873ef8312094bee8dcd017c1f4095845"
+        },
+        {
+          "name": "wordsmith-script-0.9.0-linux-x86_64.tar.gz",
+          "url": "https://github.com/jamescjfoundation/wordsmith-script/releases/download/v0.9.0/wordsmith-script-0.9.0-linux-x86_64.tar.gz",
+          "size": 56798012,
+          "sha256": "7d149db1226c076e25f1957af093ccd0d5273a04ea2fba3324db850d90425d1c"
+        },
+        {
+          "name": "wordsmith-script-0.9.0-macos-aarch64.dmg",
+          "url": "https://github.com/jamescjfoundation/wordsmith-script/releases/download/v0.9.0/wordsmith-script-0.9.0-macos-aarch64.dmg",
+          "size": 55446727,
+          "sha256": "04cd0e7a6ae06ce913aa3a86dea134255089332f7960ae345786727890bf7eb5"
+        },
+        {
+          "name": "wordsmith-script-0.9.0-windows-x64-portable.zip",
+          "url": "https://github.com/jamescjfoundation/wordsmith-script/releases/download/v0.9.0/wordsmith-script-0.9.0-windows-x64-portable.zip",
+          "size": 49848561,
+          "sha256": "4ef448499824047d8c6b324443d790d8eb62617ebb0b5855e4ad1c4ade662988"
+        }
+      ]
+    },
+    "manuscript": {
+      "version": "0.9.0",
+      "tag": "v0.9.0",
+      "date": "2026-11-27",
+      "url": "https://github.com/jamescjfoundation/wordsmith-manuscript/releases/tag/v0.9.0",
+      "prerelease": false,
+      "files": [
+        {
+          "name": "SHA256SUMS.txt",
+          "url": "https://github.com/jamescjfoundation/wordsmith-manuscript/releases/download/v0.9.0/SHA256SUMS.txt",
+          "size": 342,
+          "sha256": "443a4c3cb0569faa1bd40b7c51917cba53e597d6c7cffe66da098a2827f73bfd"
+        },
+        {
+          "name": "wordsmith-manuscript-0.9.0-linux-x86_64.tar.gz",
+          "url": "https://github.com/jamescjfoundation/wordsmith-manuscript/releases/download/v0.9.0/wordsmith-manuscript-0.9.0-linux-x86_64.tar.gz",
+          "size": 54325821,
+          "sha256": "c59dc5335b62d4f92197423be3a4e492a2cdf4991c755923ed1207f5322fbc87"
+        },
+        {
+          "name": "wordsmith-manuscript-0.9.0-macos-aarch64.dmg",
+          "url": "https://github.com/jamescjfoundation/wordsmith-manuscript/releases/download/v0.9.0/wordsmith-manuscript-0.9.0-macos-aarch64.dmg",
+          "size": 52311216,
+          "sha256": "350fa6de6da890feec15f852997bbc5af7603dfe47974fb5c93b7b8568d431b6"
+        },
+        {
+          "name": "wordsmith-manuscript-0.9.0-windows-x64-portable.zip",
+          "url": "https://github.com/jamescjfoundation/wordsmith-manuscript/releases/download/v0.9.0/wordsmith-manuscript-0.9.0-windows-x64-portable.zip",
+          "size": 47426647,
+          "sha256": "537c69dc9f3f0f52f49ef5e6300d9771b61af5d521d53b50638deb4e6eb73ded"
+        }
+      ]
+    },
+    "book": {
+      "version": "0.9.0",
+      "tag": "v0.9.0",
+      "date": "2026-11-27",
+      "url": "https://github.com/jamescjfoundation/wordsmith-book/releases/tag/v0.9.0",
+      "prerelease": false,
+      "files": [
+        {
+          "name": "SHA256SUMS.txt",
+          "url": "https://github.com/jamescjfoundation/wordsmith-book/releases/download/v0.9.0/SHA256SUMS.txt",
+          "size": 324,
+          "sha256": "128908f711eebd5f7260c387106b91c663ed3ce4e9adcd34402b107eda4caab6"
+        },
+        {
+          "name": "wordsmith-book-0.9.0-linux-x86_64.tar.gz",
+          "url": "https://github.com/jamescjfoundation/wordsmith-book/releases/download/v0.9.0/wordsmith-book-0.9.0-linux-x86_64.tar.gz",
+          "size": 54239233,
+          "sha256": "11c724e31d518b7d210a194e7e51fe6fd74998ae159679b3455b9a9f3fa281ad"
+        },
+        {
+          "name": "wordsmith-book-0.9.0-macos-aarch64.dmg",
+          "url": "https://github.com/jamescjfoundation/wordsmith-book/releases/download/v0.9.0/wordsmith-book-0.9.0-macos-aarch64.dmg",
+          "size": 53085868,
+          "sha256": "3ec22b7e6d3ea8b9aed183683f20a2265b25871aece6cf91514c3db66c86d629"
+        },
+        {
+          "name": "wordsmith-book-0.9.0-windows-x64-portable.zip",
+          "url": "https://github.com/jamescjfoundation/wordsmith-book/releases/download/v0.9.0/wordsmith-book-0.9.0-windows-x64-portable.zip",
+          "size": 47972886,
+          "sha256": "e92bbc84d4f667792b897e5af8de320c8f08c50b09bf26198548b56b86a808e9"
+        }
+      ]
+    },
+    "launcher": null
   }
 }

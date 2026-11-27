@@ -125,6 +125,17 @@ def repo(slug):
     return f"https://github.com/{APPS[slug]['repository']}"
 
 
+def source(slug):
+    """Where an app's code is: its repository, or its folder of one (the launcher is a folder of this repository)."""
+    folder = APPS[slug].get("folder")
+    return f"{repo(slug)}/tree/main/{folder}" if folder else repo(slug)
+
+
+def brand(slug):
+    """The kit's name for an app's icon: its own, or the brand it carries until it has one."""
+    return APPS[slug].get("brand", f"wordsmith-{slug}")
+
+
 def state(slug):
     """The app's words for where it stands: "chip", "line" and "download", with the version and date filled in."""
     return rel.state_words(APPS[slug], RELEASES.get(slug))
@@ -186,14 +197,14 @@ def download(slug, sunken=False):
                 Privacy &amp; Security, and click Open Anyway.</li>
               <li><b>Windows:</b> on the &ldquo;Windows protected your PC&rdquo; notice, click More info, then Run anyway.</li>
             </ul>
-            <p><a href="wiki/start/install">Installing, step by step</a></p>
+            <p><a href="{'wiki/launcher/installing' if slug == 'launcher' else 'wiki/start/install'}">Installing, step by step</a></p>
           </div>
           <div>
             <h3>Free, and yours to check</h3>
             <p>{app["name"]} costs nothing and needs no account. Downloads come only from the app's own
               releases on GitHub. {all_files}.</p>
-            <p>The code is open source. To build the app yourself, follow the
-              <a href="{repo(slug)}#readme">README in its repository</a>.</p>
+            <p>The code is open source. To build it yourself, follow the
+              <a href="{source(slug)}#readme">README beside its code</a>.</p>
           </div>
         </div>
       </div>
@@ -464,7 +475,7 @@ home = f"""
           <li><a class="step n-manuscript" href="manuscript"><span class="step-num">2</span><img src="{B}wordsmith-manuscript-icon.svg" alt="" width="72" height="72"><h3>Manuscript</h3><p>Draft and revise the story, with characters and places in one bible.</p></a></li>
           <li><a class="step n-book" href="book"><span class="step-num">3</span><img src="{B}wordsmith-book-icon.svg" alt="" width="72" height="72"><h3>Book</h3><p>Turn the finished manuscript into a print book and an ebook.</p></a></li>
         </ol>
-        <p class="flow-note">The <a href="launcher">Wordsmith Launcher</a>, which is planned, will bring all three together in one download.</p>
+        <p class="flow-note">The <a href="launcher">Wordsmith Launcher</a> installs all three, keeps them up to date and opens them from one window.</p>
       </div>
     </section>
 
@@ -825,36 +836,25 @@ book = app_hero(
 # ---------------------------------------------------------------- Launcher
 launcher = f"""
     <section class="p-hero app-hero">
-      <div class="wrap split">
-        <div>
+      <div class="wrap">
+        <div class="app-hero-copy">
           <div class="app-id">
-            <img class="icon" src="{B}wordsmith-and-ink-icon.svg" alt="" width="72" height="72">
+            <img class="icon" src="{B}{brand("launcher")}-icon.svg" alt="" width="72" height="72">
             <div><p class="eyebrow flat">Wordsmith Launcher</p></div>
           </div>
-          <h1>One download for the whole desk.</h1>
-          <p class="lede">The Wordsmith Launcher is planned, and not started. It will be the front door to the suite: a
-            small app that installs the Wordsmith apps you want, keeps them up to date, and opens your recent work
-            from any of them.</p>
-          <div class="meta"><span class="chip planned">Planned</span><span>Not started</span><span>Until it exists, each app is its own download</span></div>
-        </div>
-        <figure class="launch">
-          <div class="mock" role="img" aria-label="Sketch of the planned launcher: the three apps with their status, and a list of recent projects">
-            <div class="mock-bar"><i></i><i></i><i></i><span class="title">Wordsmith</span></div>
-            <div class="mock-body">
-              <div class="launch-apps">
-                <div><img src="{B}wordsmith-script-icon.svg" alt="">Script<small>Up to date</small></div>
-                <div><img src="{B}wordsmith-manuscript-icon.svg" alt="">Manuscript<small>Update ready</small></div>
-                <div><img src="{B}wordsmith-book-icon.svg" alt="">Book<small>Install</small></div>
-              </div>
-              <div class="launch-recent">
-                <h4>Recent</h4>
-                <div class="r"><img src="{B}wordsmith-manuscript-icon.svg" alt=""><span>Little Women</span><small>Today</small></div>
-                <div class="r"><img src="{B}wordsmith-script-icon.svg" alt=""><span>Everybody's Girl</span><small>Yesterday</small></div>
-                <div class="r"><img src="{B}wordsmith-book-icon.svg" alt=""><span>Pride and Prejudice</span><small>Last week</small></div>
-              </div>
-            </div>
+          <h1>One window for the whole desk.</h1>
+          <p class="lede">Wordsmith Launcher is a small program for the three Wordsmith apps. It shows which of them are
+            on your computer and at which version, installs the ones you want, keeps them up to date, opens them and
+            removes them.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="#download">{DOWN} Download</a>
+            <a class="btn btn-ghost" href="wiki/launcher/">Read the guide</a>
           </div>
-          <figcaption>A sketch of the idea, not a design. Nothing of the launcher is built yet.</figcaption>
+          <div class="meta">{hero_meta("launcher")}</div>
+        </div>
+        <figure class="visual">
+          <div class="stage"><div class="shot">{shot("launcher", "window", "Wordsmith Launcher: a list of the three apps. Wordsmith Script and Wordsmith Book are installed, each with Open and Remove; Wordsmith Manuscript is not, and has Install.", lazy=False)}</div></div>
+          <figcaption>The whole window: one row for each app. The picture is drawn by the launcher itself.</figcaption>
         </figure>
       </div>
     </section>
@@ -862,26 +862,41 @@ launcher = f"""
     <section class="section sunken">
       <div class="wrap">
         <div class="section-head">
-          <p class="eyebrow">The plan</p>
-          <h2>What the launcher will be for.</h2>
+          <p class="eyebrow">What it does</p>
+          <h2>Install, update, open, remove.</h2>
+          <p class="lede">You do not need the launcher to use the apps: each one can be downloaded by itself. The
+            launcher does those steps for you.</p>
         </div>
         {features([
-    ("import", "Install what you need", "Pick the apps you want. A screenwriter may only need Script; a novelist may want Manuscript and Book."),
-    ("refresh", "Stay up to date", "One place to see and install updates, downloaded only from the project's official releases and checked before they run."),
-    ("folder", "All your work", "Recent screenplays, novels and books in one list, each opened in the right app."),
-    ("plus", "Start something new", "Choose a screenplay, a stage play, a novel or a book, and the right app opens with the right template."),
-    ("open-book", "Learn the tools", "Guides and getting-started help for every app, in one place."),
-    ("shield", "Same promises", "No account, no tracking. Update checks can be turned off."),
+    ("import", "Install what you need", "Pick the apps you want. A screenwriter may only need Script; a novelist may want Manuscript and Book. The launcher fetches the right download for your computer."),
+    ("refresh", "Stay up to date", "Each row says which version you have and which is the newest. One button replaces an app with its newest release; your documents and settings are not touched."),
+    ("shield", "Checked before it is opened", "Every download comes from the app's own releases on GitHub and is compared with the release's list of checksums. A file that does not match is not installed."),
+    ("folder", "For your account only", "Apps are installed where your system keeps a user's own programs. Nothing asks for an administrator's password."),
+    ("open-book", "From a terminal too", "The same work as commands: list the apps, install one, start one, remove one."),
+    ("plus", "Same promises", "No account, no tracking. The launcher talks only to GitHub, for the releases, and the checks it makes by itself can be turned off."),
 ])}
       </div>
     </section>
 
     <section class="section">
       <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Not yet</p>
+          <h2>What the launcher does not do.</h2>
+          <p class="lede">These are planned, and not built: a list of your recent screenplays, novels and books from all
+            three apps; starting a new document in the right app; and guides inside the launcher. Today the launcher
+            installs and opens the apps, and each app keeps its own recent documents.</p>
+        </div>
+      </div>
+    </section>
+{download("launcher", sunken=True)}
+
+    <section class="section">
+      <div class="wrap">
         <div class="callout">
-          <img src="{B}wordsmith-and-ink-icon.svg" alt="" width="64" height="64">
-          <div><h3>Have ideas for the launcher?</h3><p>It hasn't been built yet, so now is the best time to shape it. Its plan is an open issue: tell us there what would help you.</p></div>
-          <a class="btn btn-ghost" href="{ORG}/wordsmith/issues/10">{GH} The plan on GitHub</a>
+          <img src="{B}{brand("launcher")}-icon.svg" alt="" width="64" height="64">
+          <div><h3>Have ideas for the launcher?</h3><p>It is small on purpose, and it is new. Tell us what would help you, or what went wrong.</p></div>
+          <a class="btn btn-ghost" href="{ORG}/wordsmith/issues">{GH} Issues on GitHub</a>
         </div>
       </div>
     </section>
@@ -896,9 +911,9 @@ def status_rows():
         release = RELEASES.get(slug)
         latest = (f'<a href="{release["url"]}">{release["version"]}</a>, {rel.long_date(release["date"])}' if release
                   else f'<a href="{repo(slug)}/releases">Releases page</a>')
-        name = app["repository"].split("/")[1]
-        rows.append(f'              <tr class="p-{slug}"><td><img src="{B}wordsmith-{slug}-icon.svg" alt="" width="28" height="28">{app["name"]}</td>'
-                    f'<td>{latest}</td><td>{app["for"]}</td><td><a href="{repo(slug)}">{name}</a></td></tr>')
+        name = "/".join(part for part in (app["repository"].split("/")[1], app.get("folder")) if part)
+        rows.append(f'              <tr class="p-{slug}"><td><img src="{B}{brand(slug)}-icon.svg" alt="" width="28" height="28">{app["name"]}</td>'
+                    f'<td>{latest}</td><td>{app["for"]}</td><td><a href="{source(slug)}">{name}</a></td></tr>')
     return "\n".join(rows)
 
 
@@ -917,15 +932,14 @@ opensource = f"""
         <div class="section-head">
           <p class="eyebrow">Where things stand</p>
           <h2>Releases and plans.</h2>
-          <p class="lede">Each app is released from its own repository, and this page reads its latest release from
-            there. What comes next is not written here: it is kept as issues, where anyone can read it and add to it.</p>
+          <p class="lede">Each app is released from its own repository, the launcher from this website's, and this page
+            reads the latest release of each from there. What comes next is not written here: it is kept as issues, where anyone can read it and add to it.</p>
         </div>
         <div class="table-scroll">
           <table class="status">
             <thead><tr><th>App</th><th>Latest release</th><th>For</th><th>Code</th></tr></thead>
             <tbody>
 {status_rows()}
-              <tr><td><img src="{B}wordsmith-and-ink-icon.svg" alt="" width="28" height="28">Wordsmith Launcher</td><td><span class="chip planned">Planned</span></td><td>Installing and opening the apps</td><td class="muted">Not started</td></tr>
               <tr><td><span class="core-dot" aria-hidden="true"></span>open-source-core</td><td><a href="{ORG}/open-source-core/releases">Releases page</a></td><td>The shared base every app is built on</td><td><a href="{ORG}/open-source-core">open-source-core</a></td></tr>
             </tbody>
           </table>
@@ -1018,7 +1032,7 @@ page("index.html", "Wordsmith: free, open-source writing apps",
 page("script.html", "Wordsmith Script", "A free, open-source screenwriting app for macOS, Windows and Linux.", script, "p-script")
 page("manuscript.html", "Wordsmith Manuscript", "A free, open-source app for writing novels and other long work.", manuscript, "p-manuscript")
 page("book.html", "Wordsmith Book", "A free, open-source app for designing and typesetting print books and ebooks.", book, "p-book")
-page("launcher.html", "Wordsmith Launcher", "The planned Wordsmith Launcher: one download to install, update and open the Wordsmith apps.", launcher)
+page("launcher.html", "Wordsmith Launcher", "Wordsmith Launcher: one small program that installs the Wordsmith apps, keeps them up to date and opens them.", launcher)
 page("about.html", "About", "Wordsmith is made by Wordsmith & Ink, a project of The James C. J. Foundation, to give writers free, open tools.", about)
 page("open-source.html", "Open source", "Wordsmith is an open-source project of The James C. J. Foundation. Read where each app's releases and plans are, and how to help.", opensource)
 page("404.html", "Page not found", "This page could not be found.", notfound)

@@ -1,7 +1,7 @@
 /* Which pages come from an app's own guide, and at which commit. scripts/guide.mjs writes
    guides.lock.json when it builds an app's section from the guide in the app's repository. */
 import lock from '@/guides.lock.json';
-import { apps } from './brand';
+import { apps, programs } from './brand';
 
 const docs = 'website/wiki/content/docs/';
 
@@ -24,7 +24,7 @@ export function guideSource(pagePath: string): GuideSource | undefined {
   for (const [slug, entry] of Object.entries(lock.apps)) {
     const page = entry.pages.find((one) => one.file === file);
     if (!page) continue;
-    const name = apps[`wordsmith-${slug}` as keyof typeof apps]?.name ?? slug;
+    const name = apps[`wordsmith-${slug}` as keyof typeof apps]?.name ?? programs[slug as keyof typeof programs]?.name ?? slug;
     const repository = `https://github.com/${entry.repository}`;
     return {
       app: name,

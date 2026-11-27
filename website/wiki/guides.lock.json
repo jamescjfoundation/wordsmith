@@ -591,6 +591,79 @@
           ]
         }
       ]
+    },
+    "launcher": {
+      "repository": "jamescjfoundation/wordsmith",
+      "commit": "ea5017a674de03352abb2bcd2b28a7ae0a7fe380",
+      "date": "2026-11-27",
+      "pages": [
+        {
+          "source": "launcher/docs/guide/README.md",
+          "blob": "5bcf0b2c92b16af997e6e2dfc27f8668e0745683",
+          "file": "website/wiki/content/docs/launcher/index.mdx",
+          "sha256": "0c0e00b749e55f73e139c1ee32d3b2733aa955fd1a16c0be634753d7fa114865"
+        },
+        {
+          "source": "launcher/docs/guide/apps.md",
+          "blob": "59f3d395622fab8294ad11e971469bc119fbec8c",
+          "file": "website/wiki/content/docs/launcher/apps.mdx",
+          "sha256": "f43a3d9de53b0d75730c57808f8c9ec9b4a79d4ba657bfb9b42d5d7304a710cf"
+        },
+        {
+          "source": "launcher/docs/guide/checking-a-download.md",
+          "blob": "34ecb9a89630a8e3b87eafd60a27065e5c218370",
+          "file": "website/wiki/content/docs/launcher/checking-a-download.mdx",
+          "sha256": "4da59df16e7540cdb27861ad2a5afdba698e055b0935169bd437629eb6846dc0"
+        },
+        {
+          "source": "launcher/docs/guide/command-line.md",
+          "blob": "584dae3ee39b04f54310c4f84ef9a9e98e48ab0c",
+          "file": "website/wiki/content/docs/launcher/command-line.mdx",
+          "sha256": "26839fee9820ca6f0e63c81cd5e250160ad8fe9c7c008852b00dd27abcb4f5ce"
+        },
+        {
+          "source": "launcher/docs/guide/installing.md",
+          "blob": "5e701555afa63f116c221f9a7bdffc940dae2ef8",
+          "file": "website/wiki/content/docs/launcher/installing.mdx",
+          "sha256": "e6b44e4f01d7373ee803a00a5acc4ab7ed2cbd14de249848fd031ea28587391e"
+        },
+        {
+          "source": "launcher/docs/guide/privacy.md",
+          "blob": "0c6d75c061991c336f509ca100fe38df8dba0fb3",
+          "file": "website/wiki/content/docs/launcher/privacy.mdx",
+          "sha256": "2586d9e946aa1864970b2c260ef5b5fdbe6597d51e34290872afae0a6dda1682"
+        },
+        {
+          "source": "launcher/docs/guide/problems.md",
+          "blob": "a52ffbeaccc4f2f6cb4168a5e11051d2eb2d3cff",
+          "file": "website/wiki/content/docs/launcher/problems.mdx",
+          "sha256": "39e9cb3140b867db833fac168f4ee622f714fa1c3bd5ff0266a4c813554f3ceb"
+        }
+      ],
+      "meta": {
+        "file": "website/wiki/content/docs/launcher/meta.json",
+        "sha256": "8b23c52439175d07ac181b5b632bb6e776d241e5c2e425475129070c48cd476c"
+      },
+      "images": [
+        {
+          "source": "launcher/docs/images/window.png",
+          "blob": "7d926e097f38b0c07f7c98ae757f1127381aca10",
+          "copies": [
+            {
+              "file": "website/wiki/content/docs/launcher/images/window.webp",
+              "sha256": "23518604e9b8b28f2dd80bfad8ab6d162ec58b3162b1c11971ffa0a95a5d7df6",
+              "width": 1600,
+              "height": 1366
+            },
+            {
+              "file": "website/assets/img/launcher-window.webp",
+              "sha256": "23518604e9b8b28f2dd80bfad8ab6d162ec58b3162b1c11971ffa0a95a5d7df6",
+              "width": 1600,
+              "height": 1366
+            }
+          ]
+        }
+      ]
     }
   }
 }

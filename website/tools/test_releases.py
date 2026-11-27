@@ -159,7 +159,7 @@ class ThisRepository(unittest.TestCase):
         platforms = {platform["id"] for platform in releases.read_platforms()}
         kept = releases.read_kept()
         apps = releases.read_apps()
-        self.assertEqual([app["slug"] for app in apps], ["script", "manuscript", "book"])
+        self.assertEqual([app["slug"] for app in apps], ["script", "manuscript", "book", "launcher"])
         for app in apps:
             self.assertEqual(set(app["state"]), {"none", "preview", "released"}, app["slug"])
             self.assertTrue(set(app["platforms"]) <= platforms, app["slug"])

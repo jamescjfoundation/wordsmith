@@ -4,17 +4,22 @@ import { DocsLayout } from 'fumadocs-ui/layouts/docs';
 import { getLayoutTabs } from 'fumadocs-ui/layouts/shared';
 import { SidebarTabsDropdown } from 'fumadocs-ui/components/sidebar/tabs/dropdown';
 import { baseOptions } from '@/lib/layout.shared';
-import { AppIcon, appForSection, apps, Wordmark } from '@/lib/brand';
+import { AppIcon, appForSection, apps, programForSection, Wordmark } from '@/lib/brand';
 
 export default function Layout({ children }: LayoutProps<'/'>) {
   const tree = source.getPageTree();
 
-  // The switcher lists only the apps, each as its wordmark. The shared pages (start/) are a tab
-  // too, so their sidebar shows only them, but they're reached from "Getting started" at the
-  // bottom of the sidebar instead.
+  // The switcher lists only the apps, each as its wordmark, and the launcher, which has no
+  // wordmark yet, by its name. The shared pages (start/) are a tab too, so their sidebar shows
+  // only them, but they're reached from "Getting started" at the bottom of the sidebar instead.
   const appTabs = getLayoutTabs(tree, {
     transform(tab) {
-      const app = appForSection(tab.url.split('/').filter(Boolean)[0]);
+      const section = tab.url.split('/').filter(Boolean)[0];
+      const app = appForSection(section);
+      const program = programForSection(section);
+      if (program) {
+        return { ...tab, icon: <AppIcon app={program.brand} size={20} />, title: <span className="ws-tab-placeholder">{program.name}</span> };
+      }
       if (!app) return null;
       return {
         ...tab,

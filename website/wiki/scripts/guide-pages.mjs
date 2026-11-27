@@ -286,5 +286,6 @@ export function sectionMeta(app, pages, guideDir, order) {
   const listed = order.filter((path) => !index.includes(path));
   const rest = [...pages].filter((path) => !index.includes(path) && !listed.includes(path)).sort();
   const names = [...index, ...listed, ...rest].map((path) => pagePath(path, guideDir).replace(/\.mdx$/, ''));
-  return `${JSON.stringify({ title: app.name, icon: `brand:wordsmith-${app.slug}`, root: true, pages: names }, null, 2)}\n`;
+  // the kit's icon for the section: the app's own, or the brand its data file names until it has one
+  return `${JSON.stringify({ title: app.name, icon: `brand:${app.brand ?? `wordsmith-${app.slug}`}`, root: true, pages: names }, null, 2)}\n`;
 }

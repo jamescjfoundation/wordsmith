@@ -146,6 +146,7 @@ All are public, under [github.com/jamescjfoundation](https://github.com/jamescjf
 | Manuscript → Script (files) | `.wss` files kept inside a Manuscript project, shown read-only | Manuscript's own reader, `crates/manuscript-io/src/screenplay.rs`. The format is Script's, in its [`docs/format.md`](https://github.com/jamescjfoundation/wordsmith-script/blob/main/docs/format.md) |
 | Each app → wordsmith (brand) | Logos, icons, the palette card, and the seven palette colors of the app's theme file | Copies in the app's `assets/brand/`, written by `npm run brand -- --app <app>` here from the kit, with `kit.json`, the record of the kit commit they came from. `brand/apps.json` here lists every carried file with its checksum ([Route F](#route-f)) |
 | wordsmith → each app (the guide) | Each app's section of the wiki, and the screenshots the wiki and the website show | Built by `npm run guide` in `website/wiki` from the app's `docs/guide/` and `docs/images/` at a commit recorded in `website/wiki/guides.lock.json`. `npm run guide:check` (in `checks.yml`) fails when a page here is not what that commit gives; `guides.yml` fails while the app's guide on `main` has moved on ([Route C](#route-c)) |
+| wordsmith → the launcher (guide, releases) | The launcher's section of the wiki, its picture on the website, and its version and downloads on both | The same tools as for an app. `website/data/apps/launcher.json` names this repository, the folder `launcher/` and the guide `launcher/docs/guide`. `npm run guide` builds the section from the guide at a commit of this repository's `main`, so a change to the launcher's guide lands first and the wiki's pages follow in a second change; `guides.yml` is red in between. `releases.py` reads this repository's releases, which are the launcher's |
 | wordsmith → each app (releases) | The version, the date and the download links the website and the wiki show | Read from each app's public releases on GitHub by `website/tools/releases.py`, at every deploy and once a day ([Route J](#route-j)). The words around them are in `website/data/apps/<app>.json` |
 | wordsmith → each app (facts) | What the website and the wiki's project pages say an app does | Written by hand from the app's `docs/guide/`, `CHANGELOG.md` and code |
 | Each app → its GitHub releases | The in-app update check | The only network request an app makes on its own; it reads the app's own published releases and can be turned off |
@@ -203,7 +204,7 @@ Two pairs exist: Book builds on Manuscript's crates and reads its projects, and 
 <a id="route-c"></a>
 ### Route C: a change users will see in an app
 
-Each app has one user guide, `docs/guide/` in its own repository. The wiki's section for the app is built from it, so the guide is written once ([decision 0005](decisions/0005-one-guide-per-app.md)).
+Each app has one user guide, `docs/guide/` in its own repository. The wiki's section for the app is built from it, so the guide is written once ([decision 0005](decisions/0005-one-guide-per-app.md)). The launcher's guide is `launcher/docs/guide/` in this repository and reaches the wiki by the same steps: land the guide's change on `main`, then run `npm run guide` and land what it writes.
 
 1. In the app: make the change, update the page in the app's `docs/guide/`, and add a `CHANGELOG.md` line. Manuscript and Book also add a line to `docs/progress.md`. A new guide page gets a line in the guide's `README.md`, which sets the order of the wiki's pages; the words after its link there become the page's description.
 2. If screenshots changed, redraw them in the app ([Route G](#route-g)).
@@ -221,7 +222,7 @@ Each app has one user guide, `docs/guide/` in its own repository. The wiki's sec
 
 "The wiki" always means the one in this repository, published at [wordsmithand.ink/wiki/](https://wordsmithand.ink/wiki/). It is not the wiki tab on GitHub. It holds two kinds of page.
 
-**A page about one app** (`website/wiki/content/docs/script/`, `manuscript/`, `book/`) is that app's guide. It is changed in the app's repository, in `docs/guide/`, and reaches the wiki by [Route C](#route-c). If the wiki should say something about an app that its guide does not, open an issue in the app's repository for the guide page.
+**A page about one app** (`website/wiki/content/docs/script/`, `manuscript/`, `book/`, and `launcher/` for the launcher) is that app's guide. It is changed in the app's repository, in `docs/guide/`, and reaches the wiki by [Route C](#route-c). If the wiki should say something about an app that its guide does not, open an issue in the app's repository for the guide page.
 
 **A page about the project as a whole** (`website/wiki/content/docs/index.mdx` and `start/`: the apps and how they fit together, installing, your files, moving between the apps, getting help, questions and answers, privacy) is written here:
 
@@ -239,7 +240,7 @@ Each app has one user guide, `docs/guide/` in its own repository. The wiki's sec
 ### Route E: website text
 
 1. Work in the wordsmith repository. All page text, the header and the footer are in `website/tools/build.py`. Never edit the `.html` pages by hand.
-2. What a page says about an app's state is not page text ([decision 0006](decisions/0006-the-site-reads-the-apps-releases.md)). The version, the date and the download links come from the app's releases on GitHub. The words around them ("Preview 0.9.0", the line above the downloads) are in `website/data/apps/<app>.json`, one set for each state: no release, a preview before 1.0.0, released. Change them there. In `build.py`, use `chip`, `state`, `systems` and `download`; never write a version or a download link.
+2. What a page says about an app's state is not page text ([decision 0006](decisions/0006-the-site-reads-the-apps-releases.md)). The version, the date and the download links come from the app's releases on GitHub. The words around them ("Preview 0.9.0", the line above the downloads) are in `website/data/apps/<app>.json` (`launcher.json` for the launcher), one set for each state: no release, a preview before 1.0.0, released. Change them there. In `build.py`, use `chip`, `state`, `systems` and `download`; never write a version or a download link.
 3. Run `python3 website/tools/build.py` from the repository root and commit the regenerated pages with the script and the data files.
 4. Preview with `python3 website/tools/serve.py`. Check phone width, dark mode and every link you touched. To see a page as it will look after a release, write a releases file by hand in a folder outside the repository and build into another: `python3 website/tools/build.py <folder> --releases <file>`.
 5. Say only what is true of the apps today. Check the app's guide and code before you change what a page says an app does.
@@ -288,7 +289,7 @@ To have an app carry another kit file, change the app's entry in the table `APPS
 <a id="route-g"></a>
 ### Route G: screenshots
 
-1. In the app, run `cargo xtask screenshots`. The app draws its own pictures into `docs/images/`. Never use a screenshot of a real desktop.
+1. In the app, run `cargo xtask screenshots` (for the launcher: in `launcher/` here). The app draws its own pictures into `docs/images/`. Never use a screenshot of a real desktop.
 2. Land them in the app. A guide page shows one with an ordinary Markdown picture link (`![The window](../images/page-view.png)`).
 3. In wordsmith, in `website/wiki`, run `npm run guide` ([Route C](#route-c), step 4). It carries every picture a guide page shows into the app's section of the wiki, and every picture named under `screenshots` in `website/data/apps/<app>.json` into `website/assets/img/` as `<app>-<name>.webp`, each scaled to 1600 pixels wide and written as WebP. A picture is never copied, converted or cropped by hand.
 4. To show another screenshot on the website: add its name to `screenshots` in the app's data file, run `npm run guide`, and place it in `website/tools/build.py` with `shot(app, name, alt)` ([Route E](#route-e)).

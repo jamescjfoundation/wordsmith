@@ -11,6 +11,18 @@ export const apps = {
   'wordsmith-book': { name: 'Wordsmith Book', section: 'book' },
 } as const;
 
+/* A section built from a guide whose program has no wordmark in the kit yet: it is shown by its
+   name, with the icon of the brand it carries. The launcher's guide is launcher/docs/guide/ in
+   this repository. */
+export const programs = {
+  launcher: { name: 'Wordsmith Launcher', brand: 'wordsmith-and-ink' },
+} as const;
+
+/** The program for a wiki section ("launcher"), if the section is one's */
+export function programForSection(section: string | undefined): (typeof programs)[keyof typeof programs] | undefined {
+  return section !== undefined && section in programs ? programs[section as keyof typeof programs] : undefined;
+}
+
 export type Brand = 'wordsmith-and-ink' | keyof typeof apps;
 
 /** The app for a wiki section ("script" → "wordsmith-script"), if the section is an app's */

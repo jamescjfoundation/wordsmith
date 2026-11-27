@@ -1,0 +1,42 @@
+---
+# Made by website/wiki/scripts/guide.mjs from launcher/docs/guide/command-line.md in jamescjfoundation/wordsmith.
+# Never edit this page: change the guide in the app's repository, then run `npm run guide`.
+title: "The command line"
+description: "The same work from a terminal."
+---
+
+The launcher's program does the same work without its window, for a terminal and for scripts.
+On Linux it is `wordsmith-launcher`; on Windows `wordsmith-launcher.exe` in the launcher's
+folder; on macOS `/Applications/Wordsmith Launcher.app/Contents/MacOS/wordsmith-launcher`.
+
+| Command | What it does |
+| --- | --- |
+| `wordsmith-launcher` | Opens the window |
+| `wordsmith-launcher list` | Prints each app with the version installed and the newest version published |
+| `wordsmith-launcher install <app>` | Installs the newest release of an app, or updates it to the newest. `update <app>` is the same |
+| `wordsmith-launcher start <app>` | Starts an installed app |
+| `wordsmith-launcher remove <app>` | Removes an app the launcher installed. Documents and settings are kept |
+| `wordsmith-launcher --version` | Prints the launcher's name and version |
+| `wordsmith-launcher --help` | Prints the commands |
+
+`<app>` is `script`, `manuscript` or `book`.
+
+A command prints what it did, and ends with 0 when it worked, 1 when it did not (the reason is
+printed), and 2 when the command was not understood.
+
+```text
+$ wordsmith-launcher list
+wordsmith-script       not installed      newest 0.9.0
+wordsmith-manuscript   installed 0.9.0    newest 0.9.0
+wordsmith-book         not installed      newest 0.9.0
+```
+
+## A run kept apart
+
+Set `WORDSMITH_LAUNCHER_PROFILE` to a folder, and that run keeps and installs everything inside
+it: its preferences, its records and the apps themselves. Your own apps are not touched. It
+works for the window and for the commands.
+
+```sh
+WORDSMITH_LAUNCHER_PROFILE=/tmp/launcher-try wordsmith-launcher install book
+```

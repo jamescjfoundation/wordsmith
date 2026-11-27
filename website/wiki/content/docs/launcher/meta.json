@@ -1,0 +1,14 @@
+{
+  "title": "Wordsmith Launcher",
+  "icon": "brand:wordsmith-and-ink",
+  "root": true,
+  "pages": [
+    "index",
+    "installing",
+    "apps",
+    "checking-a-download",
+    "command-line",
+    "privacy",
+    "problems"
+  ]
+}

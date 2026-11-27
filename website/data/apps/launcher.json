@@ -1,0 +1,37 @@
+{
+  "slug": "launcher",
+  "order": 4,
+  "name": "Wordsmith Launcher",
+  "repository": "jamescjfoundation/wordsmith",
+  "folder": "launcher",
+  "brand": "wordsmith-and-ink",
+  "for": "Installing, updating and opening the apps",
+  "description": "A free, open-source program that installs the Wordsmith apps, keeps them up to date and opens them.",
+  "state": {
+    "none": {
+      "chip": "",
+      "line": "Free and open source",
+      "download": "Downloads for each system are published on the launcher's releases page on GitHub."
+    },
+    "preview": {
+      "chip": "Preview {version}",
+      "line": "Published {date}",
+      "download": "Version {version} is a preview, published on {date}: it is here to try the downloads and the updates before 1.0. You do not need the launcher to use the apps; each one can be downloaded by itself."
+    },
+    "released": {
+      "chip": "Version {version}",
+      "line": "Released {date}",
+      "download": "Version {version}, published on {date}."
+    }
+  },
+  "platforms": [
+    "macos-arm64",
+    "windows-x64",
+    "linux-x64"
+  ],
+  "guide": "launcher/docs/guide",
+  "images": "launcher/docs/images",
+  "screenshots": [
+    "window"
+  ]
+}

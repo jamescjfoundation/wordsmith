@@ -27,3 +27,5 @@ Nothing is in users' hands yet. No app has a published release, so a broken `mai
 ## Revisit when
 
 The first app publishes a release. From then on a broken `main` or a bad release reaches writers, and the landing and release rules are looked at again: required checks before `main` changes, and who may publish an app release.
+
+2026-11-27: this is due. The three apps and the launcher each published 0.9.0, a preview, on that day. The rules have not been looked at again yet, and changes still land as above; [issue 28](https://github.com/jamescjfoundation/wordsmith/issues/28) holds the question.

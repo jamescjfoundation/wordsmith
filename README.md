@@ -25,7 +25,7 @@ The apps themselves live in their own repositories. This repository is a small m
 | wordsmith (this one) | Project map, brand kit, website, wiki, launcher |
 | [wordcraft](https://github.com/jamescjfoundation/wordcraft), [craft-libs](https://github.com/jamescjfoundation/craft-libs) | Our forks of the upstream projects the shared base builds on |
 
-![How the Wordsmith repositories fit together: the upstream projects are forked into our wordcraft and craft-libs forks, which open-source-core builds on. The core feeds Wordsmith Script, Wordsmith Manuscript and Wordsmith Book. Manuscript reads Script's .wss files and Book builds on Manuscript's model and format. The wordsmith repository sends brand files to each app and writes up each app's guide, changelog and releases in the wiki and on the website.](project/repositories.svg)
+![How the Wordsmith repositories fit together: the upstream projects are forked into our wordcraft and craft-libs forks, which open-source-core builds on. The core feeds Wordsmith Script, Wordsmith Manuscript and Wordsmith Book. Manuscript reads Script's .wss files and Book builds on Manuscript's model and format. The wordsmith repository sends brand files to each app and writes up each app's guide, changelog and releases in the wiki and on the website; it also holds the project map and rules, the brand kit, the website, the wiki and the launcher.](project/repositories.svg)
 
 How they fit together, and where each kind of change goes, is in the [project map](project/README.md).
 

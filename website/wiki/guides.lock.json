@@ -3,7 +3,7 @@
   "apps": {
     "script": {
       "repository": "jamescjfoundation/wordsmith-script",
-      "commit": "bb0c36b445644c86e23830d4c7a6959bd319100d",
+      "commit": "ed5768498387f3ce067c561cb6abce930404620a",
       "date": "2026-11-27",
       "pages": [
         {
@@ -104,9 +104,9 @@
         },
         {
           "source": "docs/guide/workspace.md",
-          "blob": "4ba1d4627047fdf3404fe98685492418eccc7aba",
+          "blob": "45e9a343a29dbe99c70c10b6c50ecb844ae7ca70",
           "file": "website/wiki/content/docs/script/workspace.mdx",
-          "sha256": "6e068e2414472d8bdb1635b839ab6785d3c01ccbe5c893afae8f3ebdc36dd004"
+          "sha256": "fe91498167ca6f1b32a5e8b5d49304806113b8896c008eeb431e6526cd84896b"
         },
         {
           "source": "docs/guide/writing.md",
@@ -190,7 +190,7 @@
     },
     "manuscript": {
       "repository": "jamescjfoundation/wordsmith-manuscript",
-      "commit": "0150866ec92ac86c733deaa887b1319437ee6a34",
+      "commit": "8cdddb58915852e6fff0d1de7ddbceec55ccbe7e",
       "date": "2026-11-27",
       "pages": [
         {
@@ -225,9 +225,9 @@
         },
         {
           "source": "docs/guide/files.md",
-          "blob": "30868e592eb3f29e6223c3e256f9c18dde14cb60",
+          "blob": "41931e2d1abac5320580f1834d987f5fbe17a441",
           "file": "website/wiki/content/docs/manuscript/files.mdx",
-          "sha256": "a7bc0ea0c4212b7038a414fbd0116cb33b22b27f5e8c1b1a7cda1fe705ca88ad"
+          "sha256": "b2a286e49560fd29564e8a3bb113721ce4347988208bf34dd82f88c4a9c91662"
         },
         {
           "source": "docs/guide/getting-started.md",
@@ -377,7 +377,7 @@
     },
     "book": {
       "repository": "jamescjfoundation/wordsmith-book",
-      "commit": "beaf2cae03e130aff4704e5c3f0be341ce403dda",
+      "commit": "0f40541013ad3793c47cc1ed48b2b0b44a62a56e",
       "date": "2026-11-27",
       "pages": [
         {
@@ -424,9 +424,9 @@
         },
         {
           "source": "docs/guide/files.md",
-          "blob": "2461c56c2fd06717f6157ad27eecc3c2fd096adf",
+          "blob": "895e898627f8486d6a2e7707af3448aab2d7790a",
           "file": "website/wiki/content/docs/book/files.mdx",
-          "sha256": "9713a11bf953d0e671786def09a347c2ea3cc087d07bd5ddaba18a21b666541e"
+          "sha256": "5a4239947bdd5bb450c3777881e52e5a127de16b2a35c037e25cd0e3c2fa6af4"
         },
         {
           "source": "docs/guide/getting-started.md",
@@ -594,7 +594,7 @@
     },
     "launcher": {
       "repository": "jamescjfoundation/wordsmith",
-      "commit": "ea5017a674de03352abb2bcd2b28a7ae0a7fe380",
+      "commit": "527360e36be586e66d3787aa7265398cc2732f6c",
       "date": "2026-11-27",
       "pages": [
         {

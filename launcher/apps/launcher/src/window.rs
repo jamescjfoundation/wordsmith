@@ -218,7 +218,7 @@ impl Launcher {
             ctx.request_repaint();
         });
         if let Err(e) = spawned {
-            eprintln!("{}: a task could not be started: {e}", crate::ID);
+            cli::complain(format_args!("{}: a task could not be started: {e}", crate::ID));
         }
     }
 

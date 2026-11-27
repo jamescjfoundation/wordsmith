@@ -24,7 +24,7 @@ fn main() -> ExitCode {
         Ok(cli::Asked::Window) => DESKTOP.main(|start| window::Launcher::new(start, Setup::of_this_run(), true)),
         Ok(asked) => cli::run(&asked, &Setup::of_this_run()),
         Err(problem) => {
-            eprintln!("{ID}: {problem}\n\n{}", cli::USAGE);
+            cli::complain(format_args!("{ID}: {problem}\n\n{}", cli::USAGE));
             ExitCode::from(2)
         }
     }

@@ -6,12 +6,25 @@
 //! understood.
 
 use std::ffi::OsString;
+use std::fmt::Display;
+use std::io::Write as _;
 use std::process::ExitCode;
 
 use wordsmith_launcher_core::install::Target;
 use wordsmith_launcher_core::{APPS, AppInfo, Client, Installed, Step, System};
 
 use crate::{ID, Setup};
+
+/// Print a line on standard output. When whoever reads it has gone away (`list | head -1`),
+/// the rest is not written and nothing is said about it: that is no failure of the command.
+pub fn say(line: impl Display) {
+    let _ = writeln!(std::io::stdout(), "{line}");
+}
+
+/// Print a line on standard error, the same way.
+pub fn complain(line: impl Display) {
+    let _ = writeln!(std::io::stderr(), "{line}");
+}
 
 /// What `--help` prints.
 pub const USAGE: &str = "\
@@ -112,7 +125,7 @@ fn list(setup: &Setup, client: &Client) -> Result<(), String> {
                 "newest release unknown".to_owned()
             }
         };
-        println!("{:<22} {have:<18} {newest}", app.id);
+        say(format_args!("{:<22} {have:<18} {newest}", app.id));
     }
     failed.map_or(Ok(()), Err)
 }
@@ -123,7 +136,7 @@ fn install(target: &Target<'_>, client: &Client) -> Result<(), String> {
     if let Installed::Yes { version: Some(version), .. } = target.installed()
         && version >= release.version
     {
-        println!("{} {version} is installed, and it is the newest.", app.name);
+        say(format_args!("{} {version} is installed, and it is the newest.", app.name));
         return Ok(());
     }
     let mut last = String::new();
@@ -131,11 +144,11 @@ fn install(target: &Target<'_>, client: &Client) -> Result<(), String> {
         // One line for the download, not one for every piece of it.
         let words = if matches!(step, Step::Downloading { .. }) { "Downloading…".to_owned() } else { words_for(&step) };
         if words != last {
-            println!("{words}");
+            say(format_args!("{words}"));
             last = words;
         }
     })?;
-    println!("{} {} is installed: {}", app.name, release.version, target.program().display());
+    say(format_args!("{} {} is installed: {}", app.name, release.version, target.program().display()));
     Ok(())
 }
 
@@ -149,26 +162,26 @@ pub fn run(asked: &Asked, setup: &Setup) -> ExitCode {
     let done = match *asked {
         Asked::Window => Ok(()),
         Asked::Version => {
-            println!("{}", version_line());
+            say(format_args!("{}", version_line()));
             Ok(())
         }
         Asked::Help => {
-            println!("{USAGE}");
+            say(format_args!("{USAGE}"));
             Ok(())
         }
         Asked::List => list(setup, &client),
         Asked::Install(app) => target(app).and_then(|(places, system, app)| install(&Target { places, system, app }, &client)),
-        Asked::Start(app) => {
-            target(app).and_then(|(places, system, app)| Target { places, system, app }.start()).map(|_| println!("{} is started.", app.name))
-        }
-        Asked::Remove(app) => {
-            target(app).and_then(|(places, system, app)| Target { places, system, app }.remove()).map(|()| println!("{} is removed.", app.name))
-        }
+        Asked::Start(app) => target(app)
+            .and_then(|(places, system, app)| Target { places, system, app }.start())
+            .map(|_| say(format_args!("{} is started.", app.name))),
+        Asked::Remove(app) => target(app)
+            .and_then(|(places, system, app)| Target { places, system, app }.remove())
+            .map(|()| say(format_args!("{} is removed.", app.name))),
     };
     match done {
         Ok(()) => ExitCode::SUCCESS,
         Err(problem) => {
-            eprintln!("{ID}: {problem}");
+            complain(format_args!("{ID}: {problem}"));
             ExitCode::FAILURE
         }
     }

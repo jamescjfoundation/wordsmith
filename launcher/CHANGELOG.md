@@ -6,6 +6,11 @@ takes its version and date, and the next `## Unreleased` opens above it.
 
 The first public release is 0.9.0, a preview; 1.0.0 follows it, as for the Wordsmith apps.
 
+## Unreleased
+
+- A command whose output is cut short by what reads it (`wordsmith-launcher list | head -1`)
+  ends quietly. It stopped with an error message of the program's own.
+
 ## 0.9.0 (2026-11-27)
 
 The first public release of Wordsmith Launcher: a preview of 1.0.0, for trying the launcher, its

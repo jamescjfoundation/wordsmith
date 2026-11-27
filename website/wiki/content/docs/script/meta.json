@@ -12,13 +12,14 @@
     "files",
     "production",
     "outlining",
-    "cli-and-mcp",
-    "keyboard",
+    "command-line-and-agents",
+    "keys",
     "editing",
     "macros-and-styles",
     "characters-and-reports",
     "planning",
     "production-more",
-    "workspace"
+    "workspace",
+    "installing"
   ]
 }

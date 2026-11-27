@@ -4,6 +4,7 @@
   "root": true,
   "pages": [
     "index",
+    "installing",
     "getting-started",
     "binder",
     "writing",
@@ -13,6 +14,6 @@
     "export",
     "files",
     "keys",
-    "command-line"
+    "command-line-and-agents"
   ]
 }

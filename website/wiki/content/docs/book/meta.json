@@ -4,6 +4,7 @@
   "root": true,
   "pages": [
     "index",
+    "installing",
     "getting-started",
     "import",
     "structure",
@@ -14,8 +15,10 @@
     "export",
     "editions-and-metadata",
     "manuscript",
-    "command-line-and-agents",
+    "files",
+    "house",
     "keys",
-    "house"
+    "command-line-and-agents",
+    "feature-ids"
   ]
 }

@@ -105,13 +105,14 @@ whenever you like.
 When it starts, the app asks GitHub whether a newer version has been
 released. **About** on the File page has **Check for Updates** and shows the
 result; Help › Check for Updates… does the same. When an update is available
-you can install it (on Linux) or open its release page.
+you can install it (on Linux) or open its release page
+([Installing and updating](./installing.mdx#updating)).
 
 What the check sends, and how to stop it:
 
 - The app asks GitHub's API (`api.github.com`) for the list of Wordsmith
   Script releases. GitHub sees your IP address and the app's name and version
-  (`WordsmithScript/0.1.1`), nothing about you or your scripts. If GitHub's
+  (`WordsmithScript/0.9.0`), nothing about you or your scripts. If GitHub's
   request limit has run out, the check fails quietly; no other server is
   asked.
 - An update is downloaded only when you choose to install it, from the

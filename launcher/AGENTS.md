@@ -304,7 +304,8 @@ has the whole of it; in short:
 - **A release is the wordsmith repository's release.** The tag `vX.Y.Z` and the GitHub release
   are made in `jamescjfoundation/wordsmith`, which releases nothing else. "Releasing an app"
   above holds as written, from this folder: `cargo xtask release X.Y.Z`, `cargo xtask ci`,
-  push, `gh workflow run release.yml --ref main`.
+  the release commit landed on `main` through a pull request whose checks pass, then
+  `gh workflow run release.yml --ref main`.
 - **`cargo xtask privacy`** reads this folder's files and every commit of the repository.
   `python3 project/privacy.py`, from the root, reads the whole repository.
 

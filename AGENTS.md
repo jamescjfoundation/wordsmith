@@ -176,11 +176,11 @@ What runs on GitHub, and what does not:
 
 Every workflow uses GitHub's own actions only, each pinned to a full commit hash with its version in a comment (the organisation allows no others). To move one to a newer version, look the tag's commit up (`gh api repos/actions/<name>/git/ref/tags/<tag>`; for an annotated tag, follow it to the commit) and change the hash and the comment together, in every workflow that uses the action.
 
-`.github/pull_request_template.md` lists what to confirm; a change pushed straight to `main` follows the same list. After a push, watch the "Checks" run; after one that touches `website/`, watch the "Deploy website and wiki to GitHub Pages" run too and open the live page.
+`.github/pull_request_template.md` lists what to confirm. Watch the "Checks" run of the pull request; after one that touches `website/`, watch the "Deploy website and wiki to GitHub Pages" run too and open the live page.
 
 ## Git
 
-- `main` is the default branch and deploys the website. A change may be pushed straight to `main` once the checks for its folder pass; a pull request is optional and its author merges it ([decision 0002](project/decisions/0002-how-changes-land-and-who-releases.md)).
+- `main` is the default branch and deploys the website. Every change lands through a pull request; its two "Checks" jobs must pass, and its author merges it ([decision 0002](project/decisions/0002-how-changes-land-and-who-releases.md)).
 - History on `main` is not rewritten: GitHub refuses a force-push to `main`, its deletion, and a moved or deleted `v*` tag. Fix a mistake with a new commit.
 - A `v*` tag is a release of the launcher. Only `release.yml` makes one; never push one by hand.
 - Working notes, reviews and anything private go in `.private/`, which Git ignores. Never commit them.

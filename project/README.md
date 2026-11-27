@@ -236,7 +236,7 @@ Each app has one user guide, `docs/guide/` in its own repository. The wiki's sec
 
 **Held by:** `checks.yml` runs the commands of step 4 on every pull request and every push to `main`, and puts the site together as it is published. `pages.yml` runs the same checks again before it publishes, and the site is not updated when one fails. `npm run guide:check` fails on a file in an app's section that the tool did not write, so a hand-written page cannot be put there; and it fails on a link from one wiki page to another page, a heading of it or a picture that is not there. `python3 project/check_links.py` checks the links between the other Markdown files of this repository. Nothing checks a link from a wiki page to another site, or a hand-written page's claims against the apps.
 
-**Today:** the checks are not required on `main`: a red run does not stop a merge or a direct push, only the deploy. Watch the "Checks" run of your own push.
+The two jobs of `checks.yml` are required checks on `main`: a pull request cannot be merged while one is red.
 
 <a id="route-e"></a>
 ### Route E: website text
@@ -501,7 +501,7 @@ Paths are inside the repository named. Links go to `main`.
 
 These hold in every Wordsmith repository. Each repository's `AGENTS.md` adds its own.
 
-- **How changes land.** While no app has been released, a change may be pushed straight to `main`. Run the repository's gate first (`cargo xtask ci` in the Rust repositories; the checks in `AGENTS.md` here). A pull request is optional, and its author merges it once the checks pass. A red `main` is fixed at once by whoever made it red. History on `main` is never rewritten and a release tag is never moved; GitHub refuses both in every repository. [Decision 0002](decisions/0002-how-changes-land-and-who-releases.md). **Today:** the three apps and the launcher have each published 0.9.0, a preview, which is when the decision says to look at this rule again. That has not been done yet ([wordsmith#28](https://github.com/jamescjfoundation/wordsmith/issues/28)); until it is, changes still land this way.
+- **How changes land.** Every change lands through a pull request whose required checks pass; its author merges it, and no approval is needed. Run the repository's gate before you push the branch (`cargo xtask ci` in the Rust repositories; the checks in `AGENTS.md` here). GitHub refuses a direct push to `main`. History on `main` is never rewritten and a release tag is never moved; GitHub refuses both in every repository. [Decision 0002](decisions/0002-how-changes-land-and-who-releases.md). Pull requests from 2026-11-27, after the 0.9.0 releases.
 - **Who releases.** A person or an agent may release the core or an app, once the release's gate passes. [Decision 0002](decisions/0002-how-changes-land-and-who-releases.md).
 - **Core pins.** An app moves to the newest core release before new work starts on it and before it is released. An app more than three core releases behind gets an issue. [Decision 0002](decisions/0002-how-changes-land-and-who-releases.md), [Route I](#route-i).
 - **Naming other companies, programs and formats.** Code and docs may name them where it is a fact a reader needs: the formats an app opens, what a store or print service expects of a file. Interface names, designs and help text stay our own, and an app never says it replaces or follows another product. Apps never name WordCraft or craft-libs types. People are never named. [Decision 0003](decisions/0003-naming-other-companies-programs-and-formats.md).

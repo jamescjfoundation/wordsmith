@@ -1,4 +1,4 @@
-<!-- A pull request is optional here (project decision 0002). A change pushed straight to `main` follows the same list. Delete the lines that do not apply. -->
+<!-- Every change lands through a pull request whose checks pass; its author merges it (project decision 0002). Delete the lines that do not apply. -->
 
 ## What changed, and why
 

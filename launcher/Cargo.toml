@@ -17,7 +17,7 @@ wordsmith-launcher-core = { path = "crates/launcher-core" }
 
 # The core, at a release tag. The launcher uses only jcj- interface crates (never jcj-upstream,
 # WordCraft or craft-libs); `cargo xtask layers` checks it. Move all of them together.
-jcj-shell = { git = "https://github.com/jamescjfoundation/open-source-core", tag = "v0.1.22" }
+jcj-shell = { git = "https://github.com/jamescjfoundation/open-source-core", tag = "v0.1.23" }
 
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"

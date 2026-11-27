@@ -154,7 +154,8 @@ python3 -m unittest discover -s website/tools
 python3 project/privacy.py
 python3 project/check_links.py
 python3 website/tools/build.py --check
-(cd website/wiki && npm ci && npm run brand:check && npm test && npm run guide:check && npm run lint && npm run types:check && npm run build)(cd launcher && cargo xtask ci)   # only after a change under launcher/; it needs Rust
+(cd website/wiki && npm ci && npm run brand:check && npm test && npm run guide:check && npm run lint && npm run types:check && npm run build)
+(cd launcher && cargo xtask ci)   # only after a change under launcher/; it needs Rust
 ```
 
 What runs on GitHub, and what does not:

@@ -2,7 +2,7 @@
 
 Thank you for helping. This repository is public: everything you commit, push, or write in an issue, pull request or review can be read by anyone and stays in the history for good.
 
-This repository holds what belongs to Wordsmith as a whole: the project map, the brand kit, the website and the wiki. The apps are in their own repositories, each with its own `CONTRIBUTING.md`. [`AGENTS.md`](AGENTS.md) has this repository's rules in full, for people and for coding agents; this page is the short way in.
+This repository holds what belongs to Wordsmith as a whole: the project map, the brand kit, the website, the wiki, and one program, Wordsmith Launcher, in `launcher/`. The three apps are in their own repositories, each with its own `CONTRIBUTING.md`, and the launcher has its own too: [`launcher/CONTRIBUTING.md`](launcher/CONTRIBUTING.md). [`AGENTS.md`](AGENTS.md) has this repository's rules in full, for people and for coding agents; this page is the short way in.
 
 ## The quickest way to help
 
@@ -16,7 +16,7 @@ Fix a wiki page. Every page of [the wiki](https://wordsmithand.ink/wiki/) has an
 
 ## Building and checking
 
-There is no Cargo here. The tools need Python 3 and nothing else. The wiki needs Node.js 22 or later.
+There is no Cargo outside `launcher/`. The tools need Python 3 and nothing else. The wiki needs Node.js 22 or later. The launcher needs Rust, and its commands are in `launcher/CONTRIBUTING.md`.
 
 ```sh
 python3 -m unittest discover -s project   # the tools' own tests
@@ -116,9 +116,9 @@ than "as discussed".
 
 The rules above are carried word for word from open-source-core and are written for a repository with Cargo. Read them here as follows.
 
-- **The checks.** There is no `cargo xtask`. `python3 project/privacy.py` does the job of `cargo xtask privacy`, and the checks under "Building and checking" stand where the rules say `cargo xtask ci`: a push to `main` is allowed once the ones for the folders you changed pass.
+- **The checks.** There is no `cargo xtask` outside `launcher/`. `python3 project/privacy.py` does the job of `cargo xtask privacy`, and the checks under "Building and checking" stand where the rules say `cargo xtask ci`: a push to `main` is allowed once the ones for the folders you changed pass.
 - **Licenses.** A contribution takes the license of the folder it is made in, and [`LICENSES.md`](LICENSES.md) has the list: code is MIT OR Apache-2.0, and the words of the website and the wiki are CC BY 4.0. The brand files are not open source. Do not send a changed logo or icon: open an issue that says what should change.
-- **No releases, no changelog.** Nothing is released from here and there is no `CHANGELOG.md`. The website and the wiki are published from `main` by the deploy. A change that follows a change in an app links it ([Route L](project/README.md#route-l) of the project map).
+- **Releases and the changelog.** Only the launcher is released from here: a tag `vX.Y.Z` in this repository is a version of the launcher, made by its release workflow, and its changelog is `launcher/CHANGELOG.md`. The website, the wiki, the brand kit and the project map have no releases and no changelog: the website and the wiki are published from `main` by the deploy. A change that follows a change in an app links it ([Route L](project/README.md#route-l) of the project map).
 - **Say only what exists.** The website and the wiki describe what an app does today. Check the app's repository before you write a claim.
 - **The Foundation's name** is always "The James C. J. Foundation".
 - **Generated files.** Website pages come from `website/tools/build.py` and brand files from `brand/source/build.py`. Change the script, run it, and commit what it writes.

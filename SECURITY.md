@@ -37,7 +37,7 @@ If a problem is already public or being exploited, go straight to a fix and an a
 
 ## What counts here
 
-This repository holds no app. It holds what the project publishes about itself: the website, the wiki, the brand kit, and the project map with its tools. A security problem here is anything that lets someone change what the project publishes, or that breaks a promise the site makes to its visitors. For example:
+This repository holds what the project publishes about itself: the website, the wiki, the brand kit, and the project map with its tools. It also holds one program, Wordsmith Launcher, in `launcher/`: what counts as a security problem in the launcher is in [`launcher/SECURITY.md`](launcher/SECURITY.md), and it is reported here, on this repository's Security tab. For the rest, a security problem is anything that lets someone change what the project publishes, or that breaks a promise the site makes to its visitors. For example:
 
 - **The website and the wiki.** A page of [wordsmithand.ink](https://wordsmithand.ink/) that loads something from another site (a script, a font, a tracker), or a way to make a page run someone else's script. A link on the site or the wiki that offers an app from anywhere but the project's own repositories and their GitHub releases.
 - **The deploy.** A way to change what is published without a commit on `main`: a workflow that runs text it was given as a command, an action that is not pinned to a commit, a token with more rights than its job needs.
@@ -53,6 +53,6 @@ A problem in an app is reported in that app's repository: [wordsmith-script](htt
 
 The text between the two marker lines is carried word for word from open-source-core and is written for a repository that releases an app.
 
-- Nothing is released from here and there is no `CHANGELOG.md`. A fix ships when it is on `main` and the deploy that follows is green. The public record of a fixed problem is the advisory.
-- What is supported is the site as it is published today, and `main`.
+- Only the launcher is released from here; a fix to it ships as a new version, with a **Security** entry in `launcher/CHANGELOG.md`. Nothing else here is released and nothing else has a changelog: a fix to the website, the wiki, the deploy or the brand files ships when it is on `main` and the deploy that follows is green, and the public record of that fixed problem is the advisory.
+- What is supported is the site as it is published today, `main`, and the newest release of the launcher.
 - Someone working in a checkout, an agent included, does not file a report: keep the problem in `.private/`, which Git ignores, and tell the maintainer you are working for ([Route H](project/README.md#route-h) of the project map).

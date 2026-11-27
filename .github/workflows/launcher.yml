@@ -18,7 +18,7 @@
 #   reads changed files as paths from the repository's root and would find that nothing in the
 #   workspace changed. The launcher is two small packages, so a whole run costs little.
 # - A fourth job, `live`, runs the launcher's own code against GitHub and a real release on
-#   Linux, macOS and Windows (`cargo xtask live`): it installs one Wordsmith app into a scratch
+#   Linux, macOS and Windows (`cargo xtask live`): it installs each Wordsmith app into a scratch
 #   folder, asks the installed program its version, and removes it. The gate's tests use no
 #   network; this is where the three systems' install steps are tried for real.
 #
@@ -222,15 +222,19 @@ jobs:
             ~/.cargo/git/db
           key: ${{ steps.home.outputs.cache-primary-key }}
 
-  # The launcher's own code against GitHub and a real release, on each system it is built for.
+  # The launcher's own code against GitHub and a real release: each app, on each system it is
+  # built for.
   live:
-    name: a real release, installed and removed (${{ matrix.os }})
+    name: ${{ matrix.app }}, installed and removed (${{ matrix.os }})
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-24.04, macos-latest, windows-latest]
+        app: [wordsmith-script, wordsmith-manuscript, wordsmith-book]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
+    env:
+      WORDSMITH_LAUNCHER_LIVE_APP: ${{ matrix.app }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

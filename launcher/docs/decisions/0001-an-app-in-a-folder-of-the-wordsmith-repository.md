@@ -46,7 +46,7 @@ Read at core v0.1.22:
 
   | At the root | Does what | In place of |
   | --- | --- | --- |
-  | `.github/workflows/launcher.yml` | The gate in three jobs (checks, cargo-deny, clippy and tests), on every push to `main` and every pull request that touches `launcher/`; and the live check on Linux, macOS and Windows | The core's `shared-ci.yml` |
+  | `.github/workflows/launcher.yml` | The gate in three jobs (checks, cargo-deny, clippy and tests), on every push to `main` and every pull request that touches `launcher/`; and the live check, each app on Linux, macOS and Windows | The core's `shared-ci.yml` |
   | `.github/workflows/release.yml` | The release, and its dry run: the release commit checked, the whole gate on three systems, the package of each system, `SHA256SUMS.txt`, the attestation, then the tag and the published release | The core's `shared-release.yml` |
   | `.github/workflows/launcher-core-pin.yml` | The weekly look at how far behind the core pin is, and the issue | The core's `shared-core-pin.yml` |
 

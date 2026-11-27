@@ -325,9 +325,14 @@ has the whole of it; in short:
 - **The brand files** in `assets/brand/` are the kit's, written by `npm run brand` in
   `../website/wiki` and checked by `npm run brand:check` there. Only `tokens.json` and
   `README.md` are the launcher's.
-- **Say only what exists.** The guide (`docs/guide/`), `CHANGELOG.md`, the website's launcher
-  page (`../website/tools/build.py`) and the wiki's pages for the launcher say what the
-  launcher does today. Change them with the code.
+- **Say only what exists.** The guide (`docs/guide/`), `CHANGELOG.md` and the website's launcher
+  page (`../website/tools/build.py`) say what the launcher does today. Change them with the
+  code.
+- **The wiki's pages for the launcher are built from the guide here**, at a commit of `main`,
+  by `npm run guide` in `../website/wiki`, and so is the picture the website shows
+  (`docs/images/`, redrawn with `cargo xtask screenshots`). After a change to either has
+  landed, run `npm run guide` and land what it writes; the "Check the guides" workflow is red
+  until then.
 - **Interface names and text are our own.** What a launcher does was learned from another
   open-source launcher (`ATTRIBUTION.md`); none of its code, names or wording is used.
 

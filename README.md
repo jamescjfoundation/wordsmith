@@ -12,7 +12,7 @@ The apps themselves live in their own repositories. This repository is a small m
 | [`brand/`](brand/) | The brand kit: logos, app icons, palettes, tokens and brand guidelines | v1.0 |
 | [`website/`](website/) | The public website, plain HTML and CSS, published with GitHub Pages | Live |
 | [`website/wiki/`](website/wiki/) | The wiki (Fumadocs), at wordsmithand.ink/wiki/: each app's user guide, built from the guide in the app's own repository, and the pages about the project as a whole | Live |
-| [`launcher/`](launcher/) | Wordsmith Launcher, a Rust app that installs, updates and opens the Wordsmith apps | Not started |
+| [`launcher/`](launcher/) | Wordsmith Launcher, a small Rust program that installs, updates, opens and removes the Wordsmith apps. Its downloads are this repository's [releases](https://github.com/jamescjfoundation/wordsmith/releases) | Its first release is 0.9.0, a preview ([changelog](launcher/CHANGELOG.md)) |
 
 ## The Wordsmith repositories
 
@@ -37,9 +37,9 @@ Each folder has its own README with how to build, preview and publish it.
 - **Brand kit:** [`brand/README.md`](brand/README.md). Logos, icons and palettes are rebuilt from `brand/source/`, never edited by hand.
 - **Website:** `python3 website/tools/build.py` rewrites the pages; preview with `python3 website/tools/serve.py`, then http://localhost:8000. Every push to `main` that touches `website/` deploys it, wiki included.
 - **Wiki:** `npm ci && npm run dev` in `website/wiki`; see [`website/wiki/README.md`](website/wiki/README.md). It deploys with the website.
-- **Launcher:** see [`launcher/README.md`](launcher/README.md).
+- **Launcher:** a Cargo workspace of its own, built on the shared base like an app. `cargo xtask ci` in `launcher/` is its gate; see [`launcher/README.md`](launcher/README.md) and [`launcher/AGENTS.md`](launcher/AGENTS.md).
 
-Every pull request and every push to `main` runs the "Checks" workflow: the tools' tests, the privacy and link checks, the website's pages, the brand copies, and the wiki's lint, type check and build.
+Every pull request and every push to `main` runs the "Checks" workflow: the tools' tests, the privacy and link checks, the website's pages, the brand copies, and the wiki's lint, type check and build. A change under `launcher/` also runs the "Launcher" workflow, the launcher's own gate.
 
 What is planned is in [`ROADMAP.md`](ROADMAP.md): open work is an issue in the [v1 milestone](https://github.com/jamescjfoundation/wordsmith/milestone/1).
 

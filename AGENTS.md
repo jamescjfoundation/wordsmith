@@ -4,7 +4,7 @@ Guidance for anyone, human or agent, changing this repository.
 
 ## What this repository is
 
-The pieces of Wordsmith that belong to the project as a whole. The apps (Wordsmith Script, Wordsmith Manuscript, Wordsmith Book) and their shared base (`open-source-core`) live in their own repositories under `jamescjfoundation`; never copy their code here. Each top-level folder is its own small project with its own tooling:
+The pieces of Wordsmith that belong to the project as a whole. The apps (Wordsmith Script, Wordsmith Manuscript, Wordsmith Book) and their shared base (`open-source-core`) live in their own repositories under `jamescjfoundation`; never copy their code here. One program is built here: Wordsmith Launcher, in `launcher/`. Each top-level folder is its own small project with its own tooling:
 
 | Folder | Stack | Owns |
 | --- | --- | --- |
@@ -12,8 +12,9 @@ The pieces of Wordsmith that belong to the project as a whole. The apps (Wordsmi
 | `brand/` | SVG, PNG, ICO, JSON tokens, PDFs, Python 3 build scripts | The brand kit: the source of every logo, icon and brand color, and the list of what each app carries from it |
 | `website/` | Plain HTML/CSS/JS, a Python 3 page generator and release reader, no dependencies | The public site, [wordsmithand.ink](https://wordsmithand.ink/), and the data files that say what each app is and where it stands |
 | `website/wiki/` | Fumadocs (Next.js, MDX), static export, Node.js scripts | The wiki, at `/wiki/`: each app's user guide, built from the guide in the app's own repository, and the pages about the project as a whole |
-| `launcher/` | Rust (planned) | Wordsmith Launcher, a desktop app. Not started |
-| `.github/` | GitHub Actions, Markdown | `workflows/checks.yml` (every check, on each pull request and each push to `main`), `workflows/pages.yml` (runs the same checks, then deploys the website and the wiki: on a push, and every day when an app has published a release), `workflows/carried.yml` (compares the carried text with what the other repositories have published), `workflows/guides.yml` (compares each app's guide on `main` with the commit the wiki was built from), and the pull request template |
+| `launcher/` | Rust: a Cargo workspace of its own, built on `open-source-core` | Wordsmith Launcher, the desktop program that installs, updates, opens and removes the apps. It is handled like an app, and has its own `AGENTS.md` |
+| `.github/` | GitHub Actions, Markdown | `workflows/checks.yml` (every check, on each pull request and each push to `main`), `workflows/pages.yml` (runs the same checks, then deploys the website and the wiki: on a push, and every day when an app has published a release), `workflows/carried.yml` (compares the carried text with what the other repositories have published), `workflows/guides.yml` (compares each app's guide on `main` with the commit the wiki was built from), the launcher's three (`workflows/launcher.yml`, its gate; `workflows/release.yml`, its release and the release's dry run; `workflows/launcher-core-pin.yml`, the weekly look at its core pin), and the pull request template |
+| `hooks/` | Shell | The Git hooks, which run the launcher's checks when a commit or a push touches `launcher/` ([launcher/](#launcher)) |
 
 At the root: `ROADMAP.md` says where the plan is: open work in this repository is an issue with the milestone `v1`, and the file links to it and holds no list of its own. When you find work you will not do now, open an issue there; do not add a list to a file. `LICENSES.md` says which license covers which folder, with the license texts beside it (`LICENSE-MIT`, `LICENSE-APACHE`, `LICENSE-CC-BY-4.0`; the brand terms are `brand/LICENSE.md`). `SECURITY.md`, `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md` are for people arriving from outside; each carries text from `open-source-core` ([`project/`](#project) says how).
 
@@ -57,7 +58,7 @@ wherever it stands in a sentence, never in a shorter form.
 
 Where the block and this repository differ:
 
-- There is no `cargo xtask` here. `python3 project/privacy.py` does the job of `cargo xtask privacy`: it reads every tracked text file for email addresses, home folders, private network addresses and host names, and things shaped like secrets, and it reads the author and committer address of every commit. The checks workflow runs it on every pull request and push. No hook runs it for you: run it before you push.
+- There is no `cargo xtask` at the root, only in `launcher/`, where it reads that folder's files. For the repository as a whole, `python3 project/privacy.py` does the job of `cargo xtask privacy`: it reads every tracked text file for email addresses, home folders, private network addresses and host names, and things shaped like secrets, and it reads the author and committer address of every commit. The checks workflow runs it on every pull request and push. No hook runs it for you (the hooks in `hooks/` are for a change to `launcher/`): run it before you push.
 - A pattern cannot find a person's name, something said in a conversation or an open security problem. Read your own diff and commit message for those.
 - In a fresh clone, set a GitHub no-reply address with `git config user.email` before the first commit.
 - A line that must keep something the check finds (an example in a test) ends with the marker `privacy:allow`. Use it for made-up examples only, never to keep a real detail.
@@ -87,6 +88,7 @@ The copies of kit files, and what keeps each in step:
 | --- | --- | --- |
 | `website/wiki/public/brand/` | `npm run brand` in `website/wiki` | `npm run brand:check`, which the checks workflow runs on every pull request and push |
 | `website/assets/brand/` and `website/favicon.svg` | The same `npm run brand`: from the kit's `logo/`, `lockups/` and `app-icon/` folders into one flat folder, some renamed (`app-icon/icon-512.png` is `wordsmith-and-ink-icon-512.png` there) | The same `npm run brand:check` |
+| `launcher/assets/brand/` | The same `npm run brand`: the parent brand's icons under the names the launcher's packaging reads (`icon-256.png`, `icon.ico`), and each app's 128 px icon for the launcher's list | The same `npm run brand:check`. `tokens.json` and `README.md` there are the launcher's own, and the check lets them stay |
 | Each app's `assets/brand/`, in the app's repository | `npm run brand -- --app <app>` in `website/wiki`, which writes the kit's files into the app's checkout beside this repository: the app's `production/` set and the icons it uses from `app-icon/`, with `kit.json`, the record of the kit commit they came from. The change is committed in the app | `npm run brand:check -- --app <app>` here, by hand. The check that fails in the app is the app's own, from `kit.json` and `brand/apps.json` ([Route F](project/README.md#route-f)) |
 
 - One script makes and checks every copy: `website/wiki/scripts/brand.mjs`. It needs Node.js and nothing installed. To use another kit file on the website or in the wiki, add it to the script's list and run `npm run brand`; never copy one by hand. `brand:check` also fails on a file in either folder of copies that the script does not make.
@@ -129,15 +131,17 @@ The copies of kit files, and what keeps each in step:
 
 ## launcher/
 
-Not started. When it is:
+Wordsmith Launcher: a desktop program that lists the three apps, installs the ones a writer wants from their public GitHub releases, updates them, opens them and removes them. It is a Rust app built on `open-source-core`, handled like the three apps, in a folder of this repository instead of a repository of its own.
 
-- A Rust crate (or Cargo workspace) rooted at `launcher/`, so `cargo` commands run from there: `cargo fmt --check`, `cargo clippy --all-targets -- -D warnings`, `cargo test`.
-- Match the apps' choices where it makes sense (egui for the interface, `open-source-core` if it fits) so the suite looks and behaves as one.
-- Downloads come only from the project's official GitHub releases and are verified before anything runs. Update checks can be turned off. No accounts, no telemetry.
-- Targets macOS, Windows and Linux.
-- Add a `launcher.yml` workflow scoped to `paths: ["launcher/**"]` when there is code to check.
-- Keep the website's launcher page (`website/launcher.html`, written by `build.py`) in step with what the launcher actually does.
-- Its plan is [issue 10](https://github.com/jamescjfoundation/wordsmith/issues/10), in the `v1` milestone.
+- **`launcher/` is a Cargo workspace, and has its own rules: [`launcher/AGENTS.md`](launcher/AGENTS.md).** Read it before changing anything there. It carries the core's blocks for apps (`cargo xtask sync` writes them, from the core release the launcher pins) and then the launcher's own rules. Run every `cargo` command from `launcher/`; the root has no Cargo.
+- Its gate is `cargo xtask ci`, the gate every app has. Never `cargo xtask ci --changed` there: it finds nothing changed, because the workspace is not the repository's root.
+- It builds on `open-source-core` at one release tag and moves to the newest core before new work and before a release, like an app ([Route I](project/README.md#route-i)). After a move, compare the three launcher workflows here with the core's shared workflows: they are written out here because the core's have no input for a folder ([launcher decision 0001](launcher/docs/decisions/0001-an-app-in-a-folder-of-the-wordsmith-repository.md)).
+- **This repository's releases are the launcher's.** A tag `vX.Y.Z` here is a version of the launcher, made by `release.yml` after the gate, never by hand ([Route J](project/README.md#route-j)). Nothing else in this repository is released: the website and the wiki are deployed.
+- The files under `launcher/.github/` and `launcher/hooks/` are the core's, carried for its check. GitHub and Git do not run them: the workflows that run are in `.github/workflows/` and the hooks in `hooks/`, at the root. `cargo xtask install-hooks`, run in `launcher/`, switches the root hooks on for a clone.
+- Its brand files are copies made by `npm run brand` ([brand/](#brand)). Its guide, `launcher/docs/guide/`, is the source of its pages in the wiki, as an app's guide is ([website/wiki/](#websitewiki)).
+- The checks of the repository read the launcher's files too: `python3 project/privacy.py` and `python3 project/check_links.py`. In a Markdown file under `launcher/`, a link to a file outside that folder is written as a full GitHub address, because the launcher's own `docs` check takes its folder for the whole repository.
+- Keep the website's launcher page (`website/launcher.html`, written by `build.py`) and `website/data/apps/launcher.json` in step with what the launcher does.
+- Check before pushing: in `launcher/`, `cargo xtask ci` passes; then the repository's own checks below.
 
 ## Before you push
 
@@ -149,7 +153,7 @@ python3 -m unittest discover -s website/tools
 python3 project/privacy.py
 python3 project/check_links.py
 python3 website/tools/build.py --check
-(cd website/wiki && npm ci && npm run brand:check && npm test && npm run guide:check && npm run lint && npm run types:check && npm run build)
+(cd website/wiki && npm ci && npm run brand:check && npm test && npm run guide:check && npm run lint && npm run types:check && npm run build)(cd launcher && cargo xtask ci)   # only after a change under launcher/; it needs Rust
 ```
 
 What runs on GitHub, and what does not:
@@ -160,6 +164,9 @@ What runs on GitHub, and what does not:
 | `npm run brand:check`, `npm test`, `npm run guide:check`, `npm run lint`, `npm run types:check` and `npm run build` in `website/wiki`, then the site put together as it is published | `checks.yml`, job "wiki and site": the same. `guide:check` reads each app's public repository at its recorded commit, so this job needs the network, as `npm ci` does |
 | All of the above again, before the deploy | `pages.yml`: on a push to `main` that touches `website/` or either workflow, every day when an app's latest release has changed, and by hand. It calls `checks.yml` and publishes only when every job passed. A failure there means the site was not updated |
 | The pages the deploy builds from fresh release data | Nowhere: they are written by the checked `build.py` from what GitHub answered, after the pages in the repository passed `--check`. Look at the live page after an app's release |
+| `cargo xtask ci` in `launcher/`: every check of an app's gate, clippy and the tests, with cargo-deny beside it; and `cargo xtask live`, which installs a real release of one app into a scratch folder on Linux, macOS and Windows, and removes it | `launcher.yml`: on a push to `main` or a pull request that touches `launcher/`, `hooks/` or the workflow; and by hand. Nothing else here starts a Rust build |
+| The launcher's release files built and checked on the three systems, without a release | `release.yml`, as a dry run: every Tuesday, and by hand (`gh workflow run release.yml -f dry-run=true`). A failed scheduled run opens an issue |
+| How far the launcher's core pin is behind | `launcher-core-pin.yml`: every Monday; it opens an issue when the pin is more than three releases behind |
 | `python3 project/carry.py --check --remote` | `carried.yml`: on a push to `main` or a pull request that touches `project/README.md`, `project/carry.py`, `AGENTS.md`, `SECURITY.md`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md` or the workflow; weekly; and by hand. It is red while a published copy is behind its source |
 | `npm run guide:behind`: an app's guide on `main` is still the one the wiki was built from | `guides.yml`: every day, by hand, and on a push to `main` that touches the lock file, the tool or an app's data file. It is red while an app's guide has moved on, until `npm run guide` is run and its result landed |
 | `python3 brand/source/build.py` matches the committed kit | Locally only |
@@ -173,6 +180,7 @@ Every workflow uses GitHub's own actions only, each pinned to a full commit hash
 
 - `main` is the default branch and deploys the website. A change may be pushed straight to `main` once the checks for its folder pass; a pull request is optional and its author merges it ([decision 0002](project/decisions/0002-how-changes-land-and-who-releases.md)).
 - History on `main` is not rewritten: GitHub refuses a force-push to `main`, its deletion, and a moved or deleted `v*` tag. Fix a mistake with a new commit.
+- A `v*` tag is a release of the launcher. Only `release.yml` makes one; never push one by hand.
 - Working notes, reviews and anything private go in `.private/`, which Git ignores. Never commit them.
 - Keep commits focused, with a short imperative subject.
 - Commit the generated website pages with the change that regenerates them. Commit no other build output: not `out/`, `.next/`, `node_modules/`, `target/` or editor files.

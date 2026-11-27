@@ -53,7 +53,7 @@ Before changing a repository, read its own `AGENTS.md`. Its rules apply inside i
 
 Lines that start with **Today:** describe a gap as it stands: a tool that does not exist yet or a choice not yet made. They say what is safe to do now. They are not promises.
 
-Each route ends with a **Held by:** line. It names what checks the route or refuses a wrong step, and says what nothing checks. A task named there (`core-pin`, `sync`, `layers`, `docs`) is a task of `cargo xtask ci`, the gate of each Rust repository; "on GitHub" means a setting of the repository there, which refuses the step for everyone.
+Each route ends with a **Held by:** line. It names what checks the route or refuses a wrong step, and says what nothing checks. A task named there (`core-pin`, `sync`, `layers`, `docs`) is a task of `cargo xtask ci`, the gate of each Rust repository and of the launcher in `launcher/` here; "on GitHub" means a setting of the repository there, which refuses the step for everyone.
 
 ## The repositories
 
@@ -63,11 +63,11 @@ All are public, under [github.com/jamescjfoundation](https://github.com/jamescjf
 
 [github.com/jamescjfoundation/wordsmith](https://github.com/jamescjfoundation/wordsmith)
 
-- **Owns:** everything that belongs to the project as a whole. `project/` (this map and the project's decisions), `brand/` (the brand kit, the source of every logo, icon and brand color), `website/` (the public site), `website/wiki/` (the wiki), `launcher/` (planned, not started).
-- **Stack:** Python 3 scripts for the brand kit and the website pages; Fumadocs on Next.js for the wiki, with Node.js scripts that build its app sections. No Rust yet.
-- **Publishes:** [wordsmithand.ink](https://wordsmithand.ink/) and [wordsmithand.ink/wiki/](https://wordsmithand.ink/wiki/), by `.github/workflows/pages.yml` on every push to `main` that touches `website/`, and each day an app has published a release, after every check in `.github/workflows/checks.yml` has passed.
+- **Owns:** everything that belongs to the project as a whole. `project/` (this map and the project's decisions), `brand/` (the brand kit, the source of every logo, icon and brand color), `website/` (the public site), `website/wiki/` (the wiki), `launcher/` (Wordsmith Launcher, the program that installs, updates, opens and removes the three apps).
+- **Stack:** Python 3 scripts for the brand kit and the website pages; Fumadocs on Next.js for the wiki, with Node.js scripts that build its app sections. Rust in one folder: `launcher/` is a Cargo workspace of its own, built on open-source-core like an app, with the program `wordsmith-launcher`. The rest of the repository has no Cargo.
+- **Publishes:** [wordsmithand.ink](https://wordsmithand.ink/) and [wordsmithand.ink/wiki/](https://wordsmithand.ink/wiki/), by `.github/workflows/pages.yml` on every push to `main` that touches `website/`, and each day an app has published a release, after every check in `.github/workflows/checks.yml` has passed. And the launcher's release files, on this repository's GitHub releases page: a tag `vX.Y.Z` here is a version of the launcher ([Route J](#route-j)).
 - **Licenses:** by folder, in [`LICENSES.md`](../LICENSES.md): code is MIT OR Apache-2.0, the words of the website and the wiki are CC BY 4.0, and the brand files are not open source.
-- **Rules:** [`AGENTS.md`](../AGENTS.md).
+- **Rules:** [`AGENTS.md`](../AGENTS.md); for the launcher, [`launcher/AGENTS.md`](../launcher/AGENTS.md), which carries the core's rules for apps.
 
 ### wordsmith-script
 
@@ -75,7 +75,7 @@ All are public, under [github.com/jamescjfoundation](https://github.com/jamescjf
 
 - **Owns:** Wordsmith Script, the app for screenplays, TV and stage plays. The screenplay rules (elements, typing, pagination, Fountain, scene numbers, reports) and the `.wss` file format (`docs/format.md`).
 - **Stack:** Rust on open-source-core. Crates `wordsmith-script`, `wordsmith-format`, `wordsmith-ui` in `crates/`; programs `wordsmith`, `wordsmith-cli`, `wordsmith-web` in `apps/`.
-- **Publishes:** release files on its GitHub releases page (none yet), which the app's update check reads. Its user guide is `docs/guide/`, the source of its section of the wiki ([Route C](#route-c)).
+- **Publishes:** release files on its GitHub releases page, which the app's update check and the launcher read. Its user guide is `docs/guide/`, the source of its section of the wiki ([Route C](#route-c)).
 - **Rules:** its [`AGENTS.md`](https://github.com/jamescjfoundation/wordsmith-script/blob/main/AGENTS.md).
 
 ### wordsmith-manuscript
@@ -84,7 +84,7 @@ All are public, under [github.com/jamescjfoundation](https://github.com/jamescjf
 
 - **Owns:** Wordsmith Manuscript, the app for novels and long work. The binder, the story bible, import and export, the `.wsm` project folder and its packed form `.wsmz` (`docs/format.md`), and the book view that Wordsmith Book reads (`docs/book-handoff.md`).
 - **Stack:** Rust on open-source-core. Crates `manuscript-model`, `manuscript-format`, `manuscript-io`, `manuscript-ui` in `crates/`; programs `manuscript`, `manuscript-cli`, `manuscript-web` in `apps/`.
-- **Publishes:** release files on its GitHub releases page (none yet), which the app's update check reads; and the tag Book builds on (`book-view-1.3` today; a new one is cut each time Manuscript moves to a newer core). Its user guide is `docs/guide/`, the source of its section of the wiki ([Route C](#route-c)).
+- **Publishes:** release files on its GitHub releases page, which the app's update check and the launcher read; and the tag Book builds on (`book-view-1.3` today; a new one is cut each time Manuscript moves to a newer core). Its user guide is `docs/guide/`, the source of its section of the wiki ([Route C](#route-c)).
 - **Rules:** its [`AGENTS.md`](https://github.com/jamescjfoundation/wordsmith-manuscript/blob/main/AGENTS.md).
 
 ### wordsmith-book
@@ -93,7 +93,7 @@ All are public, under [github.com/jamescjfoundation](https://github.com/jamescjf
 
 - **Owns:** Wordsmith Book, the app that designs and typesets print books and ebooks. Designs, editions, print typesetting, the ebook writer, preflight, the `.wsbk` project folder and its packed form `.wsbkz` (`docs/format.md`, `docs/design-format.md`).
 - **Stack:** Rust on open-source-core, and on Manuscript's `manuscript-model` and `manuscript-format` crates. Crates `book-model`, `book-format`, `book-design`, `book-import`, `book-typeset`, `book-epub`, `book-check`, `book-ui` in `crates/`; programs `book`, `book-cli` in `apps/`.
-- **Publishes:** release files on its GitHub releases page (none yet), which the app's update check reads. Its user guide is `docs/guide/`, the source of its section of the wiki ([Route C](#route-c)).
+- **Publishes:** release files on its GitHub releases page, which the app's update check and the launcher read. Its user guide is `docs/guide/`, the source of its section of the wiki ([Route C](#route-c)).
 - **Rules:** its [`AGENTS.md`](https://github.com/jamescjfoundation/wordsmith-book/blob/main/AGENTS.md).
 
 ### open-source-core
@@ -127,6 +127,8 @@ All are public, under [github.com/jamescjfoundation](https://github.com/jamescjf
       \________.wss__/                          (Manuscript reads Script's files)
           \        |         /   brand files in, guide + changelog + releases out
                wordsmith                        (brand kit, website, wiki, this map)
+                   |
+           launcher/ in wordsmith               (built on open-source-core; installs the three apps from their releases)
 ```
 
 | From → to | What crosses | How it is held |
@@ -135,6 +137,8 @@ All are public, under [github.com/jamescjfoundation](https://github.com/jamescjf
 | Each app → open-source-core | Shared settings and tooling: the toolchain, format and lint settings, `deny.toml`, the shared `xtask/src/` modules, the shared gate behind each app's `xtask/src/main.rs`, `.github/workflows/ci.yml` and `core-pin.yml` (short callers of the core's shared workflows at its tag `workflows-v1`), `.github/dependabot.yml`, `hooks/`, the pull request template, and marked blocks in `Cargo.toml` (patches, lints and profiles), `.cargo/config.toml`, `.gitignore` and `.gitattributes` | `cargo xtask sync` copies them from the pinned core release; `cargo xtask sync --check` (part of `cargo xtask ci`) fails if they differ. They are changed in the core, never in the app |
 | Each app → open-source-core | The shared rules: marked blocks in `AGENTS.md`, `SECURITY.md` and `CONTRIBUTING.md`, and the whole `CODE_OF_CONDUCT.md` | The same `cargo xtask sync` and `--check`, from core v0.1.17 on. Their source is the core's `template/` ([Route N](#route-n)) |
 | Each app → wordsmith (the map) | The project block at the top of this file | A copy in the app's `AGENTS.md`, written by `python3 project/carry.py --write` here and checked by this repository's `carried.yml` workflow ([Route N](#route-n)) |
+| The launcher → open-source-core | The `jcj-` crates, and everything an app carries: the shared settings and tooling, the shared gate, the marked blocks and the code of conduct | In `launcher/` here, as in an app: one release tag on its `jcj-` line, and `cargo xtask sync` with `sync --check` in its gate (`cargo xtask ci`, run by `launcher.yml`). The core's workflow files and hooks are carried and do not run in a folder: the workflows that run are the launcher's own, at this repository's root ([launcher decision 0001](../launcher/docs/decisions/0001-an-app-in-a-folder-of-the-wordsmith-repository.md)) |
+| The launcher → each app (releases) | The newest release's version, its file for the user's system, and `SHA256SUMS.txt` | Read from each app's public releases on GitHub, by the core's release contract ([`docs/app-releases.md`](https://github.com/jamescjfoundation/open-source-core/blob/main/docs/app-releases.md), "For a launcher or a website"): the file's name, its line in the checksum file, the place of the program in a package. The launcher's tests read the three apps' recorded 0.9.0 releases, and `cargo xtask live` (in `launcher.yml`) installs a real release on Linux, macOS and Windows |
 | wordsmith → open-source-core | The core's `public`, `security` and `contributing` blocks and its code of conduct | Copies in this repository's `AGENTS.md`, `SECURITY.md`, `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md`, written and checked by the same tool against the core's newest release |
 | open-source-core → the forks | WordCraft and craft-libs code | The patch block in the core's `Cargo.toml` points the upstream names at our fork's commits; `cargo xtask pins` checks it against `docs/UPSTREAM.md`. Apps never name an upstream crate or type |
 | Book → Manuscript (code) | The crates `wordsmith-manuscript-model` and `wordsmith-manuscript-format` | Git dependencies in Book's `Cargo.toml` at a Manuscript tag `book-view-1.N`, cut on the same core release Book pins (Book's `Cargo.toml` names the current one). The contract is Manuscript's [`docs/book-handoff.md`](https://github.com/jamescjfoundation/wordsmith-manuscript/blob/main/docs/book-handoff.md) |
@@ -254,7 +258,7 @@ In wordsmith:
 
 1. Read `brand/suite/BRAND_GUIDE.md`. Change the script in `brand/source/`, run `python3 brand/source/build.py` to see what changes, then again with `--write` (add `--pdf` for the guideline PDFs). `brand/README.md` has the setup.
 2. Update by hand the files the build does not write: the kit's READMEs, `BRAND_GUIDE.md` and each `tokens.json`.
-3. In `website/wiki`, run `npm run brand`. It writes the wiki's copies (`website/wiki/public/brand/`), the website's (`website/assets/brand/` and `website/favicon.svg`) and `brand/apps.json`, the list of what each app carries with each file's checksum; `npm run brand:check` verifies all three. Land the change on `main`.
+3. In `website/wiki`, run `npm run brand`. It writes the wiki's copies (`website/wiki/public/brand/`), the website's (`website/assets/brand/` and `website/favicon.svg`), the launcher's (`launcher/assets/brand/`) and `brand/apps.json`, the list of what each app carries with each file's checksum; `npm run brand:check` verifies all three. Land the change on `main`.
 
 In each app, as a change in that app's repository that names the wordsmith commit ([Route L](#route-l)):
 
@@ -272,7 +276,7 @@ What an app's `assets/brand/` holds, and nothing else. `brand/apps.json` names e
 
 To have an app carry another kit file, change the app's entry in the table `APPS` of `website/wiki/scripts/brand.mjs` here and run `npm run brand`.
 
-**Held by:** `npm run brand:check` for the copies in this repository, the wiki's and the website's, and for `brand/apps.json`: `checks.yml` runs it on every pull request and every push to `main`, a change under `brand/` alone included, and `pages.yml` runs it again before the deploy. It fails when a copy is missing or differs from the kit, when a folder of copies holds a file the tool does not make, and when the list is not what the kit gives. `npm run brand:check -- --app <app>` fails on a carried file that is missing or differs, a file in the app's folder the list does not name, a theme file whose seven palette colors are not the kit's, and a `kit.json` that records another list than the kit has now; it runs by hand. In each app, the gate's `assets` task wants every file under `assets/` listed in `ATTRIBUTION.md`. This repository's pull request template, and the apps' from core v0.1.18, ask about brand files. Nothing on GitHub runs the kit's own build (`python3 brand/source/build.py`), so a kit file edited by hand is not found.
+**Held by:** `npm run brand:check` for the copies in this repository, the wiki's, the website's and the launcher's, and for `brand/apps.json`: `checks.yml` runs it on every pull request and every push to `main`, a change under `brand/` alone included, and `pages.yml` runs it again before the deploy. It fails when a copy is missing or differs from the kit, when a folder of copies holds a file the tool does not make, and when the list is not what the kit gives. `npm run brand:check -- --app <app>` fails on a carried file that is missing or differs, a file in the app's folder the list does not name, a theme file whose seven palette colors are not the kit's, and a `kit.json` that records another list than the kit has now; it runs by hand. In each app, the gate's `assets` task wants every file under `assets/` listed in `ATTRIBUTION.md`. This repository's pull request template, and the apps' from core v0.1.18, ask about brand files. Nothing on GitHub runs the kit's own build (`python3 brand/source/build.py`), so a kit file edited by hand is not found.
 
 **Today:**
 
@@ -326,41 +330,44 @@ Moving an app to it:
 8. Run `cargo xtask ci`. A golden file that changes is a deliberate change: review it and record it in the app's `docs/golden.md`.
 9. Script also names its core tag in its top-level `UPSTREAM.md`; update that line.
 
+The launcher moves the same way, with every command run in `launcher/` of this repository. One step more: compare `.github/workflows/launcher.yml`, `release.yml` and `launcher-core-pin.yml` here with the core's shared workflows at the new release, and bring over what changed. They are written out here because the core's shared workflows cannot be called for an app in a folder ([launcher decision 0001](../launcher/docs/decisions/0001-an-app-in-a-folder-of-the-wordsmith-repository.md)).
+
 A fix to CI itself does not wait for a release: the apps' CI is the core's shared workflow, called at the core's tag `workflows-v1`, and the fix reaches every app when that tag is moved to a commit of the core's `main` whose own CI passed (the core's `.github/workflows/README.md` has the steps).
 
 When to move: before starting new work on an app and before releasing it. `cargo xtask core-pin --behind` prints how far behind an app is, and a weekly workflow in each app (`core-pin.yml`) opens an issue there when it is more than three releases behind ([decision 0002](decisions/0002-how-changes-land-and-who-releases.md)).
 
-**Held by:** on GitHub, a `v*` tag cannot be moved or deleted in any repository and `main` cannot be force-pushed or deleted, so a release that went out wrong is fixed by the next version. The core's Release workflow runs the full gate on the tag before it publishes the GitHub release. In each app, `core-pin` fails on two tags or two cores and `sync` fails when a core-owned file or block differs from the pinned release; the weekly `core-pin.yml` opens an issue when the app is more than three releases behind. Nothing stops a tag being pushed before the Nightly run is green, and nothing checks that an app did what **What apps must do** asks beyond those two tasks.
+**Held by:** on GitHub, a `v*` tag cannot be moved or deleted in any repository and `main` cannot be force-pushed or deleted, so a release that went out wrong is fixed by the next version. The core's Release workflow runs the full gate on the tag before it publishes the GitHub release. In each app, `core-pin` fails on two tags or two cores and `sync` fails when a core-owned file or block differs from the pinned release; the weekly `core-pin.yml` opens an issue when the app is more than three releases behind (for the launcher: `launcher-core-pin.yml` here). Nothing stops a tag being pushed before the Nightly run is green, and nothing checks that an app did what **What apps must do** asks beyond those two tasks.
 
 **Today:**
 
 - Steps 3 and 4 are kept by whoever cuts the release. A tag cannot be taken back once pushed, and apps can name it even if the Release run fails.
 - Nothing builds the real apps against a core change before it is released; the core's own check builds only the template app.
+- A fix to the core's shared workflows reaches the three apps when `workflows-v1` is moved, and does not reach the launcher's three workflows: they are compared by hand, at a move to a newer core.
 - Moving Book takes two steps by hand: Manuscript moves to the new core and cuts a new book-view tag, then Book moves its core tag and its Manuscript tag in one change. `cargo xtask core-pin` fails in Book until both are done. Before Manuscript's tag exists, Book can already take the release's core-owned files: in a core checkout at that release, run `cargo xtask sync <Book's folder>`.
 
 <a id="route-j"></a>
 ### Route J: an app release
 
+The three apps and the launcher release the same way, by the core's release contract ([core decision 0019](https://github.com/jamescjfoundation/open-source-core/blob/main/docs/decisions/0019-app-releases.md); the contract is the core's [`docs/app-releases.md`](https://github.com/jamescjfoundation/open-source-core/blob/main/docs/app-releases.md)). An app's release is its own repository's. The launcher's is this repository's, and its commands run in `launcher/`.
+
 1. Move the app to the newest core first ([Route I](#route-i)).
-2. In the app: set the version, finish the `CHANGELOG.md` section, and run `cargo xtask ci`.
-3. Start the app's release workflow, the way that app's `.github/workflows/release.yml` says:
-   - Script: push to the `release` branch. The workflow builds a draft release; it is published by hand on GitHub, or by starting the workflow on that branch with "publish" ticked.
-   - Manuscript and Book: push a tag `vX.Y.Z`. The workflow publishes the release.
-4. Check the published release: the files for each platform are there, and the app's update check finds them.
-5. The website and the wiki pick the release up by themselves: every deploy reads each app's latest public release from GitHub, and `pages.yml` runs every day and deploys when an app has published one ([decision 0006](decisions/0006-the-site-reads-the-apps-releases.md)). To show it at once, start the deploy by hand in wordsmith: `gh workflow run pages.yml`. Then open the app's page on the site and its "Installing" entry in the wiki: the version, the date and a download for each system should be there.
-6. In wordsmith, when the guide changed with the release: `npm run guide`, so the wiki shows the released app's guide ([Route C](#route-c)).
+2. In the app: write what the release changes under `## Unreleased` of `CHANGELOG.md`, then run `cargo xtask release X.Y.Z`, which sets the version and gives the changelog section its date. Run `cargo xtask ci`, commit, and push to `main`.
+3. To try the packaging without releasing: `gh workflow run release.yml --ref main -f dry-run=true` builds and checks the file of every system and publishes nothing (`-f gate=true` adds the whole gate on the three systems). The same dry run starts by itself every week.
+4. Start the release: `gh workflow run release.yml --ref main`. The workflow checks that the commit is a release commit that is not released yet, runs the whole gate on Linux, macOS and Windows, builds and checks each system's file and `SHA256SUMS.txt`, and only then makes the tag `vX.Y.Z` and publishes the release. A red job leaves no tag: fix the cause on `main` and start it again. Never push a `v*` tag or make a release by hand.
+5. Check the published release: one file for each system and `SHA256SUMS.txt` are there, and the app's update check finds them.
+6. The website and the wiki pick the release up by themselves: every deploy reads each app's latest public release from GitHub, and `pages.yml` runs every day and deploys when an app has published one ([decision 0006](decisions/0006-the-site-reads-the-apps-releases.md)). To show it at once, start the deploy by hand in wordsmith: `gh workflow run pages.yml`. Then open the app's page on the site and its "Installing" entry in the wiki: the version, the date and a download for each system should be there.
+7. In wordsmith, when the guide changed with the release: `npm run guide`, so the wiki shows the released app's guide ([Route C](#route-c)).
+8. The launcher finds an app's new release by itself: it reads the app's releases when it starts. After a change to the contract, or to what a package holds, run `cargo xtask live` in `launcher/` ([launcher/AGENTS.md](../launcher/AGENTS.md)).
 
 A person or an agent may release an app once its gate passes ([decision 0002](decisions/0002-how-changes-land-and-who-releases.md)).
 
-**Held by:** each app's release workflow runs the whole gate before it builds the release files. On GitHub, a `v*` tag cannot be moved or deleted, and Book's `release` environment accepts only a run on a `v*` tag. In wordsmith, the daily run of `pages.yml` compares GitHub's releases with the release data the live site was built from and deploys when they differ, through every check of `checks.yml`; a release with no file for one of the app's systems shows that on the page instead of a wrong link. Nothing checks that a published release has a file for every system, and nothing tells this repository at the moment of a release: the site follows within a day.
+**Held by:** the release workflow runs the whole gate on three systems before it builds the release files, checks every file's name against the contract, and makes the tag last, so a failed release leaves nothing behind. In an app the workflow is the core's shared one, called at `workflows-v1`; for the launcher it is `release.yml` here, written out step for step from the core's. On GitHub, a `v*` tag cannot be moved or deleted. The gate's `release-data` task (every push) fails when a file the package data names is missing or a program is not named as the contract says. In wordsmith, the daily run of `pages.yml` compares GitHub's releases with the release data the live site was built from and deploys when they differ, through every check of `checks.yml`; a release with no file for one of the app's systems shows that on the page instead of a wrong link. Nothing tells this repository at the moment of a release: the site follows within a day.
 
 **Today:**
 
-- No app has published a release, so none of the three release workflows has run, and the site's download areas have only been seen with made-up release data. Treat the first release of each app as a test of its workflow and of the site: read the workflow before starting it, and look at the live page after step 5.
-- The first public release of each app is to be 0.9.0, a preview, then 1.0.0. The site calls a release before 1.0.0 a preview.
-- A download is matched to its system by the file's name (`website/data/platforms.json`). The three apps' release files are not named the same way yet; the patterns accept the spellings their workflows use today.
-- Book's workflow says publishing waits for an approval. Its `release` environment has no reviewers, so it does not wait.
-- The three workflows differ in trigger, platforms, file names and checksum files. There is no shared release contract yet.
+- Each of the three apps has published its first release, 0.9.0, a preview; 1.0.0 follows. The site calls a release before 1.0.0 a preview.
+- The release files are not signed with a publisher's certificate: the signing steps are in the workflow and wait for the certificates.
+- A download is matched to its system by the file's name (`website/data/platforms.json`), and the launcher builds the name from the contract's pattern. Both follow the contract; neither is checked against the other.
 
 <a id="route-k"></a>
 ### Route K: a change in WordCraft or craft-libs
@@ -416,7 +423,7 @@ wordsmith/  wordsmith-script/  wordsmith-manuscript/  wordsmith-book/  open-sour
 
 **Only one repository.** The block at the top of this file is carried in each app's `AGENTS.md`, and this repository's `AGENTS.md` starts from this file, so the others can be found from any of them. The core is general and carries no block. When a route needs another repository, clone it beside the one you have (`git clone https://github.com/jamescjfoundation/<repository> ../<repository>`). To read one file, the links in this map go straight to it on GitHub.
 
-**Held by:** in a Rust repository with the hooks installed, the pre-commit hook runs the format and privacy checks (and `unlinked` from core v0.1.18) and the pre-push hook runs the changed-only gate. From core v0.1.18, `cargo xtask ci` warns when a clone's hooks are not installed. `cargo xtask privacy` fails on a commit whose address is not a no-reply one. This repository has no hooks: `python3 project/privacy.py` checks its files and every commit's address, but only when you run it, or in `checks.yml` after the push or on the pull request. Nothing stops a task editing another task's checkout.
+**Held by:** in a Rust repository with the hooks installed, the pre-commit hook runs the format and privacy checks (and `unlinked` from core v0.1.18) and the pre-push hook runs the changed-only gate. From core v0.1.18, `cargo xtask ci` warns when a clone's hooks are not installed. `cargo xtask privacy` fails on a commit whose address is not a no-reply one. This repository's hooks (`hooks/`, switched on by `cargo xtask install-hooks` in `launcher/`) run only for a change to `launcher/`. For the rest, `python3 project/privacy.py` checks its files and every commit's address, but only when you run it, or in `checks.yml` after the push or on the pull request. Nothing stops a task editing another task's checkout.
 
 <a id="route-n"></a>
 ### Route N: a rule or instruction that several repositories carry
@@ -475,6 +482,7 @@ Paths are inside the repository named. Links go to `main`.
 | What a core release changed, and what apps must do | The core's [`CHANGELOG.md`](https://github.com/jamescjfoundation/open-source-core/blob/main/CHANGELOG.md) |
 | What an app release changed | That app's `CHANGELOG.md` |
 | Upstream pins, carried patches, follow / hold / own | The core's [`docs/UPSTREAM.md`](https://github.com/jamescjfoundation/open-source-core/blob/main/docs/UPSTREAM.md) |
+| What the launcher does, and why it is built as it is | `launcher/docs/guide/`, `launcher/CHANGELOG.md` and `launcher/docs/decisions/` here. Outside its folder, write "launcher decision NNNN" |
 | What is planned in wordsmith (the website, the wiki, the brand kit, this map, the launcher) | Its issues with the milestone [`v1`](https://github.com/jamescjfoundation/wordsmith/milestone/1). [`ROADMAP.md`](../ROADMAP.md) links there and holds no list |
 | What is missing or planned in an app | Script: `docs/gaps.md` and `ROADMAP.md`. Manuscript and Book: `docs/PLAN.md` (both plans are finished) and `docs/progress.md`. **Today:** no repository keeps one live list of what is planned |
 | What was done, step by step | Each app's `docs/progress.md`; the core's `CHANGELOG.md` |
@@ -484,7 +492,7 @@ Paths are inside the repository named. Links go to `main`.
 | An app's name, platforms and the words for its state on the site | `website/data/apps/<app>.json` here. Its version and downloads: its releases page on GitHub, read by `website/tools/releases.py` ([Route J](#route-j)) |
 | Brand rules, logos, icons, colors | `brand/suite/BRAND_GUIDE.md` and `brand/README.md` here. What each app carries from the kit: `brand/apps.json` here, and `assets/brand/kit.json` in the app. An app's interface theme: its own `tokens.json`, in the format of the core's [`crates/jcj-theme/TOKENS.md`](https://github.com/jamescjfoundation/open-source-core/blob/main/crates/jcj-theme/TOKENS.md) |
 | Test data and reference outputs | Each app's `docs/golden.md`; Manuscript's and Book's `docs/fixtures.md` |
-| Credits for assets and dependencies | Each Rust repository's `ATTRIBUTION.md` and `NOTICE` |
+| Credits for assets and dependencies | Each Rust repository's `ATTRIBUTION.md` and `NOTICE`; for the launcher, the two in `launcher/` |
 | How to report or handle a security problem | Each repository's `SECURITY.md`; [Route H](#route-h) |
 | Which license covers a file | Each Rust repository's `LICENSE-MIT`, `LICENSE-APACHE` and `NOTICE`. In wordsmith, [`LICENSES.md`](../LICENSES.md), by folder; for the names and logos, [`brand/LICENSE.md`](../brand/LICENSE.md) |
 | Security notes, reviews, audits, working notes | `.private/` in the repository you are in, never tracked ([Project rules](#project-rules)) |

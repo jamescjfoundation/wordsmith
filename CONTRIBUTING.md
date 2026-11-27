@@ -58,7 +58,7 @@ The "Checks" workflow runs every check above on each pull request and each push 
 | `website/wiki/content/docs/` | The wiki's pages: `start/` and `index.mdx`, written here, and one folder per app, built from the app's own guide by `website/wiki/scripts/guide.mjs` |
 | `website/data/` | What the pages are built from: one small file per app (its name, repository, platforms and the words for its state), the platforms, and the last known release of each app. `website/tools/releases.py` reads the releases from GitHub |
 | `website/wiki/` (the rest) | The wiki's own code: Fumadocs on Next.js, exported as static files |
-| `launcher/` | Wordsmith Launcher. Planned, not started |
+| `launcher/` | Wordsmith Launcher, a Rust program built like the apps. It has its own [`CONTRIBUTING.md`](launcher/CONTRIBUTING.md) and needs Rust; nothing else here does |
 | `.github/workflows/` | `checks.yml` (every check), `pages.yml` (the deploy, on a push and each day an app has published a release), `carried.yml` (the carried text, against what is published), `guides.yml` (the apps' guides, against what the wiki was built from) |
 | `ROADMAP.md` | Where the plan is: the issues of the `v1` milestone. It holds no list |
 | `LICENSES.md` | Which license covers which folder |

@@ -100,6 +100,38 @@
         }
       ]
     },
-    "launcher": null
+    "launcher": {
+      "version": "0.9.0",
+      "tag": "v0.9.0",
+      "date": "2026-11-27",
+      "url": "https://github.com/jamescjfoundation/wordsmith/releases/tag/v0.9.0",
+      "prerelease": false,
+      "files": [
+        {
+          "name": "SHA256SUMS.txt",
+          "url": "https://github.com/jamescjfoundation/wordsmith/releases/download/v0.9.0/SHA256SUMS.txt",
+          "size": 336,
+          "sha256": "fe3752f4ad3d5a2bf2bfa2f8ed59499a34ee1cef78dce4c23d78fec86753e651"
+        },
+        {
+          "name": "wordsmith-launcher-0.9.0-linux-x86_64.tar.gz",
+          "url": "https://github.com/jamescjfoundation/wordsmith/releases/download/v0.9.0/wordsmith-launcher-0.9.0-linux-x86_64.tar.gz",
+          "size": 10855513,
+          "sha256": "df827903f7112c6b0a77fc3b926783b9fb8e1bb59670316962d76959e27f96aa"
+        },
+        {
+          "name": "wordsmith-launcher-0.9.0-macos-aarch64.dmg",
+          "url": "https://github.com/jamescjfoundation/wordsmith/releases/download/v0.9.0/wordsmith-launcher-0.9.0-macos-aarch64.dmg",
+          "size": 8606651,
+          "sha256": "c8a60cfb89772e40f0dc4ae987a1bd277ab0bdd09d7cf3c68b5570aa197c4eda"
+        },
+        {
+          "name": "wordsmith-launcher-0.9.0-windows-x64-portable.zip",
+          "url": "https://github.com/jamescjfoundation/wordsmith/releases/download/v0.9.0/wordsmith-launcher-0.9.0-windows-x64-portable.zip",
+          "size": 7674613,
+          "sha256": "7a6f33ff8585ae2cf9fb48296bc6fbcaeba03a39c446f41864a7f2562f3f79dd"
+        }
+      ]
+    }
   }
 }

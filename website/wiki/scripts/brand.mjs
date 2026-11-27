@@ -5,7 +5,8 @@
 // The copies in this repository:
 //   npm run brand            write the wiki's copies (website/wiki/public/brand/, the kit's folder
 //                            names), the website's (website/assets/brand/ and website/favicon.svg,
-//                            flat, some renamed) and brand/apps.json, the list of what each app carries
+//                            flat, some renamed), the launcher's (launcher/assets/brand/) and
+//                            brand/apps.json, the list of what each app carries
 //   npm run brand:check      fail if one of those is missing or differs from brand/, or if a copy
 //                            folder holds a file this script does not make (the checks workflow runs it)
 //
@@ -68,8 +69,31 @@ copies.push(
   [`${parent}/app-icon/favicon.svg`, 'website/favicon.svg'],
 );
 
+// The launcher (launcher/assets/brand/): it is built in this repository, so its copies are made
+// and checked here, like the wiki's and the website's, and it has no record file. The kit has no
+// icon of the launcher's own yet, so it takes the parent brand's; the three app icons are for
+// its list of apps.
+const launcher = 'launcher/assets/brand';
+for (const [file, to] of [
+  ['icon-32.png', 'icon-32.png'],
+  ['icon-256.png', 'icon-256.png'],
+  ['icon-512.png', 'icon-512.png'],
+  ['icon-1024.png', 'icon-1024.png'],
+  ['icon-macos-1024.png', 'icon-macos-1024.png'],
+  [`${parent}.ico`, 'icon.ico'],
+]) {
+  copies.push([`${parent}/app-icon/${file}`, `${launcher}/${to}`]);
+}
+for (const app of apps) {
+  copies.push([`${app}/app-icon/icon-128.png`, `${launcher}/${app}-icon-128.png`]);
+}
+
 // Files in the copy folders that are not kit files. No script makes them.
-const notFromKit = new Set([`${site}/og-image.png`]); // the picture in link previews
+const notFromKit = new Set([
+  `${site}/og-image.png`, // the picture in link previews
+  `${launcher}/tokens.json`, // the launcher's interface theme, in the token format of open-source-core
+  `${launcher}/README.md`, // what the launcher's brand files are
+]);
 
 function filesUnder(root, folder) {
   const start = join(root, folder);
@@ -307,7 +331,7 @@ function checkHere(root) {
     if (!existsSync(copy) || !readFileSync(join(root, 'brand', from)).equals(readFileSync(copy))) stale.push(`${to}  (from brand/${from})`);
   }
   const made = new Set(copies.map(([, to]) => to));
-  const strays = ['website/wiki/public/brand', site]
+  const strays = ['website/wiki/public/brand', site, launcher]
     .flatMap((folder) => filesUnder(root, folder))
     .filter((file) => !made.has(file) && !notFromKit.has(file));
   const problems = [];

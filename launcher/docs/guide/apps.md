@@ -1,0 +1,73 @@
+# The apps
+
+The launcher's window is one list: Wordsmith Script, Wordsmith Manuscript and Wordsmith Book.
+Under each name is a line that says what is on your computer and what the newest version is, and
+beside it are the buttons for what can be done now.
+
+![The launcher's window: Wordsmith Script and Wordsmith Book installed, each with Open and Remove, and Wordsmith Manuscript not installed, with Install](../images/window.png)
+
+## What a line says
+
+| The line | What it means |
+| --- | --- |
+| Looking for it on this computer… | The launcher is looking for the app's program and asking it its version |
+| Not installed. The newest is version X.Y.Z, published on a day. | The app is not here. **Install** fetches that version |
+| Version X.Y.Z is installed. It is the newest. | Nothing to do |
+| Version X.Y.Z is installed. Version X.Y.Z is available. | A newer release exists. **Update** replaces the installed one |
+| The newest release could not be read. | GitHub did not answer; the reason is under the line. What is installed still opens |
+| No release is published yet. | The app has no download yet |
+
+A version before 1.0.0 is marked "a preview". "What is in this release" opens the release's
+page, with its notes.
+
+**Check Now**, on the Apps tab (or F5), asks GitHub again for the newest version of each app.
+
+## Installing an app
+
+Choose **Install**. The line shows each step:
+
+1. Reading the release: the launcher reads the list of checksums of the release.
+2. Downloading: about 55 MB for each app.
+3. Checking the download: the file's checksum is compared with the release's list. A file that
+   does not match is thrown away and nothing is installed
+   ([How a download is checked](checking-a-download.md)).
+4. Unpacking and installing.
+
+Then the line says which version is installed, and **Open** starts the app.
+
+Nothing asks for an administrator's password: an app is installed for your account only.
+
+## Where an app goes
+
+| System | Where | What you get |
+| --- | --- | --- |
+| Linux | `~/.local` | The program in `~/.local/bin`, the app in your desktop's menu, its icons and its file types. This is what the app's own `install.sh` does, and the launcher runs that script |
+| Windows | `%LOCALAPPDATA%\Programs`, one folder for each app | The app's folder, with its file types registered for your account. It has no Start menu entry: open it from the launcher, or make a shortcut to the program in its folder |
+| macOS | The `Applications` folder in your home folder | The app, as if you had dragged it there |
+
+On Linux, an app you installed yourself from the same download is in the same place, so the
+launcher finds it and can open and update it.
+
+## Updating an app
+
+Choose **Update**. The steps are the same as for installing, and the new version takes the old
+one's place. Your documents and the app's settings are not touched.
+
+Close the app first. The launcher does not replace an app that is running.
+
+Each app also has an update check of its own, and can update itself. The launcher asks the
+installed program for its version, so it shows the right one either way.
+
+## Opening an app
+
+Choose **Open**. The app starts as it does from your menu.
+
+## Removing an app
+
+Choose **Remove**, then **Remove** again to confirm (**Keep** leaves it). The app's program and
+what was installed with it are taken away. Your documents and the app's settings stay where
+they are.
+
+The launcher removes only what it installed. An app you installed yourself has **Open** and,
+when a newer version exists, **Update**, and no **Remove**: take it away the way you put it
+there.

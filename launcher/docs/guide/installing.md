@@ -1,0 +1,79 @@
+# Installing and updating the launcher
+
+Wordsmith Launcher is free and open source. Every release is published on the
+[releases page](https://github.com/jamescjfoundation/wordsmith/releases) of the Wordsmith
+repository, and nowhere else.
+
+You do not need the launcher to use the apps. Each app can be downloaded and installed by
+itself; the launcher does those steps for you and keeps the three in one place.
+
+## The download for your computer
+
+A release has one file for each system, and a list of their checksums. `X.Y.Z` stands for the
+version.
+
+| Your computer | File |
+| --- | --- |
+| Linux, 64-bit Intel or AMD | `wordsmith-launcher-X.Y.Z-linux-x86_64.tar.gz` |
+| Mac with Apple silicon | `wordsmith-launcher-X.Y.Z-macos-aarch64.dmg` |
+| Windows, 64-bit | `wordsmith-launcher-X.Y.Z-windows-x64-portable.zip` |
+| Any | `SHA256SUMS.txt`, the checksums of the three |
+
+The builds are not signed with a publisher's certificate yet. macOS and Windows therefore ask
+before they open the launcher the first time; the steps below say what to choose. To be sure a
+file is the one this project published, check it first
+([How a download is checked](checking-a-download.md)).
+
+### Linux
+
+The package needs the C library of Ubuntu 24.04 (glibc 2.39) or a newer one.
+
+1. Unpack the file: `tar -xzf wordsmith-launcher-X.Y.Z-linux-x86_64.tar.gz`.
+2. In the folder it makes, run `./install.sh`. It copies the program into `~/.local/bin` and the
+   menu entry and the icons into `~/.local/share`. Nothing needs administrator rights.
+3. Start Wordsmith Launcher from your menu, or run `wordsmith-launcher`.
+
+`./uninstall.sh` in the same folder removes those files again. The apps you installed with the
+launcher stay.
+
+### macOS
+
+For a Mac with Apple silicon, on macOS 11 or later.
+
+1. Open the `.dmg` file and drag Wordsmith Launcher onto the Applications folder beside it.
+2. Open it. The first time, macOS says it cannot check the app and does not open it.
+3. Open System Settings › Privacy & Security, find the line about Wordsmith Launcher and choose
+   Open Anyway.
+
+### Windows
+
+1. Unpack the `.zip` file where you want to keep the launcher. Nothing is installed
+   system-wide.
+2. In the folder it makes, run `wordsmith-launcher.exe`. The first time, Windows may show
+   "Windows protected your PC": choose More info, then Run anyway.
+
+## How the launcher updates itself
+
+When it starts, the launcher asks GitHub whether a newer version of itself exists. If one does,
+a window offers it.
+
+| System | What the offer does |
+| --- | --- |
+| Linux | Downloads the new version, checks it against the release's checksums, replaces the installed copy and starts it again |
+| Windows | Opens the release page: an unsigned copy cannot replace itself. Download the new `.zip` and unpack it over the old folder |
+| macOS | Opens the release page: download the new `.dmg` and drag the app onto Applications again |
+
+You can ask at any time: File, then About, then Check for Updates. The same page has the switch
+"Check for updates when the app starts" ([What the launcher sends](privacy.md)).
+
+## Where the launcher keeps its own files
+
+Its preferences, and a small record of each app it installed:
+
+| System | Folder |
+| --- | --- |
+| Linux | `~/.config/wordsmith-launcher` |
+| macOS | `~/Library/Application Support/Wordsmith Launcher` |
+| Windows | `%APPDATA%\Wordsmith Launcher` |
+
+A download is kept in that folder only while it is checked and unpacked.

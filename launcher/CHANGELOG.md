@@ -8,6 +8,12 @@ The first public release is 0.9.0, a preview; 1.0.0 follows it, as for the Words
 
 ## Unreleased
 
+- The launcher shows its icon, the Wordsmith & Ink icon, on macOS. In 0.9.0 the app carried it
+  but named it so that macOS could not find it, and Finder, the Dock and Launchpad showed a blank
+  icon. Fixed by moving to open-source-core v0.1.25.
+- The Windows program carries its own name in Explorer, read from
+  `[package.metadata.winresource]` (the `toml` feature of `winresource`, as the core's template
+  has it from v0.1.24).
 - A command whose output is cut short by what reads it (`wordsmith-launcher list | head -1`)
   ends quietly. It stopped with an error message of the program's own.
 

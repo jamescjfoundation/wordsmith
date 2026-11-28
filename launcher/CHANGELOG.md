@@ -8,6 +8,14 @@ The first public release is 0.9.0, a preview; 1.0.0 follows it, as for the Words
 
 ## Unreleased
 
+- **A new window.** The ribbon is gone. A bar at the top holds the launcher's name and a button
+  for its preferences; under it, a button to check for new releases, how many apps are
+  installed, and a button that updates every app with an update. Each app has a card, as many
+  side by side as the window has room for: the version at the top (with the newer one when an
+  update is waiting, and a link to its release notes), the app's icon and name, whether it is
+  installed or has an update, and at the foot its buttons, with Remove under **…**. A bar at
+  the foot says when the releases were last read and links to the guide and the website. The
+  status bar is gone too: what it said is above the cards.
 - The launcher shows its icon, the Wordsmith & Ink icon, on macOS. In 0.9.0 the app carried it
   but named it so that macOS could not find it, and Finder, the Dock and Launchpad showed a blank
   icon. Fixed by moving to open-source-core v0.1.25.

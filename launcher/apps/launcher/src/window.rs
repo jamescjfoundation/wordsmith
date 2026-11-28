@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
-//! The launcher's window: the list of apps, and a button for each thing that can be done.
+//! The launcher's window: a bar with its name, a card for each app with a button for each thing
+//! that can be done, and a bar at the foot with when the releases were read. It has no ribbon.
 //!
 //! The window never waits. Reading a release, asking an installed program its version and
 //! installing run on threads of their own, which send what they found back ([`Event`]); the
@@ -13,8 +14,7 @@ use jcj_shell::desktop::{DesktopApp, Start};
 use jcj_shell::egui::{self, Color32, RichText, Stroke, TextureHandle, Ui};
 use jcj_shell::prefs::{NoPrefs, Prefs};
 use jcj_shell::theme::Theme;
-use jcj_shell::widgets::{self, Control};
-use jcj_shell::{About, App, Cmd, CommandInfo, Commands, Page, Shell, ShellOptions, TabSpec};
+use jcj_shell::{About, App, Cmd, CommandInfo, Commands, Page, Shell, ShellOptions};
 use serde_json::json;
 use wordsmith_launcher_core::install::Target;
 use wordsmith_launcher_core::{APPS, AppInfo, Client, Installed, Release, Step, Version};
@@ -41,11 +41,24 @@ pub mod cmd {
     pub const GUIDE: &str = "launcher.guide";
     /// Open the website.
     pub const WEBSITE: &str = "launcher.website";
+    /// Install the update of every app that has one.
+    pub const UPDATE_ALL: &str = "launcher.updateAll";
 }
 
 /// The project's site and its guide.
 const WEBSITE: &str = "https://wordsmithand.ink/";
 const GUIDE: &str = "https://wordsmithand.ink/wiki/";
+
+/// The window's measures, in points.
+const PAD: f32 = 20.0;
+const HEADER_H: f32 = 56.0;
+const FOOTER_H: f32 = 34.0;
+const GAP: f32 = 14.0;
+/// A card is never narrower than this; the window fits as many to a line as it has room for.
+const CARD_MIN: f32 = 300.0;
+const CARD_H: f32 = 250.0;
+const ICON: f32 = 52.0;
+const BUTTON_H: f32 = 34.0;
 
 /// What is known of an app's newest release.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -124,6 +137,18 @@ impl Row {
         }
     }
 
+    /// The short line a card shows under the app's name: what is being looked for, or when the
+    /// newest release was published.
+    pub fn when(&self) -> Option<String> {
+        match (&self.installed, &self.newest) {
+            (None, _) => Some("Looking for it on this computer…".to_owned()),
+            (_, Newest::Asking) => Some("Looking for the newest release…".to_owned()),
+            (_, Newest::Nothing) => Some("No release is published yet.".to_owned()),
+            (_, Newest::Found(release)) => release.date.as_deref().map(|day| format!("Newest release published {day}")),
+            _ => None,
+        }
+    }
+
     /// The line under the app's name: what is installed, and what the newest release is.
     pub fn status(&self) -> String {
         let said = |version: &Version| if version.is_preview() { format!("{version} (a preview)") } else { version.to_string() };
@@ -178,6 +203,8 @@ pub struct Launcher {
     by_itself: bool,
     icons: Vec<Option<TextureHandle>>,
     marks: Vec<Color32>,
+    /// When every app's newest release was last read.
+    checked: Option<std::time::Instant>,
 }
 
 fn index_of(command: &Cmd) -> Result<usize, String> {
@@ -190,8 +217,16 @@ impl Launcher {
     /// apps at once, and ask GitHub at once when the user lets the launcher check at start.
     pub fn new(start: &mut Start<'_>, setup: Setup, by_itself: bool) -> Launcher {
         // The launcher has no document: no New, Open, Save, Export or Print page, and no row
-        // above the ribbon, which names the document and says whether it is saved.
-        let options = ShellOptions { quick_row: false, file_pages: vec![Page::Preferences, Page::Keys, Page::About], ..ShellOptions::default() };
+        // above the ribbon, which names the document and says whether it is saved. It has no
+        // ribbon and no status bar either: its own bars hold its few buttons and what it knows,
+        // and the preferences button opens the File page.
+        let options = ShellOptions {
+            quick_row: false,
+            ribbon: false,
+            status_bar: false,
+            file_pages: vec![Page::Preferences, Page::Keys, Page::About],
+            ..ShellOptions::default()
+        };
         start.shell_with(|shell| shell.with_options(options));
         let (tx, rx) = channel();
         let marks: std::collections::BTreeMap<String, String> = BRAND.section("launcher").unwrap_or_default();
@@ -207,6 +242,7 @@ impl Launcher {
             by_itself,
             icons: Vec::new(),
             marks,
+            checked: None,
         }
     }
 
@@ -320,6 +356,9 @@ impl Launcher {
                         Ok(None) => Newest::Nothing,
                         Err(problem) => Newest::Unread(problem),
                     };
+                    if self.rows.iter().all(|row| row.newest != Newest::Asking) {
+                        self.checked = Some(std::time::Instant::now());
+                    }
                 }
                 Event::Step(i, step) => {
                     let Some(row) = self.rows.get_mut(i) else { continue };
@@ -345,66 +384,169 @@ impl Launcher {
 
     fn icon(&mut self, i: usize) -> Option<TextureHandle> {
         if self.icons.is_empty() {
-            let pictures: [&[u8]; 3] = [
-                include_bytes!("../../../assets/brand/wordsmith-script-icon-128.png"),
-                include_bytes!("../../../assets/brand/wordsmith-manuscript-icon-128.png"),
-                include_bytes!("../../../assets/brand/wordsmith-book-icon-128.png"),
+            // The three apps' icons, in the catalog's order, then the launcher's own.
+            let pictures: [(&str, &[u8]); 4] = [
+                ("wordsmith-script", include_bytes!("../../../assets/brand/wordsmith-script-icon-128.png")),
+                ("wordsmith-manuscript", include_bytes!("../../../assets/brand/wordsmith-manuscript-icon-128.png")),
+                ("wordsmith-book", include_bytes!("../../../assets/brand/wordsmith-book-icon-128.png")),
+                (crate::ID, include_bytes!("../../../assets/brand/icon-256.png")),
             ];
             self.icons = pictures
                 .iter()
-                .zip(&APPS)
-                .map(|(png, app)| {
+                .map(|(name, png)| {
                     let (width, height, rgba) = jcj_shell::theme::brand::decode_png(png)?;
                     let size = [usize::try_from(width).ok()?, usize::try_from(height).ok()?];
                     let picture = egui::ColorImage::from_rgba_unmultiplied(size, &rgba);
-                    Some(self.ctx.load_texture(app.id, picture, egui::TextureOptions::LINEAR))
+                    Some(self.ctx.load_texture(*name, picture, egui::TextureOptions::LINEAR))
                 })
                 .collect();
         }
         self.icons.get(i).cloned().flatten()
     }
 
-    fn buttons(&self, ui: &mut Ui, shell: &mut Shell, i: usize) {
-        let Some(row) = self.rows.get(i) else { return };
-        let with = |id: &str| Cmd::with(id, json!({ "app": row.app.id }));
-        if row.asking_to_remove {
-            if ui.button("Keep").clicked() {
-                shell.run(with(cmd::KEEP));
-            }
-            if ui.button("Remove").clicked() {
-                shell.run(with(cmd::REMOVE_NOW));
-            }
-            return;
-        }
-        if row.busy.is_some() {
-            ui.spinner();
-            return;
-        }
-        // Laid out from the right, so the main thing, which comes first, is drawn last.
-        for offer in row.offers().into_iter().rev() {
-            let (label, command) = match offer {
-                Offer::Install => ("Install", cmd::INSTALL),
-                Offer::Update => ("Update", cmd::INSTALL),
-                Offer::Open => ("Open", cmd::OPEN),
-                Offer::Remove => ("Remove", cmd::REMOVE),
-            };
-            if ui.button(label).clicked() {
-                shell.run(with(command));
-            }
-        }
+    /// The launcher's own icon, drawn in the header.
+    fn own_icon(&mut self) -> Option<TextureHandle> {
+        self.icon(APPS.len())
     }
 
-    fn words(&self, ui: &mut Ui, shell: &mut Shell, i: usize, t: &Theme) {
+    /// The apps that have an update to install.
+    fn to_update(&self) -> Vec<usize> {
+        (0..self.rows.len()).filter(|&i| self.rows.get(i).is_some_and(|row| row.offers().contains(&Offer::Update))).collect()
+    }
+
+    /// The bar at the top: the launcher's name, and the button to its preferences.
+    fn header(&mut self, ui: &mut Ui, shell: &mut Shell, t: &Theme) {
+        let icon = self.own_icon();
+        ui.horizontal(|ui| {
+            ui.set_min_height(HEADER_H);
+            ui.add_space(PAD);
+            if let Some(texture) = &icon {
+                ui.add(egui::Image::new(texture).fit_to_exact_size(egui::vec2(30.0, 30.0)));
+            }
+            ui.add_space(6.0);
+            ui.label(RichText::new("Wordsmith").size(t.type_sizes.heading - 6.0).strong().color(t.text));
+            ui.add_space(10.0);
+            let (rule, _) = ui.allocate_exact_size(egui::vec2(1.0, HEADER_H - 20.0), egui::Sense::hover());
+            ui.painter().rect_filled(rule, 0.0, t.border);
+            ui.add_space(10.0);
+            ui.label(RichText::new("LAUNCHER").size(t.type_sizes.caption).color(t.text_dim).extra_letter_spacing(2.0));
+            ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                ui.add_space(PAD);
+                if icon_button(ui, "options", t).on_hover_text("Preferences").clicked() {
+                    shell.run(Cmd::with(jcj_shell::commands::shell_ids::FILE_PAGE, json!({ "page": "preferences" })));
+                }
+            });
+        });
+    }
+
+    /// The row under the header: look again, and update every app that has an update.
+    fn toolbar(&self, ui: &mut Ui, shell: &mut Shell, t: &Theme) {
+        ui.horizontal(|ui| {
+            ui.set_min_height(36.0);
+            let asking = self.why_disabled(cmd::CHECK);
+            let check = ui.add_enabled_ui(asking.is_none(), |ui| icon_button(ui, "update", t)).inner;
+            if check.on_hover_text(asking.unwrap_or_else(|| "Check for new releases (F5)".to_owned())).clicked() {
+                shell.run(Cmd::new(cmd::CHECK));
+            }
+            ui.add_space(6.0);
+            let installed = self.rows.iter().filter(|row| matches!(row.installed, Some(Installed::Yes { .. }))).count();
+            ui.label(RichText::new(format!("{installed} of {} apps installed", self.rows.len())).color(t.text_dim));
+            ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                let updates = self.to_update().len();
+                if updates > 0 {
+                    let words = if updates == 1 { "Update 1 app".to_owned() } else { format!("Update {updates} apps") };
+                    if filled_button(ui, &words, t, false).clicked() {
+                        shell.run(Cmd::new(cmd::UPDATE_ALL));
+                    }
+                }
+            });
+        });
+    }
+
+    /// The line above a card's name: the version, and a link to the release's notes.
+    fn card_top(&self, ui: &mut Ui, shell: &mut Shell, i: usize, mark: Color32, t: &Theme) {
         let Some(row) = self.rows.get(i) else { return };
-        ui.label(RichText::new(row.app.name).size(t.type_sizes.title + 2.0).strong());
-        ui.label(RichText::new(row.app.summary).color(t.text_dim));
-        ui.add_space(4.0);
+        let have = match &row.installed {
+            Some(Installed::Yes { version: Some(version), .. }) => Some(*version),
+            _ => None,
+        };
+        let newest = if let Newest::Found(release) = &row.newest { Some(release.version) } else { None };
+        let mono = |text: String, color: Color32| RichText::new(text).monospace().size(t.type_sizes.caption + 0.5).color(color);
+        ui.horizontal(|ui| {
+            match (have, newest) {
+                (Some(have), Some(newest)) if newest > have => {
+                    ui.label(mono(have.to_string(), t.text_dim));
+                    ui.label(mono("→".to_owned(), t.text_dim));
+                    ui.label(mono(newest.to_string(), mark).strong());
+                }
+                (Some(have), _) => {
+                    ui.label(mono(have.to_string(), mark));
+                }
+                (None, Some(newest)) => {
+                    ui.label(mono(newest.to_string(), t.text_dim));
+                }
+                (None, None) => {
+                    ui.label(mono("—".to_owned(), t.text_dim));
+                }
+            }
+            ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                if matches!(row.newest, Newest::Found(_)) {
+                    let notes = ui.add(
+                        egui::Label::new(RichText::new("Release notes ↗").size(t.type_sizes.caption).color(t.text_dim)).sense(egui::Sense::click()),
+                    );
+                    if notes.on_hover_cursor(egui::CursorIcon::PointingHand).on_hover_text("What is in this release, on GitHub").clicked() {
+                        shell.run(Cmd::with(cmd::NOTES, json!({ "app": row.app.id })));
+                    }
+                }
+            });
+        });
+    }
+
+    /// The card's name, two-toned as the brand writes it, and what the app is for.
+    fn card_name(&mut self, ui: &mut Ui, i: usize, mark: Color32, t: &Theme) {
+        let icon = self.icon(i);
+        let Some(row) = self.rows.get(i) else { return };
+        ui.horizontal(|ui| {
+            match &icon {
+                Some(texture) => ui.add(egui::Image::new(texture).fit_to_exact_size(egui::vec2(ICON, ICON))),
+                None => ui.allocate_response(egui::vec2(ICON, ICON), egui::Sense::hover()),
+            };
+            ui.add_space(8.0);
+            ui.vertical(|ui| {
+                ui.add_space(4.0);
+                let (first, rest) = row.app.name.split_once(' ').unwrap_or((row.app.name, ""));
+                let size = t.type_sizes.title + 6.0;
+                ui.horizontal(|ui| {
+                    ui.spacing_mut().item_spacing.x = 0.0;
+                    ui.label(RichText::new(first).size(size).strong().color(t.text));
+                    if !rest.is_empty() {
+                        ui.label(RichText::new(format!(" {rest}")).size(size).strong().color(mark));
+                    }
+                });
+                ui.label(RichText::new(row.app.summary).color(t.text_dim));
+            });
+        });
+    }
+
+    /// What is known of the app, and what went wrong.
+    fn card_words(&self, ui: &mut Ui, i: usize, t: &Theme) {
+        let Some(row) = self.rows.get(i) else { return };
+        let chip = match (&row.installed, row.offers().contains(&Offer::Update)) {
+            (_, true) => Some(("Update available", t.accent, t.accent_soft)),
+            (Some(Installed::No), _) => Some(("Not installed", t.text_dim, t.hover)),
+            _ => None,
+        };
+        if let Some((words, color, fill)) = chip {
+            egui::Frame::new().fill(fill).corner_radius(t.radius.chip).inner_margin(egui::Margin::symmetric(8, 3)).show(ui, |ui| {
+                ui.label(RichText::new(words.to_uppercase()).size(t.type_sizes.caption - 1.0).color(color).extra_letter_spacing(1.0));
+            });
+            ui.add_space(6.0);
+        }
         if row.asking_to_remove {
             ui.label(format!("Remove {}? Your documents and its settings are kept.", row.app.name));
-        } else if let Some(busy) = &row.busy {
-            ui.label(busy);
-        } else {
-            ui.label(row.status());
+        } else if let Some(line) = row.when() {
+            // The versions are in the line above the name; the whole sentence is under the mouse.
+            ui.label(RichText::new(line).color(t.text_dim)).on_hover_text(row.status());
         }
         if let Newest::Unread(why) = &row.newest {
             ui.label(RichText::new(why).color(t.danger).size(t.type_sizes.caption));
@@ -414,65 +556,203 @@ impl Launcher {
                 ui.label(RichText::new(text).color(color));
             }
         }
-        if matches!(row.newest, Newest::Found(_)) && ui.link("What is in this release").clicked() {
-            shell.run(Cmd::with(cmd::NOTES, json!({ "app": row.app.id })));
-        }
     }
 
-    fn card(&mut self, ui: &mut Ui, shell: &mut Shell, i: usize) {
-        let t = Theme::get(ui.ctx());
-        let icon = self.icon(i);
-        let mark = self.marks.get(i).copied().unwrap_or(Color32::GRAY);
-        let frame = egui::Frame::new().fill(t.surface_high).stroke(Stroke::new(1.0, t.border)).corner_radius(t.radius.card).inner_margin(14.0);
-        let shown = frame.show(ui, |ui| {
+    /// The buttons at the foot of a card: the main thing, and the rest under "…".
+    fn card_buttons(&self, ui: &mut Ui, shell: &mut Shell, i: usize, t: &Theme) {
+        let Some(row) = self.rows.get(i) else { return };
+        let with = |id: &str| Cmd::with(id, json!({ "app": row.app.id }));
+        let wide = ui.available_width();
+        if let Some(busy) = &row.busy {
             ui.horizontal(|ui| {
-                ui.add_space(6.0);
-                match &icon {
-                    Some(texture) => ui.add(egui::Image::new(texture).fit_to_exact_size(egui::vec2(56.0, 56.0))),
-                    None => ui.allocate_response(egui::vec2(56.0, 56.0), egui::Sense::hover()),
-                };
-                ui.add_space(8.0);
-                // The words take what the buttons leave, so a long line wraps before them.
-                let room = (ui.available_width() - 230.0).max(160.0);
-                ui.vertical(|ui| {
-                    ui.set_width(room);
-                    self.words(ui, shell, i, &t);
+                ui.spinner();
+                ui.label(busy);
+            });
+            return;
+        }
+        if row.asking_to_remove {
+            ui.horizontal(|ui| {
+                let half = (wide - ui.spacing().item_spacing.x) / 2.0;
+                if ui.add_sized([half, BUTTON_H], outlined("Keep", t)).clicked() {
+                    shell.run(with(cmd::KEEP));
+                }
+                if ui.add_sized([half, BUTTON_H], outlined(RichText::new("Remove").color(t.danger), t)).clicked() {
+                    shell.run(with(cmd::REMOVE_NOW));
+                }
+            });
+            return;
+        }
+        let offers = row.offers();
+        // Open is the main thing once the app is installed; an update waits beside it.
+        let main = if offers.contains(&Offer::Open) { Some(Offer::Open) } else { offers.first().copied() };
+        let update = offers.contains(&Offer::Update);
+        let remove = offers.contains(&Offer::Remove);
+        let notes = matches!(row.newest, Newest::Found(_));
+        ui.horizontal(|ui| {
+            let gap = ui.spacing().item_spacing.x;
+            let more = notes || remove;
+            let side = BUTTON_H;
+            let room = wide - if more { side + gap } else { 0.0 } - if update && main == Some(Offer::Open) { 90.0 + gap } else { 0.0 };
+            match main {
+                Some(Offer::Open) => {
+                    if ui.add_sized([room, BUTTON_H], outlined(RichText::new("OPEN").strong().extra_letter_spacing(1.5), t)).clicked() {
+                        shell.run(with(cmd::OPEN));
+                    }
+                }
+                Some(Offer::Install | Offer::Update) => {
+                    let label = if main == Some(Offer::Install) { "INSTALL" } else { "UPDATE" };
+                    ui.allocate_ui(egui::vec2(room, BUTTON_H), |ui| {
+                        if filled_button(ui, label, t, true).clicked() {
+                            shell.run(with(cmd::INSTALL));
+                        }
+                    });
+                }
+                _ => {
+                    let waiting = if row.installed.is_none() { "Looking…" } else { "Waiting for the newest release…" };
+                    ui.add_sized([room, BUTTON_H], egui::Label::new(RichText::new(waiting).color(t.text_dim)));
+                }
+            }
+            let update_words = RichText::new("UPDATE").strong().extra_letter_spacing(1.5);
+            if update && main == Some(Offer::Open) && ui.add_sized([90.0, BUTTON_H], outlined(update_words, t)).clicked() {
+                shell.run(with(cmd::INSTALL));
+            }
+            if more {
+                let more = ui.add_sized([side, BUTTON_H], outlined("…", t)).on_hover_text("More");
+                egui::Popup::menu(&more).show(|ui| {
+                    if notes && ui.button("Release notes").clicked() {
+                        shell.run(with(cmd::NOTES));
+                    }
+                    if remove && ui.button(RichText::new("Remove…").color(t.danger)).clicked() {
+                        shell.run(with(cmd::REMOVE));
+                    }
                 });
-                ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| self.buttons(ui, shell, i));
+            }
+        });
+    }
+
+    fn card(&mut self, ui: &mut Ui, shell: &mut Shell, i: usize, width: f32, t: &Theme) {
+        let mark = self.marks.get(i).copied().unwrap_or(Color32::GRAY);
+        let frame = egui::Frame::new().fill(t.surface_high).stroke(Stroke::new(1.0, t.border)).corner_radius(t.radius.card);
+        frame.show(ui, |ui| {
+            ui.set_width(width);
+            let top = ui.cursor().top();
+            ui.vertical(|ui| {
+                ui.spacing_mut().item_spacing.y = 4.0;
+                egui::Frame::new().inner_margin(egui::Margin::symmetric(16, 10)).show(ui, |ui| self.card_top(ui, shell, i, mark, t));
+                let (rule, _) = ui.allocate_exact_size(egui::vec2(width, 1.0), egui::Sense::hover());
+                ui.painter().rect_filled(rule, 0.0, t.border);
+                egui::Frame::new().inner_margin(egui::Margin { left: 16, right: 16, top: 14, bottom: 16 }).show(ui, |ui| {
+                    self.card_name(ui, i, mark, t);
+                    ui.add_space(12.0);
+                    self.card_words(ui, i, t);
+                    // The buttons sit at the card's foot, whatever the words above them took, so
+                    // the cards of a line are one height and their buttons line up.
+                    let room = top + CARD_H - 16.0 - BUTTON_H - ui.cursor().top();
+                    if room > 0.0 {
+                        ui.add_space(room);
+                    }
+                    self.card_buttons(ui, shell, i, t);
+                });
             });
         });
-        // The app's own color, as a small mark on the card's edge.
-        let edge = shown.response.rect;
-        let bar = egui::Rect::from_min_max(edge.left_top() + egui::vec2(0.0, 10.0), edge.left_bottom() + egui::vec2(4.0, -10.0));
-        ui.painter().rect_filled(bar, 2.0, mark);
     }
 
-    fn footer(&self, ui: &mut Ui, t: &Theme) {
-        let dim = |text: String| RichText::new(text).color(t.text_dim).size(t.type_sizes.caption);
-        match (&self.setup.places, self.setup.system) {
-            (Err(problem), _) => {
-                ui.label(RichText::new(problem).color(t.danger));
-            }
-            (Ok(_), None) => {
-                ui.label(
-                    RichText::new("No release file of the Wordsmith apps is built for this system, so nothing can be installed here.")
-                        .color(t.danger),
-                );
-            }
-            (Ok(places), Some(system)) => {
-                ui.label(dim(format!(
-                    "Apps are installed for this account only, in {}. Release files for {}.",
+    /// The cards, as many to a line as the window has room for.
+    fn grid(&mut self, ui: &mut Ui, shell: &mut Shell, t: &Theme) {
+        let gap = GAP;
+        let room = ui.available_width();
+        let columns = (((room + gap) / (CARD_MIN + gap)).floor() as usize).clamp(1, self.rows.len().max(1));
+        let width = ((room - gap * (columns as f32 - 1.0)) / columns as f32).floor();
+        let count = self.rows.len();
+        for first in (0..count).step_by(columns) {
+            ui.horizontal_top(|ui| {
+                ui.spacing_mut().item_spacing.x = gap;
+                for i in first..(first + columns).min(count) {
+                    self.card(ui, shell, i, width - 2.0, t);
+                }
+            });
+            ui.add_space(gap);
+        }
+    }
+
+    /// The bar at the foot: when the releases were read, where apps go, and the help links.
+    fn footer(&self, ui: &mut Ui, shell: &mut Shell, t: &Theme) {
+        let dim = |text: String| RichText::new(text).color(t.text_dim).size(t.type_sizes.caption).extra_letter_spacing(0.5);
+        ui.horizontal(|ui| {
+            ui.set_min_height(FOOTER_H);
+            ui.add_space(PAD);
+            let checked = match self.checked {
+                _ if self.rows.iter().any(|row| row.newest == Newest::Asking) => "Checking for new releases…".to_owned(),
+                None => "Not checked yet".to_owned(),
+                Some(when) => match when.elapsed().as_secs() / 60 {
+                    0 => "Checked just now".to_owned(),
+                    1 => "Checked a minute ago".to_owned(),
+                    minutes if minutes < 60 => format!("Checked {minutes} minutes ago"),
+                    _ => "Checked over an hour ago".to_owned(),
+                },
+            };
+            let place = match (&self.setup.places, self.setup.system) {
+                (Err(problem), _) => {
+                    ui.label(RichText::new(problem).color(t.danger).size(t.type_sizes.caption));
+                    None
+                }
+                (Ok(_), None) => {
+                    ui.label(
+                        RichText::new("No release file of the Wordsmith apps is built for this system, so nothing can be installed here.")
+                            .color(t.danger)
+                            .size(t.type_sizes.caption),
+                    );
+                    None
+                }
+                (Ok(places), Some(system)) => Some(format!(
+                    "Apps are installed for this account only, in {}, from the release files for {}. Every download comes from the app's own \
+                     releases on GitHub and is checked against the release's checksums before it is opened. Nothing about you is sent.",
                     places.apps.display(),
                     system.name()
-                )));
+                )),
+            };
+            if let Some(place) = place {
+                ui.label(dim(format!("{checked} · from the apps' releases on GitHub"))).on_hover_text(place);
             }
-        }
-        ui.label(dim(
-            "Every download comes from the app's own releases on GitHub and is checked against the release's checksums before it is opened. \
-             Nothing about you is sent."
-                .to_owned(),
-        ));
+            ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                ui.add_space(PAD);
+                if ui.link(dim("Website".to_owned())).clicked() {
+                    shell.run(Cmd::new(cmd::WEBSITE));
+                }
+                ui.label(dim("·".to_owned()));
+                if ui.link(dim("Guide".to_owned())).clicked() {
+                    shell.run(Cmd::new(cmd::GUIDE));
+                }
+            });
+        });
     }
+}
+
+/// A line across the window, between its bars and the cards.
+fn rule(ui: &mut Ui, t: &Theme) {
+    let (line, _) = ui.allocate_exact_size(egui::vec2(ui.available_width(), 1.0), egui::Sense::hover());
+    ui.painter().rect_filled(line, 0.0, t.border);
+}
+
+/// A square button with one of the shell's icons in it.
+fn icon_button(ui: &mut Ui, icon: &str, t: &Theme) -> egui::Response {
+    let side = 32.0;
+    let response = ui.add_sized([side, side], outlined("", t));
+    let color = if ui.is_enabled() { t.text } else { t.text_dim };
+    jcj_shell::icons::paint(ui.painter(), response.rect.shrink(8.0), icon, color, t.accent);
+    response
+}
+
+/// A button drawn as an outline on the card, for everything but the one main thing.
+fn outlined(text: impl Into<egui::WidgetText>, t: &Theme) -> egui::Button<'static> {
+    egui::Button::new(text).fill(Color32::TRANSPARENT).stroke(Stroke::new(1.0, t.border))
+}
+
+/// A button filled with the brand's color, for the one thing a place asks for most.
+fn filled_button(ui: &mut Ui, words: &str, t: &Theme, wide: bool) -> egui::Response {
+    let text = RichText::new(words.to_uppercase()).strong().color(t.on_brand).extra_letter_spacing(1.5);
+    let button = egui::Button::new(text).fill(t.brand).stroke(Stroke::NONE);
+    if wide { ui.add_sized([ui.available_width(), BUTTON_H], button) } else { ui.add(button.min_size(egui::vec2(0.0, 32.0))) }
 }
 
 impl Commands for Launcher {
@@ -489,7 +769,11 @@ impl Commands for Launcher {
     }
 
     fn why_disabled(&self, id: &str) -> Option<String> {
-        (id == cmd::CHECK && self.rows.iter().all(|row| row.newest == Newest::Asking)).then(|| "The releases are being read.".to_owned())
+        match id {
+            cmd::CHECK => self.rows.iter().all(|row| row.newest == Newest::Asking).then(|| "The releases are being read.".to_owned()),
+            cmd::UPDATE_ALL => self.to_update().is_empty().then(|| "Every installed app is up to date.".to_owned()),
+            _ => None,
+        }
     }
 
     fn all_commands(&self) -> Vec<CommandInfo> {
@@ -502,6 +786,7 @@ impl Commands for Launcher {
             apps(cmd::CHECK, "Check for New Releases", "F5 / Mod+R", "search"),
             apps(cmd::GUIDE, "Open the Guide", "F1", "help"),
             apps(cmd::WEBSITE, "Open the Website", "", "link"),
+            apps(cmd::UPDATE_ALL, "Update Every App", "", "update"),
         ]
     }
 }
@@ -518,6 +803,12 @@ impl App for Launcher {
             cmd::GUIDE => open(GUIDE.to_owned()),
             cmd::WEBSITE => open(WEBSITE.to_owned()),
             cmd::INSTALL => return self.install(index_of(command)?),
+            cmd::UPDATE_ALL => {
+                let problems: Vec<String> = self.to_update().into_iter().filter_map(|i| self.install(i).err()).collect();
+                if !problems.is_empty() {
+                    return Err(problems.join(" "));
+                }
+            }
             cmd::OPEN => return self.open(index_of(command)?),
             cmd::REMOVE_NOW => return self.remove(index_of(command)?),
             cmd::REMOVE | cmd::KEEP => {
@@ -538,52 +829,20 @@ impl App for Launcher {
 
     fn document_ui(&mut self, ui: &mut Ui, shell: &mut Shell) {
         let t = Theme::get(ui.ctx());
-        egui::ScrollArea::vertical().auto_shrink(false).show(ui, |ui| {
-            ui.vertical_centered(|ui| {
-                ui.set_max_width(760.0);
-                ui.with_layout(egui::Layout::top_down(egui::Align::Min), |ui| {
-                    ui.add_space(18.0);
-                    ui.label(RichText::new("The Wordsmith apps").size(t.type_sizes.heading).strong());
-                    ui.label(RichText::new("Install the ones you want, keep them up to date, and open them from here.").color(t.text_dim));
-                    ui.add_space(12.0);
-                    for i in 0..self.rows.len() {
-                        self.card(ui, shell, i);
-                        ui.add_space(10.0);
-                    }
-                    ui.add_space(4.0);
-                    self.footer(ui, &t);
-                    ui.add_space(18.0);
-                });
+        ui.spacing_mut().item_spacing.y = 0.0;
+        self.header(ui, shell, &t);
+        rule(ui, &t);
+        let body = ui.available_height() - FOOTER_H - 1.0;
+        egui::ScrollArea::vertical().auto_shrink(false).max_height(body.max(0.0)).show(ui, |ui| {
+            egui::Frame::new().inner_margin(egui::Margin::symmetric(PAD as i8, 14)).show(ui, |ui| {
+                ui.spacing_mut().item_spacing.y = 6.0;
+                self.toolbar(ui, shell, &t);
+                ui.add_space(10.0);
+                self.grid(ui, shell, &t);
             });
         });
-    }
-
-    fn ribbon_tabs(&self) -> Vec<TabSpec> {
-        vec![TabSpec::new("apps", "Apps", "A")]
-    }
-
-    fn ribbon_ui(&mut self, tab: &str, ui: &mut Ui, shell: &mut Shell) {
-        if tab != "apps" {
-            return;
-        }
-        let me: &Launcher = self;
-        widgets::group(ui, shell, "Releases", |ui, shell| {
-            widgets::big(ui, shell, me, &Control::new(cmd::CHECK).label("Check Now").about("Ask GitHub for the newest release of each app"));
-        });
-        widgets::group(ui, shell, "Help", |ui, shell| {
-            widgets::big(ui, shell, me, &Control::new(cmd::GUIDE).label("Guide").about("The guide of the Wordsmith apps, on the web"));
-            widgets::big(ui, shell, me, &Control::new(cmd::WEBSITE).label("Website").about("wordsmithand.ink"));
-        });
-    }
-
-    fn status_ui(&mut self, ui: &mut Ui, _shell: &mut Shell) {
-        let installed = self.rows.iter().filter(|row| matches!(row.installed, Some(Installed::Yes { .. }))).count();
-        let updates = self.rows.iter().filter(|row| row.offers().contains(&Offer::Update)).count();
-        let mut text = format!("{installed} of {} installed", self.rows.len());
-        if updates > 0 {
-            text.push_str(&format!(" · {updates} to update"));
-        }
-        ui.label(text);
+        rule(ui, &t);
+        self.footer(ui, shell, &t);
     }
 
     fn about(&self) -> About {
@@ -696,10 +955,12 @@ mod tests {
         let (_ctx, mut window) = window(&dir);
         assert_eq!(window.app.rows.iter().map(|row| row.app.id).collect::<Vec<_>>(), ["wordsmith-script", "wordsmith-manuscript", "wordsmith-book"]);
         assert_eq!(window.shell.options.file_pages, [Page::Preferences, Page::Keys, Page::About]);
-        assert!(!window.shell.options.quick_row && window.shell.options.ribbon);
+        assert!(!window.shell.options.quick_row && !window.shell.options.ribbon && !window.shell.options.status_bar);
         assert_eq!(window.prefs_path(), Some(dir.join("settings").join("preferences.json").as_path()));
-        // Every command the ribbon and the keys reach is one the launcher has.
-        for id in [cmd::CHECK, cmd::GUIDE, cmd::WEBSITE, cmd::INSTALL, cmd::OPEN, cmd::REMOVE, cmd::REMOVE_NOW, cmd::KEEP, cmd::NOTES] {
+        // Every command the buttons and the keys reach is one the launcher has.
+        for id in
+            [cmd::CHECK, cmd::GUIDE, cmd::WEBSITE, cmd::UPDATE_ALL, cmd::INSTALL, cmd::OPEN, cmd::REMOVE, cmd::REMOVE_NOW, cmd::KEEP, cmd::NOTES]
+        {
             assert!(window.app.command(id).is_some(), "{id}");
         }
         assert!(window.app.command("file.save").is_none());

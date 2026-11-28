@@ -867,7 +867,7 @@ launcher = f"""
           <div class="meta">{hero_meta("launcher")}</div>
         </div>
         <figure class="visual">
-          <div class="stage"><div class="shot">{shot("launcher", "window", "Wordsmith Launcher: a list of the three apps. Wordsmith Script and Wordsmith Book are installed, each with Open and Remove; Wordsmith Manuscript is not, and has Install.", lazy=False)}</div></div>
+          <div class="stage"><div class="shot">{shot("launcher", "window", "Wordsmith Launcher: a card for each of the three apps. Wordsmith Script is installed, with an update waiting, and has Open and Update; Wordsmith Manuscript is not installed and has Install; Wordsmith Book is up to date and has Open.", lazy=False)}</div></div>
           <figcaption>The whole window: one row for each app. The picture is drawn by the launcher itself.</figcaption>
         </figure>
       </div>

@@ -5102,7 +5102,7 @@ dependencies = [
 
 [[package]]
 name = "wordsmith-launcher"
-version = "0.9.0"
+version = "0.10.0"
 dependencies = [
  "jcj-shell",
  "serde_json",
@@ -5112,7 +5112,7 @@ dependencies = [
 
 [[package]]
 name = "wordsmith-launcher-core"
-version = "0.9.0"
+version = "0.10.0"
 dependencies = [
  "flate2",
  "serde",
@@ -5218,7 +5218,7 @@ checksum = "9440ea3e5aeabb0ac63af70daf835274065238cdd0cec83418f417eae38bacee"
 
 [[package]]
 name = "xtask"
-version = "0.9.0"
+version = "0.10.0"
 
 [[package]]
 name = "yeslogic-fontconfig-sys"

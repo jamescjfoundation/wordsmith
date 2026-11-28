@@ -6,7 +6,7 @@ takes its version and date, and the next `## Unreleased` opens above it.
 
 The first public release is 0.9.0, a preview; 1.0.0 follows it, as for the Wordsmith apps.
 
-## Unreleased
+## 0.10.0 (2026-11-28)
 
 - **A new window.** The ribbon is gone. A bar at the top holds the launcher's name and a button
   for its preferences; under it, a button to check for new releases, how many apps are

@@ -2,8 +2,8 @@
 //! `cargo xtask screenshots`: the launcher draws its own window into `docs/images/`.
 //!
 //! The pictures are drawn offscreen by the launcher's own code, never taken from a real desktop.
-//! The window is shown as it is with the three apps at their first release: one not installed,
-//! two installed. Nothing is read from this computer and nothing is asked of the network: the
+//! The window is shown with the three apps a release after their first: one installed at the
+//! first and with the update to take, one not installed, one up to date. Nothing is read from this computer and nothing is asked of the network: the
 //! rows are filled in here, and the folders named in the picture are made up.
 
 #![forbid(unsafe_code)]
@@ -19,8 +19,9 @@ use wordsmith_launcher::window::{Launcher, Newest};
 use wordsmith_launcher::{DESKTOP, Setup};
 use wordsmith_launcher_core::{Installed, Places, Release, System, Version};
 
-/// The first release of the three apps.
+/// The first release of the three apps, and the one after it.
 const FIRST: Version = Version::new(0, 9, 0);
+const NEXT: Version = Version::new(0, 9, 1);
 const PUBLISHED: &str = "2026-11-27";
 
 fn draw(out: &Path) -> Result<(), String> {
@@ -32,11 +33,14 @@ fn draw(out: &Path) -> Result<(), String> {
         // No settings folder: this run keeps nothing.
         let mut window = Window::start(&DESKTOP, &ctx, None, Vec::new(), |start| Launcher::new(start, setup, false));
         window.shell.mode = mode;
-        for (row, installed) in window.app.rows.iter_mut().zip([true, false, true]) {
-            row.newest = Newest::Found(Release { date: Some(PUBLISHED.to_owned()), ..Release::of(FIRST) });
-            row.installed = Some(if installed { Installed::Yes { version: Some(FIRST), by_launcher: true } } else { Installed::No });
+        for (row, installed) in window.app.rows.iter_mut().zip([Some(FIRST), None, Some(NEXT)]) {
+            row.newest = Newest::Found(Release { date: Some(PUBLISHED.to_owned()), ..Release::of(NEXT) });
+            row.installed = Some(match installed {
+                Some(version) => Installed::Yes { version: Some(version), by_launcher: true },
+                None => Installed::No,
+            });
         }
-        let picture = jcj_shell::snapshot::render(&ctx, egui::vec2(820.0, 700.0), 2.0, Vec::new(), 3, |ui| window.ui_offscreen(ui));
+        let picture = jcj_shell::snapshot::render(&ctx, egui::vec2(1040.0, 480.0), 2.0, Vec::new(), 3, |ui| window.ui_offscreen(ui));
         let file = out.join(format!("{name}.png"));
         std::fs::write(&file, picture.to_png()).map_err(|e| format!("{}: {e}", file.display()))?;
         println!("drew {}", file.display());

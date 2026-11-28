@@ -1,12 +1,16 @@
 # The apps
 
-The launcher's window is one list: Wordsmith Script, Wordsmith Manuscript and Wordsmith Book.
-Under each name is a line that says what is on your computer and what the newest version is, and
-beside it are the buttons for what can be done now.
+The launcher's window has a card for each app: Wordsmith Script, Wordsmith Manuscript and
+Wordsmith Book, as many side by side as the window has room for. At the top of a card is the
+version: the one installed, or the newest when the app is not installed, and "0.9.0 → 0.9.1"
+when a newer one is waiting. Under the app's name is a line that says when the newest release
+was published, and at the foot of the card are the buttons for what can be done now.
 
-![The launcher's window: Wordsmith Script and Wordsmith Book installed, each with Open and Remove, and Wordsmith Manuscript not installed, with Install](../images/window.png)
+![The launcher's window: a card for each app. Wordsmith Script is installed at 0.9.0 with an update to 0.9.1 waiting, and has Open and Update; Wordsmith Manuscript is not installed and has Install; Wordsmith Book is installed and up to date, and has Open](../images/window.png)
 
-## What a line says
+A card marked **Update available** has a newer release than the one installed, and one marked
+**Not installed** is not on this computer. Point at the line under the name to see all the
+launcher knows about the app:
 
 | The line | What it means |
 | --- | --- |
@@ -17,14 +21,20 @@ beside it are the buttons for what can be done now.
 | The newest release could not be read. | GitHub did not answer; the reason is under the line. What is installed still opens |
 | No release is published yet. | The app has no download yet |
 
-A version before 1.0.0 is marked "a preview". "What is in this release" opens the release's
-page, with its notes.
+A version before 1.0.0 is marked "a preview". **Release notes**, at the top of a card, opens the
+release's page, with its notes; it is also under the **…** button.
 
-**Check Now**, on the Apps tab (or F5), asks GitHub again for the newest version of each app.
+The round arrow above the cards (or F5) asks GitHub again for the newest version of each app.
+The line at the foot of the window says when it last did. When an app has an update, a button
+at the other end of that row (**Update 1 app**, **Update 2 apps**) updates every app that has
+one.
+
+The button with the gear, at the top right, opens the launcher's preferences. Its keys and the
+About page are beside them.
 
 ## Installing an app
 
-Choose **Install**. The line shows each step:
+Choose **Install**. The card shows each step:
 
 1. Reading the release: the launcher reads the list of checksums of the release.
 2. Downloading: about 55 MB for each app.
@@ -33,7 +43,7 @@ Choose **Install**. The line shows each step:
    ([How a download is checked](checking-a-download.md)).
 4. Unpacking and installing.
 
-Then the line says which version is installed, and **Open** starts the app.
+Then the card shows which version is installed, and **Open** starts the app.
 
 Nothing asks for an administrator's password: an app is installed for your account only.
 
@@ -50,7 +60,8 @@ launcher finds it and can open and update it.
 
 ## Updating an app
 
-Choose **Update**. The steps are the same as for installing, and the new version takes the old
+Choose **Update** on the app's card, or the button above the cards that updates every app with
+an update. The steps are the same as for installing, and the new version takes the old
 one's place. Your documents and the app's settings are not touched.
 
 Close the app first. The launcher does not replace an app that is running.
@@ -64,7 +75,8 @@ Choose **Open**. The app starts as it does from your menu.
 
 ## Removing an app
 
-Choose **Remove**, then **Remove** again to confirm (**Keep** leaves it). The app's program and
+Choose **…**, then **Remove…**, then **Remove** again on the card to confirm (**Keep** leaves
+it). The app's program and
 what was installed with it are taken away. Your documents and the app's settings stay where
 they are.
 

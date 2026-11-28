@@ -63,7 +63,8 @@ a window offers it.
 | Windows | Opens the release page: an unsigned copy cannot replace itself. Download the new `.zip` and unpack it over the old folder |
 | macOS | Opens the release page: download the new `.dmg` and drag the app onto Applications again |
 
-You can ask at any time: File, then About, then Check for Updates. The same page has the switch
+You can ask at any time: the gear button at the top right of the window, then About, then Check
+for Updates. The same page has the switch
 "Check for updates when the app starts" ([What the launcher sends](privacy.md)).
 
 ## Where the launcher keeps its own files

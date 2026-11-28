@@ -1,5 +1,12 @@
 # Wordsmith
 
+[![checks status](https://img.shields.io/github/actions/workflow/status/jamescjfoundation/wordsmith/checks.yml?branch=main&label=checks&style=flat-square&labelColor=1C2340)](https://github.com/jamescjfoundation/wordsmith/actions/workflows/checks.yml)
+[![website status](https://img.shields.io/github/actions/workflow/status/jamescjfoundation/wordsmith/pages.yml?branch=main&label=website&style=flat-square&labelColor=1C2340)](https://github.com/jamescjfoundation/wordsmith/actions/workflows/pages.yml)
+[![Latest release](https://img.shields.io/github/v/release/jamescjfoundation/wordsmith?label=launcher&color=3B4FA8&style=flat-square&labelColor=1C2340)](https://github.com/jamescjfoundation/wordsmith/releases/latest)
+[![Code license: MIT OR Apache-2.0](https://img.shields.io/badge/code-MIT%20OR%20Apache--2.0-3B4FA8?style=flat-square&labelColor=1C2340)](LICENSES.md)
+[![Words license: CC BY 4.0](https://img.shields.io/badge/words-CC%20BY%204.0-3B4FA8?style=flat-square&labelColor=1C2340)](LICENSES.md)
+[![Website: wordsmithand.ink](https://img.shields.io/badge/website-wordsmithand.ink-8A6418?style=flat-square&labelColor=1C2340)](https://wordsmithand.ink)
+
 Shared pieces of the [Wordsmith](https://wordsmithand.ink) project: free, open-source writing apps for screenwriters, novelists and authors, from The James C. J. Foundation.
 
 > **A note from the founder**

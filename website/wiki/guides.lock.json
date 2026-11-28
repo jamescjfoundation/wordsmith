@@ -3,8 +3,8 @@
   "apps": {
     "script": {
       "repository": "jamescjfoundation/wordsmith-script",
-      "commit": "ed5768498387f3ce067c561cb6abce930404620a",
-      "date": "2026-11-27",
+      "commit": "d68ae5df887a2aae4e8ba578836733e4a4c01247",
+      "date": "2026-11-28",
       "pages": [
         {
           "source": "docs/guide/README.md",
@@ -190,8 +190,8 @@
     },
     "manuscript": {
       "repository": "jamescjfoundation/wordsmith-manuscript",
-      "commit": "8cdddb58915852e6fff0d1de7ddbceec55ccbe7e",
-      "date": "2026-11-27",
+      "commit": "2faa4c5529fdf261e4a04960bed09f3dabf04841",
+      "date": "2026-11-28",
       "pages": [
         {
           "source": "docs/guide/README.md",
@@ -377,8 +377,8 @@
     },
     "book": {
       "repository": "jamescjfoundation/wordsmith-book",
-      "commit": "0f40541013ad3793c47cc1ed48b2b0b44a62a56e",
-      "date": "2026-11-27",
+      "commit": "c9232b2468e1b35938a715fadd70ebeb55aca6e9",
+      "date": "2026-11-28",
       "pages": [
         {
           "source": "docs/guide/README.md",
@@ -594,8 +594,8 @@
     },
     "launcher": {
       "repository": "jamescjfoundation/wordsmith",
-      "commit": "527360e36be586e66d3787aa7265398cc2732f6c",
-      "date": "2026-11-27",
+      "commit": "f1be724df07982bcbd8248e09cf306f06023b498",
+      "date": "2026-11-28",
       "pages": [
         {
           "source": "launcher/docs/guide/README.md",
@@ -605,9 +605,9 @@
         },
         {
           "source": "launcher/docs/guide/apps.md",
-          "blob": "59f3d395622fab8294ad11e971469bc119fbec8c",
+          "blob": "c82c589d45f1679c255ef324bf5e144844b740e4",
           "file": "website/wiki/content/docs/launcher/apps.mdx",
-          "sha256": "f43a3d9de53b0d75730c57808f8c9ec9b4a79d4ba657bfb9b42d5d7304a710cf"
+          "sha256": "4a53a830c3774d5716936d4e0a5642c3325d7eb517d15761757a3b7542953238"
         },
         {
           "source": "launcher/docs/guide/checking-a-download.md",
@@ -623,15 +623,15 @@
         },
         {
           "source": "launcher/docs/guide/installing.md",
-          "blob": "5e701555afa63f116c221f9a7bdffc940dae2ef8",
+          "blob": "64f7112383f87d3dc5212323877d8ab21355b111",
           "file": "website/wiki/content/docs/launcher/installing.mdx",
-          "sha256": "e6b44e4f01d7373ee803a00a5acc4ab7ed2cbd14de249848fd031ea28587391e"
+          "sha256": "6170a2d8e2872021626b2709cc0071d3f4d4bf531d0b11f74a466a5f584e050c"
         },
         {
           "source": "launcher/docs/guide/privacy.md",
-          "blob": "0c6d75c061991c336f509ca100fe38df8dba0fb3",
+          "blob": "b37d81dc482c496e96f3fdc45075ce510843cadf",
           "file": "website/wiki/content/docs/launcher/privacy.mdx",
-          "sha256": "2586d9e946aa1864970b2c260ef5b5fdbe6597d51e34290872afae0a6dda1682"
+          "sha256": "36a574b1aef5b77f7e3e46f51aab3d9e4315f84b4c5df476e2b547c7e402155a"
         },
         {
           "source": "launcher/docs/guide/problems.md",
@@ -647,19 +647,19 @@
       "images": [
         {
           "source": "launcher/docs/images/window.png",
-          "blob": "7d926e097f38b0c07f7c98ae757f1127381aca10",
+          "blob": "66f5d4c3b3fe6cb11b59c3246e5c6eb3243b04fa",
           "copies": [
             {
               "file": "website/wiki/content/docs/launcher/images/window.webp",
-              "sha256": "23518604e9b8b28f2dd80bfad8ab6d162ec58b3162b1c11971ffa0a95a5d7df6",
+              "sha256": "426af1ea2a399763d6ebd0fb3aaf1b8ad40e33f991a6b49e39f5585e4492abff",
               "width": 1600,
-              "height": 1366
+              "height": 738
             },
             {
               "file": "website/assets/img/launcher-window.webp",
-              "sha256": "23518604e9b8b28f2dd80bfad8ab6d162ec58b3162b1c11971ffa0a95a5d7df6",
+              "sha256": "426af1ea2a399763d6ebd0fb3aaf1b8ad40e33f991a6b49e39f5585e4492abff",
               "width": 1600,
-              "height": 1366
+              "height": 738
             }
           ]
         }
